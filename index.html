@@ -4,912 +4,1498 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="VIVIX — Know your biological age. AI-powered vital score based on science.">
-<meta property="og:title" content="VIVIX — Your Vital Score">
-<meta property="og:description" content="6 questions. Your real life expectancy. Powered by AI + Harvard, NIH, WHO science.">
-<meta property="og:image" content="https://vivix.app/og.png">
-<title>VIVIX — Your Vital Score</title>
+<meta name="description" content="VIVIX — Discover your real life expectancy. AI-powered vital analysis based on WHO, Harvard and NIH science.">
+<title>VIVIX — Know Your Vital Score</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;600&display=swap');
-
 :root {
-–bg: #f5f0e8;
-–bg2: #ede8dc;
-–ink: #1a1410;
-–ink2: #3d3530;
-–ink3: #6b5f58;
-–accent: #c8401a;
-–accent2: #2d6a4f;
-–gold: #b8860b;
-–border: #c4b9a8;
-–border2: #d4c9b8;
-–white: #faf7f2;
-–warn: #e07b39;
+  --bg: #070b14;
+  --bg2: #0d1220;
+  --surface: rgba(255,255,255,0.04);
+  --surface2: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --teal: #00d4aa;
+  --teal2: #00b896;
+  --blue: #4f8ef7;
+  --purple: #9b6dff;
+  --gold: #f5c842;
+  --red: #ff5a5a;
+  --white: #f0f4ff;
+  --gray: rgba(240,244,255,0.5);
+  --gray2: rgba(240,244,255,0.25);
+  --font: 'Outfit', sans-serif;
+  --serif: 'DM Serif Display', serif;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
+
 body {
 background: var(–bg);
-color: var(–ink);
-font-family: ‘JetBrains Mono’, monospace;
+color: var(–white);
+font-family: var(–font);
 min-height: 100vh;
+overflow-x: hidden;
 }
 
+/* ANIMATED BACKGROUND */
+.bg-orbs {
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 0;
+overflow: hidden;
+}
+
+.orb {
+position: absolute;
+border-radius: 50%;
+filter: blur(80px);
+opacity: 0.15;
+animation: orbFloat 20s ease-in-out infinite;
+}
+
+.orb-1 { width: 600px; height: 600px; background: var(–teal); top: -200px; left: -200px; animation-delay: 0s; }
+.orb-2 { width: 500px; height: 500px; background: var(–purple); top: 30%; right: -150px; animation-delay: -7s; }
+.orb-3 { width: 400px; height: 400px; background: var(–blue); bottom: -100px; left: 30%; animation-delay: -14s; }
+
+@keyframes orbFloat {
+0%, 100% { transform: translate(0, 0) scale(1); }
+33% { transform: translate(30px, -40px) scale(1.05); }
+66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+/* GRID OVERLAY */
 body::before {
 content: ‘’;
-position: fixed; inset: 0;
-background-image: repeating-linear-gradient(
-0deg, transparent, transparent 27px,
-rgba(180,160,130,0.10) 27px, rgba(180,160,130,0.10) 28px
-);
-pointer-events: none; z-index: 0;
+position: fixed;
+inset: 0;
+background-image:
+linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+background-size: 60px 60px;
+pointer-events: none;
+z-index: 0;
 }
 
 .page {
-max-width: 700px;
+max-width: 680px;
 margin: 0 auto;
-padding: 48px 24px 100px;
-position: relative; z-index: 1;
+padding: 0 20px 120px;
+position: relative;
+z-index: 1;
 }
 
-/* LANG SWITCHER */
+/* NAVBAR */
+.nav {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 20px 0;
+margin-bottom: 0;
+}
+
+.nav-logo {
+font-family: var(–serif);
+font-size: 24px;
+font-style: italic;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
 .lang-bar {
 display: flex;
-justify-content: flex-end;
 gap: 4px;
-margin-bottom: 24px;
-flex-wrap: wrap;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 100px;
+padding: 4px;
 }
 
 .lang-btn {
 background: none;
-border: 1px solid var(–border);
+border: none;
 padding: 4px 10px;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 1px;
-color: var(–ink3);
+font-family: var(–font);
+font-size: 11px;
+font-weight: 600;
+color: var(–gray2);
 cursor: pointer;
+border-radius: 100px;
 transition: all 0.2s;
-border-radius: 0;
+letter-spacing: 0.5px;
 }
-.lang-btn:hover, .lang-btn.active {
-background: var(–ink);
+
+.lang-btn:hover { color: var(–white); }
+.lang-btn.active {
+background: linear-gradient(135deg, var(–teal), var(–blue));
 color: var(–bg);
-border-color: var(–ink);
 }
 
-/* MASTHEAD */
-.masthead {
+/* HERO */
+.hero {
 text-align: center;
-border-bottom: 3px double var(–border);
-padding-bottom: 24px;
-margin-bottom: 32px;
+padding: 60px 0 48px;
 }
 
-.over { font-size: 9px; letter-spacing: 5px; text-transform: uppercase; color: var(–ink3); margin-bottom: 12px; }
-
-.masthead h1 {
-font-family: ‘Playfair Display’, serif;
-font-size: clamp(56px, 12vw, 96px);
-font-weight: 900;
-line-height: 0.9;
-letter-spacing: -3px;
-color: var(–ink);
-margin-bottom: 14px;
+.hero-badge {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background: rgba(0,212,170,0.1);
+border: 1px solid rgba(0,212,170,0.3);
+border-radius: 100px;
+padding: 6px 16px;
+font-size: 12px;
+font-weight: 600;
+color: var(–teal);
+letter-spacing: 0.5px;
+margin-bottom: 28px;
 }
 
-.masthead h1 em { font-style: italic; color: var(–accent); }
-
-.ai-badge {
-display: inline-flex; align-items: center; gap: 6px;
-background: var(–ink); color: var(–bg);
-padding: 5px 14px; font-size: 9px; letter-spacing: 3px;
-text-transform: uppercase; margin: 8px 0 14px;
-}
-
-.ai-badge::before {
-content: ‘’; width: 6px; height: 6px; border-radius: 50%;
-background: #00ff88; box-shadow: 0 0 6px #00ff88;
+.hero-badge::before {
+content: ‘’;
+width: 6px; height: 6px;
+border-radius: 50%;
+background: var(–teal);
+box-shadow: 0 0 8px var(–teal);
 animation: pulse 2s infinite;
 }
 
-.deck { font-size: 11px; color: var(–ink3); letter-spacing: 1px; line-height: 1.8; max-width: 460px; margin: 0 auto 12px; }
-.rule { display: flex; align-items: center; gap: 10px; justify-content: center; color: var(–ink3); font-size: 9px; letter-spacing: 2px; }
-.rule::before, .rule::after { content: ‘’; flex: 1; height: 1px; background: var(–border); max-width: 60px; }
-
-/* STATS BAR */
-.stats-bar {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 1px;
-background: var(–border);
-border: 1px solid var(–border);
-margin-bottom: 32px;
-}
-
-.stat-cell {
-background: var(–white);
-padding: 16px 12px;
-text-align: center;
-}
-
-.stat-num {
-font-family: ‘Playfair Display’, serif;
-font-size: 28px;
-font-weight: 900;
-color: var(–accent);
+.hero h1 {
+font-family: var(–serif);
+font-size: clamp(52px, 12vw, 88px);
 line-height: 1;
-margin-bottom: 4px;
+margin-bottom: 10px;
+background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
 }
 
-.stat-label {
-font-size: 9px;
+.hero h1 em {
+font-style: italic;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+.hero-sub {
+font-size: 17px;
+color: var(–gray);
+line-height: 1.6;
+max-width: 480px;
+margin: 0 auto 32px;
+font-weight: 300;
+}
+
+.hero-sources {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+flex-wrap: wrap;
+font-size: 11px;
+color: var(–gray2);
+font-weight: 500;
 letter-spacing: 1px;
-color: var(–ink3);
 text-transform: uppercase;
 }
 
-/* FORM */
-.form-box {
-background: var(–white);
+.source-dot { width: 3px; height: 3px; border-radius: 50%; background: var(–gray2); }
+
+/* STATS */
+.stats {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 12px;
+margin-bottom: 32px;
+}
+
+.stat-card {
+background: var(–surface);
 border: 1px solid var(–border);
-padding: 28px;
-margin-bottom: 24px;
+border-radius: 20px;
+padding: 20px 16px;
+text-align: center;
+transition: border-color 0.3s;
+}
+
+.stat-card:hover { border-color: var(–border2); }
+
+.stat-num {
+font-family: var(–serif);
+font-size: 32px;
+font-style: italic;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+line-height: 1;
+margin-bottom: 6px;
+}
+
+.stat-label {
+font-size: 10px;
+font-weight: 600;
+color: var(–gray2);
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+
+/* FORM CARD */
+.form-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 28px;
+padding: 36px 32px;
+margin-bottom: 20px;
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
 position: relative;
+overflow: hidden;
 }
 
-.form-box::after {
-content: ‘§’; position: absolute; top: 10px; right: 16px;
-font-family: ‘Playfair Display’, serif; font-size: 48px;
-color: var(–border2); line-height: 1; pointer-events: none;
+.form-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–teal), var(–blue), transparent);
 }
 
-.sec-num { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(–accent); margin-bottom: 4px; }
-.sec-title { font-family: ‘Playfair Display’, serif; font-size: 19px; font-weight: 700; margin-bottom: 4px; }
-.sec-sub { font-size: 10px; color: var(–ink3); letter-spacing: 1px; margin-bottom: 20px; line-height: 1.6; }
-
-.fg { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 480px) { .fg { grid-template-columns: 1fr; } }
-.f { display: flex; flex-direction: column; gap: 6px; }
-.f.full { grid-column: 1 / -1; }
-.f label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(–ink3); }
-.f label span { color: var(–accent); }
-
-.f input, .f select {
-background: var(–bg); border: 1px solid var(–border);
-border-bottom: 2px solid var(–ink3); padding: 9px 11px;
-font-family: ‘JetBrains Mono’, monospace; font-size: 14px;
-color: var(–ink); outline: none; appearance: none; border-radius: 0;
-transition: border-color 0.2s;
+.form-header {
+margin-bottom: 28px;
 }
-.f input:focus, .f select:focus { border-bottom-color: var(–accent); background: var(–white); }
-.f input::placeholder { color: var(–border); }
 
-.sw { display: flex; align-items: center; gap: 12px; }
-.sw input[type=range] {
-flex: 1; appearance: none; height: 2px; background: var(–border);
-outline: none; border: none; padding: 0; cursor: pointer;
+.form-step {
+font-size: 11px;
+font-weight: 700;
+color: var(–teal);
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 6px;
 }
-.sw input[type=range]::-webkit-slider-thumb {
-appearance: none; width: 16px; height: 16px; border-radius: 50%;
-background: var(–accent); cursor: pointer;
-border: 2px solid var(–white); box-shadow: 0 0 0 1px var(–accent);
-}
-.sv { font-family: ‘Playfair Display’, serif; font-size: 19px; font-weight: 700; color: var(–accent); min-width: 52px; text-align: right; }
 
-.btn-main {
-width: 100%; background: var(–ink); color: var(–bg); border: none;
-padding: 16px 32px; font-family: ‘JetBrains Mono’, monospace;
-font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
-cursor: pointer; margin-top: 20px; transition: background 0.2s;
+.form-title {
+font-size: 22px;
+font-weight: 700;
+color: var(–white);
+margin-bottom: 6px;
 }
-.btn-main:hover { background: var(–accent); }
 
-.privacy { font-size: 9px; color: var(–ink3); text-align: center; margin-top: 8px; letter-spacing: 1px; line-height: 1.9; }
+.form-sub {
+font-size: 13px;
+color: var(–gray2);
+line-height: 1.5;
+}
+
+/* FIELDS */
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 480px) { .field-grid { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field.full { grid-column: 1 / -1; }
+
+.field label {
+font-size: 11px;
+font-weight: 700;
+color: var(–gray2);
+letter-spacing: 1px;
+text-transform: uppercase;
+display: flex;
+align-items: center;
+gap: 4px;
+}
+
+.field label .req { color: var(–teal); font-size: 14px; }
+
+.field input, .field select {
+background: rgba(255,255,255,0.05);
+border: 1px solid var(–border);
+border-radius: 14px;
+padding: 14px 16px;
+font-family: var(–font);
+font-size: 15px;
+font-weight: 500;
+color: var(–white);
+outline: none;
+appearance: none;
+transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+width: 100%;
+}
+
+.field input:focus, .field select:focus {
+border-color: var(–teal);
+background: rgba(0,212,170,0.06);
+box-shadow: 0 0 0 3px rgba(0,212,170,0.1);
+}
+
+.field input::placeholder { color: rgba(240,244,255,0.2); }
+.field select option { background: #1a2035; color: var(–white); }
+
+/* SLIDER */
+.slider-wrap { display: flex; flex-direction: column; gap: 10px; }
+
+.slider-row { display: flex; align-items: center; gap: 16px; }
+
+.slider-row input[type=range] {
+flex: 1;
+appearance: none;
+height: 4px;
+background: var(–border);
+border-radius: 100px;
+outline: none;
+border: none;
+padding: 0;
+cursor: pointer;
+}
+
+.slider-row input[type=range]::-webkit-slider-thumb {
+appearance: none;
+width: 20px; height: 20px;
+border-radius: 50%;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+cursor: pointer;
+box-shadow: 0 0 12px rgba(0,212,170,0.4);
+transition: transform 0.2s;
+}
+
+.slider-row input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+.slider-val {
+font-size: 18px;
+font-weight: 800;
+min-width: 64px;
+text-align: right;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+/* SUBMIT */
+.btn-submit {
+width: 100%;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+border: none;
+border-radius: 16px;
+padding: 18px 32px;
+font-family: var(–font);
+font-size: 16px;
+font-weight: 700;
+color: var(–bg);
+cursor: pointer;
+margin-top: 24px;
+transition: all 0.3s;
+position: relative;
+overflow: hidden;
+letter-spacing: 0.3px;
+}
+
+.btn-submit::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+opacity: 0;
+transition: opacity 0.3s;
+}
+
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,212,170,0.3); }
+.btn-submit:hover::before { opacity: 1; }
+.btn-submit:active { transform: translateY(0); }
+
+.privacy-note {
+font-size: 11px;
+color: var(–gray2);
+text-align: center;
+margin-top: 14px;
+line-height: 1.8;
+}
 
 /* LOADING */
-#loadSec { display: none; text-align: center; padding: 56px 24px; }
-.lt { font-family: ‘Playfair Display’, serif; font-size: 20px; font-style: italic; color: var(–ink2); margin-bottom: 6px; }
-.ls { font-size: 10px; color: var(–ink3); letter-spacing: 2px; margin-bottom: 24px; }
-.lsteps { display: flex; flex-direction: column; gap: 8px; max-width: 300px; margin: 0 auto 24px; text-align: left; }
-.lstep { font-size: 10px; color: var(–ink3); letter-spacing: 1px; opacity: 0.3; transition: opacity 0.4s, color 0.4s; }
-.lstep.on { opacity: 1; color: var(–ink2); }
-.lstep.ok { opacity: 1; color: var(–accent2); }
-.dots { display: flex; justify-content: center; gap: 8px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: var(–accent); animation: bounce 1.2s ease infinite; }
-.dot:nth-child(2) { animation-delay: 0.2s; }
-.dot:nth-child(3) { animation-delay: 0.4s; }
+#loadSec {
+display: none;
+text-align: center;
+padding: 80px 24px;
+}
+
+.load-icon {
+width: 80px; height: 80px;
+border-radius: 50%;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 32px;
+margin: 0 auto 28px;
+animation: loadPulse 2s ease-in-out infinite;
+}
+
+@keyframes loadPulse {
+0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,212,170,0.4); }
+50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(0,212,170,0); }
+}
+
+.load-title {
+font-family: var(–serif);
+font-size: 28px;
+font-style: italic;
+color: var(–white);
+margin-bottom: 8px;
+}
+
+.load-sub { font-size: 14px; color: var(–gray2); margin-bottom: 32px; }
+
+.load-steps {
+display: flex;
+flex-direction: column;
+gap: 10px;
+max-width: 300px;
+margin: 0 auto 32px;
+text-align: left;
+}
+
+.load-step {
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 13px;
+color: var(–gray2);
+opacity: 0.3;
+transition: all 0.4s;
+}
+
+.load-step.on { opacity: 1; color: var(–white); }
+.load-step.ok { opacity: 1; color: var(–teal); }
+
+.load-step-icon {
+width: 28px; height: 28px;
+border-radius: 50%;
+background: var(–surface);
+border: 1px solid var(–border);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 12px;
+flex-shrink: 0;
+}
+
+.load-step.ok .load-step-icon {
+background: rgba(0,212,170,0.15);
+border-color: var(–teal);
+}
 
 /* RESULTS */
 #resSec { display: none; }
 
-.res-hdr {
-text-align: center; border: 3px double var(–border);
-padding: 24px; margin-bottom: 24px; background: var(–white);
+/* SCORE HERO */
+.score-hero {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 28px;
+padding: 40px 32px;
+text-align: center;
+margin-bottom: 16px;
+position: relative;
+overflow: hidden;
 }
-.res-hdr::before { content: ‘✦’; display: block; font-size: 16px; color: var(–gold); margin-bottom: 8px; }
-.rl { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(–ink3); margin-bottom: 8px; }
-.rp { font-family: ‘Playfair Display’, serif; font-size: 14px; color: var(–ink2); margin-bottom: 4px; }
-.rsw { display: flex; justify-content: center; align-items: baseline; gap: 4px; margin: 14px 0 4px; }
-.rsn { font-family: ‘Playfair Display’, serif; font-size: 80px; font-weight: 900; line-height: 1; color: var(–accent); }
-.rsu { font-size: 16px; color: var(–ink3); font-family: ‘Playfair Display’, serif; }
-.rsl { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(–ink3); }
 
-.vg { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(–border); border: 1px solid var(–border); margin-bottom: 24px; }
-@media (max-width: 460px) { .vg { grid-template-columns: 1fr; } }
-.vc { background: var(–white); padding: 16px 12px; text-align: center; }
-.vcl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(–ink3); margin-bottom: 6px; }
-.vcv { font-family: ‘Playfair Display’, serif; font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
-.vcs { font-size: 9px; letter-spacing: 1px; }
-.good { color: var(–accent2); } .warn { color: var(–warn); } .bad { color: var(–accent); }
+.score-hero::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–teal), var(–blue), transparent);
+}
 
-.lbs { background: var(–white); border: 1px solid var(–border); padding: 20px; margin-bottom: 24px; }
-.lbl { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(–ink3); margin-bottom: 12px; }
-.lbt { height: 20px; background: var(–bg2); border: 1px solid var(–border); position: relative; overflow: hidden; }
-.lbv { height: 100%; background: repeating-linear-gradient(45deg, var(–ink3), var(–ink3) 2px, transparent 2px, transparent 8px); transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
-.lbp { position: absolute; top: 0; bottom: 0; background: rgba(200,64,26,0.12); border-right: 2px solid var(–accent); transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
-.lbls { display: flex; justify-content: space-between; margin-top: 6px; }
-.lbls span { font-size: 9px; color: var(–ink3); letter-spacing: 1px; }
+.score-profile {
+font-size: 13px;
+color: var(–gray2);
+margin-bottom: 28px;
+font-weight: 500;
+}
 
-/* AI BOX */
-.ai-sec { margin-bottom: 24px; }
-.ai-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(–border); }
-.ai-title { font-family: ‘Playfair Display’, serif; font-size: 18px; font-weight: 700; }
-.ai-tag { background: var(–ink); color: var(–bg); padding: 3px 8px; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
-.ai-box { background: var(–white); border: 1px solid var(–border); border-left: 3px solid var(–accent); padding: 22px; min-height: 80px; }
-.ai-txt { font-size: 13px; color: var(–ink2); line-height: 1.9; white-space: pre-wrap; }
-.cursor { display: inline-block; width: 2px; height: 13px; background: var(–accent); animation: blink 1s step-end infinite; vertical-align: middle; margin-left: 1px; }
-.src { display: none; align-items: center; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(–border2); font-size: 9px; color: var(–ink3); }
-.src::before { content: ‘🔬’; font-size: 11px; }
+.score-ring {
+width: 160px; height: 160px;
+margin: 0 auto 20px;
+position: relative;
+}
+
+.score-ring svg {
+width: 100%; height: 100%;
+transform: rotate(-90deg);
+}
+
+.score-ring-track {
+fill: none;
+stroke: rgba(255,255,255,0.06);
+stroke-width: 10;
+}
+
+.score-ring-fill {
+fill: none;
+stroke: url(#scoreGrad);
+stroke-width: 10;
+stroke-linecap: round;
+stroke-dasharray: 440;
+stroke-dashoffset: 440;
+transition: stroke-dashoffset 1.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+.score-center {
+position: absolute;
+inset: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+}
+
+.score-num {
+font-family: var(–serif);
+font-size: 52px;
+font-style: italic;
+line-height: 1;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+.score-denom { font-size: 14px; color: var(–gray2); font-weight: 600; }
+.score-label { font-size: 11px; font-weight: 700; color: var(–gray2); letter-spacing: 2px; text-transform: uppercase; }
+
+/* VITALS */
+.vitals-row {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 12px;
+margin-bottom: 16px;
+}
+
+@media (max-width: 460px) { .vitals-row { grid-template-columns: 1fr; } }
+
+.vital-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 18px 14px;
+text-align: center;
+transition: border-color 0.3s, transform 0.3s;
+}
+
+.vital-card:hover { transform: translateY(-2px); border-color: var(–border2); }
+
+.vital-icon { font-size: 22px; margin-bottom: 8px; }
+.vital-label { font-size: 10px; font-weight: 700; color: var(–gray2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+.vital-value { font-size: 22px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.vital-status { font-size: 11px; font-weight: 600; }
+
+.c-good { color: var(–teal); }
+.c-warn { color: var(–gold); }
+.c-bad  { color: var(–red); }
+
+/* LIFE BAR */
+.life-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 24px;
+margin-bottom: 16px;
+}
+
+.life-card-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 16px;
+}
+
+.life-card-title {
+font-size: 14px;
+font-weight: 700;
+color: var(–white);
+}
+
+.life-card-years {
+font-size: 13px;
+color: var(–teal);
+font-weight: 700;
+}
+
+.life-bar-track {
+height: 12px;
+background: rgba(255,255,255,0.06);
+border-radius: 100px;
+position: relative;
+overflow: hidden;
+margin-bottom: 10px;
+}
+
+.life-bar-potential {
+position: absolute;
+top: 0; bottom: 0; left: 0;
+background: rgba(0,212,170,0.15);
+border-radius: 100px;
+transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+.life-bar-lived {
+position: absolute;
+top: 0; bottom: 0; left: 0;
+background: linear-gradient(90deg, var(–teal), var(–blue));
+border-radius: 100px;
+transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+.life-bar-labels {
+display: flex;
+justify-content: space-between;
+font-size: 11px;
+color: var(–gray2);
+font-weight: 600;
+}
+
+/* AI SECTION */
+.ai-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 24px;
+margin-bottom: 16px;
+position: relative;
+overflow: hidden;
+}
+
+.ai-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–purple), transparent);
+}
+
+.ai-card-header {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 16px;
+}
+
+.ai-card-title { font-size: 15px; font-weight: 700; }
+
+.ai-pill {
+background: rgba(155,109,255,0.15);
+border: 1px solid rgba(155,109,255,0.3);
+border-radius: 100px;
+padding: 3px 10px;
+font-size: 10px;
+font-weight: 700;
+color: var(–purple);
+letter-spacing: 1px;
+}
+
+.ai-text {
+font-size: 14px;
+color: rgba(240,244,255,0.8);
+line-height: 1.8;
+white-space: pre-wrap;
+font-weight: 400;
+}
+
+.ai-cursor {
+display: inline-block;
+width: 2px; height: 14px;
+background: var(–purple);
+animation: blink 1s step-end infinite;
+vertical-align: middle;
+margin-left: 2px;
+}
+
+.ai-source {
+display: none;
+align-items: center;
+gap: 8px;
+margin-top: 14px;
+padding-top: 12px;
+border-top: 1px solid var(–border);
+font-size: 11px;
+color: var(–gray2);
+}
 
 /* FOLLOWUP */
-.fu-sec { margin-bottom: 24px; }
-.fu-title { font-family: ‘Playfair Display’, serif; font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-.fu-title::before { content: ‘◆’; color: var(–accent); font-size: 10px; }
-.chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
-.chip { background: var(–bg2); border: 1px solid var(–border); padding: 7px 13px; font-size: 10px; color: var(–ink2); cursor: pointer; transition: all 0.2s; font-family: ‘JetBrains Mono’, monospace; }
-.chip:hover:not(.off) { background: var(–ink); color: var(–bg); border-color: var(–ink); }
-.chip.off { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
-.qrow { display: flex; gap: 8px; }
-.qi { flex: 1; background: var(–bg); border: 1px solid var(–border); border-bottom: 2px solid var(–ink3); padding: 9px 11px; font-family: ‘JetBrains Mono’, monospace; font-size: 12px; color: var(–ink); outline: none; border-radius: 0; }
-.qi:focus { border-bottom-color: var(–accent); }
-.qi:disabled { opacity: 0.45; }
-.qbtn { background: var(–accent); color: var(–white); border: none; padding: 9px 16px; font-family: ‘JetBrains Mono’, monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
-.qbtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.followup-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 24px;
+margin-bottom: 16px;
+}
+
+.followup-title {
+font-size: 15px;
+font-weight: 700;
+margin-bottom: 14px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.followup-title::before {
+content: ‘✦’;
+color: var(–teal);
+font-size: 12px;
+}
+
+.chips {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-bottom: 14px;
+}
+
+.chip {
+background: rgba(255,255,255,0.05);
+border: 1px solid var(–border);
+border-radius: 100px;
+padding: 8px 16px;
+font-size: 12px;
+font-weight: 600;
+color: var(–gray);
+cursor: pointer;
+transition: all 0.2s;
+font-family: var(–font);
+}
+
+.chip:hover:not(.off) {
+background: rgba(0,212,170,0.1);
+border-color: rgba(0,212,170,0.4);
+color: var(–teal);
+}
+
+.chip.off { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+.q-row { display: flex; gap: 10px; }
+
+.q-input {
+flex: 1;
+background: rgba(255,255,255,0.05);
+border: 1px solid var(–border);
+border-radius: 14px;
+padding: 12px 16px;
+font-family: var(–font);
+font-size: 14px;
+font-weight: 500;
+color: var(–white);
+outline: none;
+transition: all 0.2s;
+}
+
+.q-input:focus {
+border-color: var(–teal);
+box-shadow: 0 0 0 3px rgba(0,212,170,0.1);
+}
+
+.q-input::placeholder { color: rgba(240,244,255,0.2); }
+.q-input:disabled { opacity: 0.5; }
+
+.q-btn {
+background: linear-gradient(135deg, var(–teal), var(–blue));
+border: none;
+border-radius: 14px;
+padding: 12px 20px;
+font-family: var(–font);
+font-size: 13px;
+font-weight: 700;
+color: var(–bg);
+cursor: pointer;
+transition: all 0.2s;
+white-space: nowrap;
+}
+
+.q-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,212,170,0.25); }
+.q-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
 .answers { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
-.ac { background: var(–white); border: 1px solid var(–border2); border-left: 3px solid var(–gold); padding: 16px 18px; }
-.aq { font-size: 10px; color: var(–ink3); letter-spacing: 1px; margin-bottom: 8px; font-style: italic; }
-.aa { font-size: 12px; color: var(–ink2); line-height: 1.9; white-space: pre-wrap; }
 
-/* EMAIL CAPTURE */
-.email-sec {
-background: var(–ink); padding: 28px; text-align: center; margin-bottom: 24px;
+.answer-card {
+background: rgba(255,255,255,0.03);
+border: 1px solid var(–border);
+border-left: 3px solid var(–gold);
+border-radius: 14px;
+padding: 16px;
 }
-.email-ey { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(–border2); margin-bottom: 8px; }
-.email-ti { font-family: ‘Playfair Display’, serif; font-size: 20px; font-weight: 700; color: var(–bg); margin-bottom: 8px; }
-.email-tx { font-size: 10px; color: var(–border); line-height: 1.9; margin-bottom: 16px; }
-.email-row { display: flex; gap: 0; max-width: 400px; margin: 0 auto 10px; }
+
+.answer-q {
+font-size: 11px;
+color: var(–gray2);
+font-weight: 600;
+margin-bottom: 8px;
+font-style: italic;
+}
+
+.answer-a {
+font-size: 13px;
+color: rgba(240,244,255,0.8);
+line-height: 1.8;
+white-space: pre-wrap;
+}
+
+/* EMAIL CTA */
+.cta-card {
+background: linear-gradient(135deg, rgba(0,212,170,0.1), rgba(79,142,247,0.1));
+border: 1px solid rgba(0,212,170,0.2);
+border-radius: 28px;
+padding: 36px 32px;
+text-align: center;
+margin-bottom: 16px;
+position: relative;
+overflow: hidden;
+}
+
+.cta-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–teal), var(–blue), transparent);
+}
+
+.cta-icon { font-size: 40px; margin-bottom: 16px; }
+.cta-title { font-family: var(–serif); font-size: 26px; font-style: italic; margin-bottom: 10px; }
+.cta-text { font-size: 14px; color: var(–gray); line-height: 1.6; margin-bottom: 24px; max-width: 380px; margin-left: auto; margin-right: auto; }
+
+.email-row { display: flex; gap: 10px; max-width: 400px; margin: 0 auto 10px; }
+
 .email-input {
-flex: 1; background: var(–bg); border: none; border-bottom: 2px solid var(–border);
-padding: 12px 14px; font-family: ‘JetBrains Mono’, monospace; font-size: 12px;
-color: var(–ink); outline: none; border-radius: 0;
+flex: 1;
+background: rgba(255,255,255,0.08);
+border: 1px solid var(–border2);
+border-radius: 14px;
+padding: 14px 18px;
+font-family: var(–font);
+font-size: 14px;
+font-weight: 500;
+color: var(–white);
+outline: none;
+transition: all 0.2s;
 }
-.email-input:focus { border-bottom-color: var(–accent); }
+
+.email-input:focus { border-color: var(–teal); box-shadow: 0 0 0 3px rgba(0,212,170,0.1); }
+.email-input::placeholder { color: rgba(240,244,255,0.25); }
+
 .email-btn {
-background: var(–accent); color: var(–white); border: none;
-padding: 12px 18px; font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+background: linear-gradient(135deg, var(–teal), var(–blue));
+border: none;
+border-radius: 14px;
+padding: 14px 20px;
+font-family: var(–font);
+font-size: 13px;
+font-weight: 700;
+color: var(–bg);
+cursor: pointer;
+transition: all 0.2s;
+white-space: nowrap;
 }
-.email-btn:hover { opacity: 0.85; }
-.email-note { font-size: 9px; color: var(–border2); letter-spacing: 1px; }
 
-.reset { background: none; border: 1px solid var(–border); padding: 10px 20px; font-family: ‘JetBrains Mono’, monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(–ink3); cursor: pointer; display: block; margin: 0 auto; transition: all 0.2s; }
-.reset:hover { border-color: var(–ink); color: var(–ink); }
+.email-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,212,170,0.3); }
+.cta-note { font-size: 11px; color: var(–gray2); }
 
-.footer { text-align: center; padding-top: 24px; border-top: 1px solid var(–border); font-size: 9px; color: var(–ink3); letter-spacing: 1px; line-height: 2.2; margin-top: 24px; }
+.reset-btn {
+display: block;
+background: none;
+border: 1px solid var(–border);
+border-radius: 14px;
+padding: 12px 24px;
+font-family: var(–font);
+font-size: 13px;
+font-weight: 600;
+color: var(–gray2);
+cursor: pointer;
+margin: 0 auto;
+transition: all 0.2s;
+}
 
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-@keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:0.4} 40%{transform:translateY(-10px);opacity:1} }
+.reset-btn:hover { border-color: var(–border2); color: var(–white); }
+
+/* FOOTER */
+.footer {
+text-align: center;
+padding: 32px 0 0;
+border-top: 1px solid var(–border);
+margin-top: 32px;
+font-size: 11px;
+color: var(–gray2);
+line-height: 2.2;
+}
+
+/* ANIMATIONS */
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.2)} }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.fade-in { animation: fadeIn 0.6s ease both; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 </style>
 
 </head>
 <body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
 <div class="page">
 
-  <!-- LANG BAR -->
+  <!-- NAV -->
 
-  <div class="lang-bar">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('es')">ES</button>
-    <button class="lang-btn" onclick="setLang('pt')">PT</button>
-    <button class="lang-btn" onclick="setLang('fr')">FR</button>
-    <button class="lang-btn" onclick="setLang('hi')">HI</button>
-    <button class="lang-btn" onclick="setLang('zh')">ZH</button>
-  </div>
+  <nav class="nav">
+    <div class="nav-logo">VIVIX</div>
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('pt')">PT</button>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('hi')">HI</button>
+      <button class="lang-btn" onclick="setLang('zh')">ZH</button>
+    </div>
+  </nav>
 
-  <!-- MASTHEAD -->
+  <!-- HERO -->
 
-  <div class="masthead">
-    <div class="over" id="t-over">// Scientific vital wellness tool</div>
-    <h1>VIV<em>IX</em></h1>
-    <div class="ai-badge" id="t-badge">AI Engine — Claude Sonnet</div>
-    <p class="deck" id="t-deck">7 data points. Personalized scientific analysis by AI.<br>Your real life expectancy, your risks, your action plan.</p>
-    <div class="rule" id="t-rule">WHO · Harvard · NIH · The Lancet · eBioMedicine</div>
+  <div class="hero fade-in">
+    <div class="hero-badge" id="t-badge">AI Engine — Claude Sonnet</div>
+    <h1 id="t-h1">Know Your<br><em>Vital Score</em></h1>
+    <p class="hero-sub" id="t-sub">7 data points. Personalized scientific analysis by AI. Your real life expectancy, your risks, your action plan.</p>
+    <div class="hero-sources">
+      <span>WHO</span><div class="source-dot"></div>
+      <span>Harvard</span><div class="source-dot"></div>
+      <span>NIH</span><div class="source-dot"></div>
+      <span>The Lancet</span><div class="source-dot"></div>
+      <span>eBioMedicine</span>
+    </div>
   </div>
 
   <!-- STATS -->
 
-  <div class="stats-bar">
-    <div class="stat-cell">
+  <div class="stats fade-in">
+    <div class="stat-card">
       <div class="stat-num" id="userCount">0</div>
-      <div class="stat-label" id="t-stat1">Profiles analyzed</div>
+      <div class="stat-label" id="t-stat1">Profiles</div>
     </div>
-    <div class="stat-cell">
+    <div class="stat-card">
       <div class="stat-num">6</div>
       <div class="stat-label" id="t-stat2">Languages</div>
     </div>
-    <div class="stat-cell">
+    <div class="stat-card">
       <div class="stat-num">5</div>
-      <div class="stat-label" id="t-stat3">Science sources</div>
+      <div class="stat-label" id="t-stat3">Sources</div>
     </div>
   </div>
 
   <!-- FORM -->
 
   <div id="formSec">
-    <div class="form-box">
-      <div class="sec-num" id="t-secnum">// 7 questions · 45 seconds</div>
-      <div class="sec-title" id="t-sectitle">Your biometric profile</div>
-      <div class="sec-sub" id="t-secsub">Processed locally. No identifiable data stored without your consent.</div>
-      <div class="fg">
-        <div class="f"><label id="t-age">Age <span>*</span></label><input type="number" id="age" min="18" max="100"></div>
-        <div class="f"><label id="t-sex">Biological sex <span>*</span></label>
-          <select id="sex">
-            <option value="" id="t-sel">— Select —</option>
-            <option value="M" id="t-male">Male</option>
-            <option value="F" id="t-female">Female</option>
-          </select>
-        </div>
-        <div class="f"><label id="t-weight">Weight (kg) <span>*</span></label><input type="number" id="weight" min="30" max="250"></div>
-        <div class="f"><label id="t-height">Height (cm) <span>*</span></label><input type="number" id="height" min="100" max="220"></div>
-        <div class="f full"><label id="t-country">Country <span>*</span></label>
-          <select id="country">
-            <option value="">— Select —</option>
-            <option value="MX">🇲🇽 Mexico</option>
-            <option value="US">🇺🇸 United States</option>
-            <option value="CO">🇨🇴 Colombia</option>
-            <option value="AR">🇦🇷 Argentina</option>
-            <option value="BR">🇧🇷 Brazil</option>
-            <option value="CL">🇨🇱 Chile</option>
-            <option value="PE">🇵🇪 Peru</option>
-            <option value="ES">🇪🇸 Spain</option>
-            <option value="FR">🇫🇷 France</option>
-            <option value="IN">🇮🇳 India</option>
-            <option value="CN">🇨🇳 China</option>
-            <option value="GB">🇬🇧 United Kingdom</option>
-            <option value="DE">🇩🇪 Germany</option>
-            <option value="OTHER">🌍 Other</option>
-          </select>
-        </div>
-        <div class="f full">
-          <label id="t-water">Daily water (liters) <span>*</span></label>
-          <div class="sw"><input type="range" id="wS" min="0.5" max="5" step="0.1" value="1.5"><div class="sv" id="wV">1.5 L</div></div>
-        </div>
-        <div class="f full">
-          <label id="t-sleep">Hours of sleep per night <span>*</span></label>
-          <div class="sw"><input type="range" id="sS" min="2" max="12" step="0.5" value="7"><div class="sv" id="sV">7.0 h</div></div>
+    <div class="form-card fade-in">
+      <div class="form-header">
+        <div class="form-step" id="t-step">// 7 questions · 45 seconds</div>
+        <div class="form-title" id="t-ftitle">Your biometric profile</div>
+        <div class="form-sub" id="t-fsub">Processed locally. No identifiable data stored without your consent.</div>
+      </div>
+
+```
+  <div class="field-grid">
+    <div class="field">
+      <label id="t-age">Age <span class="req">*</span></label>
+      <input type="number" id="age" placeholder="38" min="18" max="100">
+    </div>
+    <div class="field">
+      <label id="t-sex">Biological sex <span class="req">*</span></label>
+      <select id="sex">
+        <option value="" id="t-sel">— Select —</option>
+        <option value="M" id="t-male">Male</option>
+        <option value="F" id="t-female">Female</option>
+      </select>
+    </div>
+    <div class="field">
+      <label id="t-weight">Weight (kg) <span class="req">*</span></label>
+      <input type="number" id="weight" placeholder="75" min="30" max="250">
+    </div>
+    <div class="field">
+      <label id="t-height">Height (cm) <span class="req">*</span></label>
+      <input type="number" id="height" placeholder="175" min="100" max="220">
+    </div>
+    <div class="field full">
+      <label id="t-country">Country <span class="req">*</span></label>
+      <select id="country">
+        <option value="">— Select —</option>
+        <option value="MX">🇲🇽 Mexico</option>
+        <option value="US">🇺🇸 United States</option>
+        <option value="CO">🇨🇴 Colombia</option>
+        <option value="AR">🇦🇷 Argentina</option>
+        <option value="BR">🇧🇷 Brazil</option>
+        <option value="CL">🇨🇱 Chile</option>
+        <option value="PE">🇵🇪 Peru</option>
+        <option value="ES">🇪🇸 Spain</option>
+        <option value="FR">🇫🇷 France</option>
+        <option value="IN">🇮🇳 India</option>
+        <option value="CN">🇨🇳 China</option>
+        <option value="GB">🇬🇧 United Kingdom</option>
+        <option value="DE">🇩🇪 Germany</option>
+        <option value="OTHER">🌍 Other</option>
+      </select>
+    </div>
+    <div class="field full">
+      <label id="t-water">Daily water (liters) <span class="req">*</span></label>
+      <div class="slider-wrap">
+        <div class="slider-row">
+          <input type="range" id="wS" min="0.5" max="5" step="0.1" value="1.5">
+          <div class="slider-val" id="wV">1.5 L</div>
         </div>
       </div>
-      <button class="btn-main" onclick="go()" id="t-btn">Analyze with AI →</button>
-      <p class="privacy" id="t-privacy">🔒 No cookies · No tracking · Anonymous data<br>By continuing you agree to share anonymous data for global wellness research</p>
     </div>
+    <div class="field full">
+      <label id="t-sleep">Hours of sleep per night <span class="req">*</span></label>
+      <div class="slider-wrap">
+        <div class="slider-row">
+          <input type="range" id="sS" min="2" max="12" step="0.5" value="7">
+          <div class="slider-val" id="sV">7.0 h</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-submit" onclick="go()" id="t-btn">✦ Analyze with AI</button>
+  <p class="privacy-note" id="t-privacy">🔒 No cookies · No tracking · Anonymous data · GDPR compliant</p>
+</div>
+```
+
   </div>
 
   <!-- LOADING -->
 
   <div id="loadSec">
-    <div class="lt" id="t-ldt">Analyzing your vital profile...</div>
-    <div class="ls" id="t-lds">AI is processing your information</div>
-    <div class="lsteps">
-      <div class="lstep" id="s1">⚗️  Calculating biometric metrics</div>
-      <div class="lstep" id="s2">📊  Applying epidemiological models</div>
-      <div class="lstep" id="s3">🧠  Generating personalized AI analysis</div>
-      <div class="lstep" id="s4">✦  Preparing your vital report</div>
+    <div class="load-icon">🧬</div>
+    <div class="load-title" id="t-ldt">Analyzing your profile...</div>
+    <div class="load-sub" id="t-lds">AI is processing your information</div>
+    <div class="load-steps">
+      <div class="load-step" id="s1"><div class="load-step-icon">⚗️</div> Calculating biometrics</div>
+      <div class="load-step" id="s2"><div class="load-step-icon">📊</div> Applying epidemiological models</div>
+      <div class="load-step" id="s3"><div class="load-step-icon">🧠</div> Generating AI analysis</div>
+      <div class="load-step" id="s4"><div class="load-step-icon">✦</div> Preparing your report</div>
     </div>
-    <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
   </div>
 
   <!-- RESULTS -->
 
   <div id="resSec">
-    <div class="res-hdr">
-      <div class="rl" id="t-rl">Your personal result</div>
-      <div class="rp" id="rp">—</div>
-      <div class="rsw"><div class="rsn" id="rsn">—</div><div class="rsu">/100</div></div>
-      <div class="rsl" id="t-rsl">GLOBAL VITAL SCORE</div>
+
+```
+<svg width="0" height="0">
+  <defs>
+    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4aa"/>
+      <stop offset="100%" style="stop-color:#4f8ef7"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="score-hero fade-in">
+  <div class="score-profile" id="rp">—</div>
+  <div class="score-ring">
+    <svg viewBox="0 0 160 160">
+      <circle class="score-ring-track" cx="80" cy="80" r="70"/>
+      <circle class="score-ring-fill" id="scoreRing" cx="80" cy="80" r="70"/>
+    </svg>
+    <div class="score-center">
+      <div class="score-num" id="rsn">—</div>
+      <div class="score-denom">/100</div>
     </div>
-    <div class="vg">
-      <div class="vc"><div class="vcl" id="t-bmi">BMI</div><div class="vcv" id="vBmi">—</div><div class="vcs" id="vBmiL">—</div></div>
-      <div class="vc"><div class="vcl" id="t-hyd">Hydration</div><div class="vcv" id="vWat">—</div><div class="vcs" id="vWatL">—</div></div>
-      <div class="vc"><div class="vcl" id="t-slp">Sleep</div><div class="vcv" id="vSlp">—</div><div class="vcs" id="vSlpL">—</div></div>
-    </div>
-    <div class="lbs">
-      <div class="lbl" id="t-lifeline">// Your estimated lifeline</div>
-      <div class="lbt">
-        <div class="lbp" id="lbp" style="width:0%"></div>
-        <div class="lbv" id="lbv" style="width:0%"></div>
-      </div>
-      <div class="lbls"><span>0</span><span id="lbAge">—</span><span id="lbExp">—</span><span>100</span></div>
-    </div>
-    <div class="ai-sec">
-      <div class="ai-hdr">
-        <div class="ai-title" id="t-analysis">Personalized analysis</div>
-        <div class="ai-tag">AI live</div>
-      </div>
-      <div class="ai-box">
-        <div class="ai-txt" id="aiTxt"></div>
-        <span class="cursor" id="aiCur" style="display:none"></span>
-        <div class="src" id="aiSrc">WHO 2024 · NIH · Harvard Chan School · The Lancet · eBioMedicine 2023</div>
-      </div>
-    </div>
-    <div class="fu-sec" id="fuSec" style="display:none">
-      <div class="fu-title" id="t-askAI">Ask your vital AI</div>
-      <div class="chips" id="chipsEl"></div>
-      <div class="qrow">
-        <input class="qi" id="qi" onkeydown="if(event.key==='Enter'&&!isLocked)send()">
-        <button class="qbtn" id="qbtn" onclick="send()" id="t-ask">Ask</button>
-      </div>
-      <div class="answers" id="answers"></div>
-    </div>
-    <div class="email-sec">
-      <div class="email-ey" id="t-eey">// Weekly monitoring</div>
-      <div class="email-ti" id="t-eti">Your Vital Score changes every week</div>
-      <p class="email-tx" id="t-etx">Track your habits and watch your life expectancy change in real time. Your anonymous data contributes to the global wellness index.</p>
-      <div class="email-row">
-        <input type="email" class="email-input" id="emailInput" placeholder="your@email.com">
-        <button class="email-btn" onclick="captureEmail()" id="t-ejoin">Join free</button>
-      </div>
-      <p class="email-note" id="t-enote">No cost · Your data always yours · No ads</p>
-    </div>
-    <button class="reset" onclick="resetForm()" id="t-reset">← Recalculate</button>
+  </div>
+  <div class="score-label" id="t-rsl">GLOBAL VITAL SCORE</div>
+</div>
+
+<div class="vitals-row fade-in">
+  <div class="vital-card">
+    <div class="vital-icon">⚖️</div>
+    <div class="vital-label" id="t-bmi">BMI</div>
+    <div class="vital-value" id="vBmi">—</div>
+    <div class="vital-status" id="vBmiL">—</div>
+  </div>
+  <div class="vital-card">
+    <div class="vital-icon">💧</div>
+    <div class="vital-label" id="t-hyd">Hydration</div>
+    <div class="vital-value" id="vWat">—</div>
+    <div class="vital-status" id="vWatL">—</div>
+  </div>
+  <div class="vital-card">
+    <div class="vital-icon">😴</div>
+    <div class="vital-label" id="t-slp">Sleep</div>
+    <div class="vital-value" id="vSlp">—</div>
+    <div class="vital-status" id="vSlpL">—</div>
+  </div>
+</div>
+
+<div class="life-card fade-in">
+  <div class="life-card-header">
+    <div class="life-card-title" id="t-lifeline">Your estimated lifeline</div>
+    <div class="life-card-years" id="lbExp">—</div>
+  </div>
+  <div class="life-bar-track">
+    <div class="life-bar-potential" id="lbp" style="width:0%"></div>
+    <div class="life-bar-lived" id="lbv" style="width:0%"></div>
+  </div>
+  <div class="life-bar-labels">
+    <span>0</span>
+    <span id="lbAge">—</span>
+    <span>100</span>
+  </div>
+</div>
+
+<div class="ai-card fade-in">
+  <div class="ai-card-header">
+    <div class="ai-card-title" id="t-analysis">Personalized AI Analysis</div>
+    <div class="ai-pill">LIVE</div>
+  </div>
+  <div class="ai-text" id="aiTxt"></div>
+  <span class="ai-cursor" id="aiCur" style="display:none"></span>
+  <div class="ai-source" id="aiSrc">🔬 WHO 2024 · NIH · Harvard Chan School · The Lancet · eBioMedicine 2023</div>
+</div>
+
+<div class="followup-card fade-in" id="fuSec" style="display:none">
+  <div class="followup-title" id="t-askAI">Ask your vital AI</div>
+  <div class="chips" id="chipsEl"></div>
+  <div class="q-row">
+    <input class="q-input" id="qi" placeholder="Ask anything about your profile..." onkeydown="if(event.key==='Enter'&&!isLocked)send()">
+    <button class="q-btn" id="qbtn" onclick="send()">Ask →</button>
+  </div>
+  <div class="answers" id="answers"></div>
+</div>
+
+<div class="cta-card fade-in">
+  <div class="cta-icon">📊</div>
+  <div class="cta-title" id="t-eti">Track Your Score Weekly</div>
+  <p class="cta-text" id="t-etx">Your Vital Score changes with your habits. Monitor it weekly and watch your life expectancy improve in real time.</p>
+  <div class="email-row">
+    <input type="email" class="email-input" id="emailInput" placeholder="your@email.com">
+    <button class="email-btn" onclick="captureEmail()" id="t-ejoin">Join Free</button>
+  </div>
+  <p class="cta-note" id="t-enote">Free forever · Your data always yours · No spam</p>
+</div>
+
+<button class="reset-btn" onclick="resetForm()" id="t-reset">← New analysis</button>
+```
+
   </div>
 
-  <div class="footer" id="t-footer">
-    VIVIX · BETA 1.0 · APRIL 2026<br>
-    AI Engine: Claude Sonnet · WHO 2024 · NIH · Harvard Chan School · The Lancet<br>
-    <span id="t-disclaimer">Indicative only. Does not replace professional medical diagnosis.</span>
+  <div class="footer">
+    <div>VIVIX · Beta 1.0 · April 2026</div>
+    <div>AI Engine: Claude Sonnet · WHO 2024 · NIH · Harvard Chan School · The Lancet</div>
+    <div id="t-disclaimer">Indicative only. Does not replace professional medical diagnosis.</div>
   </div>
 
 </div>
 
 <script>
-// ─── TRANSLATIONS ───
+// ── TRANSLATIONS (condensed) ──
 const T = {
   en: {
-    over:'// Scientific vital wellness tool',
-    badge:'AI Engine — Claude Sonnet',
-    deck:'7 data points. Personalized scientific analysis by AI.\nYour real life expectancy, your risks, your action plan.',
-    rule:'WHO · Harvard · NIH · The Lancet · eBioMedicine',
-    stat1:'Profiles analyzed', stat2:'Languages', stat3:'Science sources',
-    secnum:'// 7 questions · 45 seconds',
-    sectitle:'Your biometric profile',
-    secsub:'Processed locally. No identifiable data stored without your consent.',
+    badge:'AI Engine — Claude Sonnet', h1:'Know Your<br><em>Vital Score</em>',
+    sub:'7 data points. Personalized scientific analysis by AI.',
+    stat1:'Profiles', stat2:'Languages', stat3:'Sources',
+    step:'// 7 questions · 45 seconds', ftitle:'Your biometric profile',
+    fsub:'Processed locally. No identifiable data stored without your consent.',
     age:'Age', sex:'Biological sex', weight:'Weight (kg)', height:'Height (cm)',
     country:'Country', water:'Daily water (liters)', sleep:'Hours of sleep per night',
-    sel:'— Select —', male:'Male', female:'Female',
-    btn:'Analyze with AI →',
-    privacy:'🔒 No cookies · No tracking · Anonymous data\nBy continuing you agree to share anonymous data for global wellness research',
-    ldt:'Analyzing your vital profile...', lds:'AI is processing your information',
-    rl:'Your personal result', rsl:'GLOBAL VITAL SCORE',
-    bmi:'BMI', hyd:'Hydration', slp:'Sleep',
-    lifeline:'// Your estimated lifeline',
-    analysis:'Personalized analysis',
+    sel:'— Select —', male:'Male', female:'Female', btn:'✦ Analyze with AI',
+    privacy:'🔒 No cookies · No tracking · Anonymous data · GDPR compliant',
+    ldt:'Analyzing your profile...', lds:'AI is processing your information',
+    rsl:'GLOBAL VITAL SCORE', bmi:'BMI', hyd:'Hydration', slp:'Sleep',
+    lifeline:'Your estimated lifeline', analysis:'Personalized AI Analysis',
     askAI:'Ask your vital AI',
     chips:['What do I change first?','Impact of more sleep','Water & cognition','My main risk','30-day plan'],
-    qph:'Write your question...',
-    ask:'Ask',
-    eey:'// Weekly monitoring', eti:'Your Vital Score changes every week',
-    etx:'Track your habits and watch your life expectancy change in real time.',
-    ejoin:'Join free', enote:'No cost · Your data always yours · No ads',
-    reset:'← Recalculate',
-    footer:'VIVIX · BETA 1.0 · APRIL 2026\nAI Engine: Claude Sonnet · WHO 2024 · NIH · Harvard Chan School · The Lancet',
-    disclaimer:'Indicative only. Does not replace professional medical diagnosis.',
-    aiPrompt:(p)=>`You are a preventive medicine specialist. Analyze this profile and give a personalized report in English, max 300 words, no markdown, second person (you).\n\nProfile: ${p.age}yo, ${p.sex==='F'?'Female':'Male'}, ${p.country}, BMI ${p.bmi} (${p.bmiL}), water ${p.water}L of ${p.wOpt}L optimal (${p.watL}), sleep ${p.sleep}h (${p.slpL}). Vital Score: ${p.score}/100. Life expectancy ~${p.le} years (${p.yl} remaining).\n\nInclude: 1) Impactful opener 2) What their score means 3) Biggest risk factor 4) Main strength 5) Top 3 changes by impact with timeline 6) Honest motivating close.`,
-    qaPrompt:(p,q)=>`Preventive medicine specialist. User profile: ${p.age}yo, ${p.sex==='F'?'F':'M'}, BMI ${p.bmi} (${p.bmiL}), water ${p.water}L (${p.watL}), sleep ${p.sleep}h (${p.slpL}), Score ${p.score}/100, expectancy ~${p.le}y.\n\nAnswer in English, max 150 words, direct, evidence-based, second person: ${q}`,
+    qph:'Ask anything about your profile...',
+    eti:'Track Your Score Weekly', etx:'Your Vital Score changes with your habits.',
+    ejoin:'Join Free', enote:'Free forever · Your data always yours · No spam',
+    reset:'← New analysis', disclaimer:'Indicative only. Does not replace professional medical diagnosis.',
+    nowLabel:'You now', expectLabel:'Expectancy: ~',
     bmiLabels:{low:'Underweight',ok:'Optimal',over:'Overweight',ob1:'Obesity I',ob2:'Obesity II+'},
     watLabels:{dehy:'Dehydrated',low:'Low',ok2:'Acceptable',opt:'Optimal',exc:'Slight excess'},
     slpLabels:{sev:'Severe deprivation',insuf:'Insufficient',border:'Borderline',opt:'Optimal',exc:'Slight excess',hyp:'Hypersomnia'},
-    nowLabel:'You now', expectLabel:'Expectancy',
-    emailSuccess:'✓ You\'re on the list! We\'ll notify you.',
+    aiPrompt:(p)=>`You are a preventive medicine specialist. Analyze this biometric profile and give a personalized, evidence-based report. English only. Max 280 words. No markdown, no asterisks. Second person (you). Be direct, empathetic, scientific.\n\nProfile: ${p.age}yo, ${p.sex==='F'?'Female':'Male'}, ${p.country}, BMI ${p.bmi} (${p.bmiL}), water ${p.water}L of ${p.wOpt}L optimal (${p.watL}), sleep ${p.sleep}h (${p.slpL}). Vital Score: ${p.score}/100. Life expectancy: ~${p.le} years (${p.yl} remaining).\n\nStructure: 1) Powerful personalized opener 2) What their score means practically 3) Biggest risk factor with biological impact 4) Main strength if any 5) Top 3 changes ordered by impact on life expectancy with timeframes 6) Honest motivating close.`,
+    qaPrompt:(p,q)=>`Preventive medicine specialist. Profile: ${p.age}yo, ${p.sex==='F'?'F':'M'}, BMI ${p.bmi} (${p.bmiL}), water ${p.water}L (${p.watL}), sleep ${p.sleep}h (${p.slpL}), Score ${p.score}/100, expectancy ~${p.le}y. Answer in English, max 140 words, direct, evidence-based, second person: ${q}`,
+    emailSuccess:'✓ You\'re on the list!'
   },
   es: {
-    over:'// Herramienta científica de bienestar vital',
-    badge:'Motor IA — Claude Sonnet',
-    deck:'7 datos. Análisis científico personalizado por IA.\nTu expectativa de vida real, tus riesgos, tu plan de acción.',
-    rule:'OMS · Harvard · NIH · The Lancet · eBioMedicine',
-    stat1:'Perfiles analizados', stat2:'Idiomas', stat3:'Fuentes científicas',
-    secnum:'// 7 preguntas · 45 segundos',
-    sectitle:'Tu perfil biométrico',
-    secsub:'Procesado localmente. Sin datos identificables sin tu consentimiento.',
+    badge:'Motor IA — Claude Sonnet', h1:'Conoce Tu<br><em>Vital Score</em>',
+    sub:'7 datos. Análisis científico personalizado por IA.',
+    stat1:'Perfiles', stat2:'Idiomas', stat3:'Fuentes',
+    step:'// 7 preguntas · 45 segundos', ftitle:'Tu perfil biométrico',
+    fsub:'Procesado localmente. Sin datos identificables sin tu consentimiento.',
     age:'Edad', sex:'Sexo biológico', weight:'Peso (kg)', height:'Altura (cm)',
     country:'País', water:'Litros de agua al día', sleep:'Horas de sueño por noche',
-    sel:'— Selecciona —', male:'Masculino', female:'Femenino',
-    btn:'Analizar con IA →',
-    privacy:'🔒 Sin cookies · Sin tracking · Datos anónimos\nAl continuar aceptas compartir datos anónimos para investigación global',
-    ldt:'Analizando tu perfil vital...', lds:'La IA está procesando tu información',
-    rl:'Tu resultado personal', rsl:'VITAL SCORE GLOBAL',
-    bmi:'IMC', hyd:'Hidratación', slp:'Sueño',
-    lifeline:'// Tu línea de vida estimada',
-    analysis:'Análisis personalizado',
+    sel:'— Selecciona —', male:'Masculino', female:'Femenino', btn:'✦ Analizar con IA',
+    privacy:'🔒 Sin cookies · Sin tracking · Datos anónimos · GDPR',
+    ldt:'Analizando tu perfil...', lds:'La IA está procesando tu información',
+    rsl:'VITAL SCORE GLOBAL', bmi:'IMC', hyd:'Hidratación', slp:'Sueño',
+    lifeline:'Tu línea de vida estimada', analysis:'Análisis IA Personalizado',
     askAI:'Pregúntale a tu IA vital',
     chips:['¿Qué cambio primero?','Impacto de dormir más','Agua y cognición','Mi riesgo principal','Plan 30 días'],
-    qph:'Escribe tu pregunta...',
-    ask:'Preguntar',
-    eey:'// Monitoreo semanal', eti:'Tu Vital Score cambia cada semana',
-    etx:'Registra tus hábitos y observa cómo tu expectativa de vida cambia en tiempo real.',
-    ejoin:'Acceso gratuito', enote:'Sin costo · Datos siempre tuyos · Sin publicidad',
-    reset:'← Recalcular',
-    footer:'VIVIX · BETA 1.0 · ABRIL 2026\nMotor IA: Claude Sonnet · OMS 2024 · NIH · Harvard Chan School · The Lancet',
-    disclaimer:'Orientativo. No sustituye diagnóstico médico profesional.',
-    aiPrompt:(p)=>`Eres médico especialista en medicina preventiva. Analiza este perfil y genera un informe personalizado en español, máximo 300 palabras, sin markdown, segunda persona (tú).\n\nPerfil: ${p.age}a, ${p.sex==='F'?'Femenino':'Masculino'}, ${p.country}, IMC ${p.bmi} (${p.bmiL}), agua ${p.water}L de ${p.wOpt}L óptimo (${p.watL}), sueño ${p.sleep}h (${p.slpL}). Vital Score: ${p.score}/100. Expectativa ~${p.le} años (${p.yl} restantes).\n\nIncluye: 1) Apertura impactante 2) Qué significa su score 3) Mayor factor de riesgo 4) Mayor fortaleza 5) Top 3 cambios por impacto con tiempo estimado 6) Cierre motivador y honesto.`,
-    qaPrompt:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, ${p.sex==='F'?'F':'M'}, IMC ${p.bmi} (${p.bmiL}), agua ${p.water}L (${p.watL}), sueño ${p.sleep}h (${p.slpL}), Score ${p.score}/100, expectativa ~${p.le}a.\n\nResponde en español, máximo 150 palabras, directo, basado en evidencia, segunda persona: ${q}`,
+    qph:'Pregunta sobre tu perfil...',
+    eti:'Monitorea Tu Score Semanal', etx:'Tu Vital Score cambia con tus hábitos.',
+    ejoin:'Acceso Gratuito', enote:'Gratis · Tus datos siempre tuyos · Sin spam',
+    reset:'← Nuevo análisis', disclaimer:'Orientativo. No sustituye diagnóstico médico profesional.',
+    nowLabel:'Tú ahora', expectLabel:'Expectativa: ~',
     bmiLabels:{low:'Bajo peso',ok:'Óptimo',over:'Sobrepeso',ob1:'Obesidad I',ob2:'Obesidad II+'},
     watLabels:{dehy:'Deshidratado',low:'Bajo',ok2:'Aceptable',opt:'Óptimo',exc:'Exceso leve'},
     slpLabels:{sev:'Privación grave',insuf:'Insuficiente',border:'Borderline',opt:'Óptimo',exc:'Exceso leve',hyp:'Hipersomnia'},
-    nowLabel:'Tú ahora', expectLabel:'Expectativa',
-    emailSuccess:'✓ ¡En la lista! Te notificaremos pronto.',
+    aiPrompt:(p)=>`Eres médico especialista en medicina preventiva. Analiza este perfil y genera un informe personalizado en español. Sin markdown ni asteriscos. Máximo 280 palabras. Segunda persona (tú). Directo, empático, científico.\n\nPerfil: ${p.age}a, ${p.sex==='F'?'Femenino':'Masculino'}, ${p.country}, IMC ${p.bmi} (${p.bmiL}), agua ${p.water}L de ${p.wOpt}L óptimo (${p.watL}), sueño ${p.sleep}h (${p.slpL}). Vital Score: ${p.score}/100. Expectativa: ~${p.le} años (${p.yl} restantes).\n\nEstructura: 1) Apertura impactante personalizada 2) Qué significa su score prácticamente 3) Mayor factor de riesgo con impacto biológico 4) Mayor fortaleza si existe 5) Top 3 cambios por impacto en expectativa con plazos 6) Cierre motivador y honesto.`,
+    qaPrompt:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi} (${p.bmiL}), agua ${p.water}L (${p.watL}), sueño ${p.sleep}h (${p.slpL}), Score ${p.score}/100, expectativa ~${p.le}a. Responde en español, máx 140 palabras, directo, basado en evidencia, segunda persona: ${q}`,
+    emailSuccess:'✓ ¡En la lista!'
   },
   pt: {
-    over:'// Ferramenta científica de bem-estar vital',
-    badge:'Motor IA — Claude Sonnet',
-    deck:'7 dados. Análise científica personalizada por IA.\nSua expectativa de vida real, seus riscos, seu plano de ação.',
-    rule:'OMS · Harvard · NIH · The Lancet · eBioMedicine',
-    stat1:'Perfis analisados', stat2:'Idiomas', stat3:'Fontes científicas',
-    secnum:'// 7 perguntas · 45 segundos', sectitle:'Seu perfil biométrico',
-    secsub:'Processado localmente. Sem dados identificáveis sem seu consentimento.',
+    badge:'Motor IA — Claude Sonnet', h1:'Conheça Seu<br><em>Vital Score</em>',
+    sub:'7 dados. Análise científica personalizada por IA.',
+    stat1:'Perfis', stat2:'Idiomas', stat3:'Fontes',
+    step:'// 7 perguntas · 45 segundos', ftitle:'Seu perfil biométrico',
+    fsub:'Processado localmente. Sem dados identificáveis sem seu consentimento.',
     age:'Idade', sex:'Sexo biológico', weight:'Peso (kg)', height:'Altura (cm)',
     country:'País', water:'Litros de água por dia', sleep:'Horas de sono por noite',
-    sel:'— Selecione —', male:'Masculino', female:'Feminino',
-    btn:'Analisar com IA →',
+    sel:'— Selecione —', male:'Masculino', female:'Feminino', btn:'✦ Analisar com IA',
     privacy:'🔒 Sem cookies · Sem rastreamento · Dados anônimos',
-    ldt:'Analisando seu perfil vital...', lds:'A IA está processando suas informações',
-    rl:'Seu resultado pessoal', rsl:'VITAL SCORE GLOBAL',
-    bmi:'IMC', hyd:'Hidratação', slp:'Sono',
-    lifeline:'// Sua linha de vida estimada', analysis:'Análise personalizada',
+    ldt:'Analisando seu perfil...', lds:'A IA está processando suas informações',
+    rsl:'VITAL SCORE GLOBAL', bmi:'IMC', hyd:'Hidratação', slp:'Sono',
+    lifeline:'Sua linha de vida estimada', analysis:'Análise IA Personalizada',
     askAI:'Pergunte à sua IA vital',
     chips:['O que mudo primeiro?','Impacto de dormir mais','Água e cognição','Meu risco principal','Plano 30 dias'],
-    qph:'Escreva sua pergunta...', ask:'Perguntar',
-    eey:'// Monitoramento semanal', eti:'Seu Vital Score muda toda semana',
-    etx:'Registre seus hábitos e veja como sua expectativa de vida muda em tempo real.',
-    ejoin:'Acesso gratuito', enote:'Sem custo · Seus dados sempre seus',
-    reset:'← Recalcular',
-    footer:'VIVIX · BETA 1.0 · ABRIL 2026',
-    disclaimer:'Indicativo. Não substitui diagnóstico médico profissional.',
-    aiPrompt:(p)=>`Você é médico especialista em medicina preventiva. Analise este perfil e gere um relatório personalizado em português, máx 300 palavras, sem markdown, segunda pessoa (você).\n\nPerfil: ${p.age}a, ${p.sex==='F'?'Feminino':'Masculino'}, ${p.country}, IMC ${p.bmi} (${p.bmiL}), água ${p.water}L de ${p.wOpt}L ótimo (${p.watL}), sono ${p.sleep}h (${p.slpL}). Vital Score: ${p.score}/100. Expectativa ~${p.le} anos (${p.yl} restantes).`,
-    qaPrompt:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi}, água ${p.water}L, sono ${p.sleep}h, Score ${p.score}/100.\nResponda em português, máx 150 palavras: ${q}`,
+    qph:'Pergunte sobre seu perfil...',
+    eti:'Monitore Seu Score Semanal', etx:'Seu Vital Score muda com seus hábitos.',
+    ejoin:'Acesso Gratuito', enote:'Gratuito · Seus dados sempre seus',
+    reset:'← Nova análise', disclaimer:'Indicativo. Não substitui diagnóstico médico.',
+    nowLabel:'Você agora', expectLabel:'Expectativa: ~',
     bmiLabels:{low:'Abaixo do peso',ok:'Ótimo',over:'Sobrepeso',ob1:'Obesidade I',ob2:'Obesidade II+'},
     watLabels:{dehy:'Desidratado',low:'Baixo',ok2:'Aceitável',opt:'Ótimo',exc:'Excesso leve'},
     slpLabels:{sev:'Privação grave',insuf:'Insuficiente',border:'Limítrofe',opt:'Ótimo',exc:'Excesso leve',hyp:'Hipersonia'},
-    nowLabel:'Você agora', expectLabel:'Expectativa',
-    emailSuccess:'✓ Na lista! Vamos te notificar.',
+    aiPrompt:(p)=>`Você é médico especialista em medicina preventiva. Analise este perfil em português. Sem markdown. Máx 280 palavras. Segunda pessoa (você).\n\nPerfil: ${p.age}a, ${p.sex==='F'?'Feminino':'Masculino'}, ${p.country}, IMC ${p.bmi}, água ${p.water}L, sono ${p.sleep}h. Vital Score: ${p.score}/100. Expectativa: ~${p.le} anos.`,
+    qaPrompt:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi}, água ${p.water}L, sono ${p.sleep}h, Score ${p.score}/100. Responda em português, máx 140 palavras: ${q}`,
+    emailSuccess:'✓ Na lista!'
   },
   fr: {
-    over:'// Outil scientifique de bien-être vital',
-    badge:'Moteur IA — Claude Sonnet',
-    deck:'7 données. Analyse scientifique personnalisée par IA.\nVotre espérance de vie réelle, vos risques, votre plan d\'action.',
-    rule:'OMS · Harvard · NIH · The Lancet · eBioMedicine',
-    stat1:'Profils analysés', stat2:'Langues', stat3:'Sources scientifiques',
-    secnum:'// 7 questions · 45 secondes', sectitle:'Votre profil biométrique',
-    secsub:'Traité localement. Aucune donnée identifiable sans votre consentement.',
+    badge:'Moteur IA — Claude Sonnet', h1:'Connaissez Votre<br><em>Vital Score</em>',
+    sub:'7 données. Analyse scientifique personnalisée par IA.',
+    stat1:'Profils', stat2:'Langues', stat3:'Sources',
+    step:'// 7 questions · 45 secondes', ftitle:'Votre profil biométrique',
+    fsub:'Traité localement. Aucune donnée identifiable sans votre consentement.',
     age:'Âge', sex:'Sexe biologique', weight:'Poids (kg)', height:'Taille (cm)',
-    country:'Pays', water:'Litres d\'eau par jour', sleep:'Heures de sommeil par nuit',
-    sel:'— Sélectionner —', male:'Masculin', female:'Féminin',
-    btn:'Analyser avec l\'IA →',
+    country:'Pays', water:'Litres d\'eau par jour', sleep:'Heures de sommeil',
+    sel:'— Sélectionner —', male:'Masculin', female:'Féminin', btn:'✦ Analyser avec l\'IA',
     privacy:'🔒 Sans cookies · Sans traçage · Données anonymes',
-    ldt:'Analyse de votre profil vital...', lds:'L\'IA traite vos informations',
-    rl:'Votre résultat personnel', rsl:'VITAL SCORE GLOBAL',
-    bmi:'IMC', hyd:'Hydratation', slp:'Sommeil',
-    lifeline:'// Votre ligne de vie estimée', analysis:'Analyse personnalisée',
+    ldt:'Analyse en cours...', lds:'L\'IA traite vos informations',
+    rsl:'VITAL SCORE GLOBAL', bmi:'IMC', hyd:'Hydratation', slp:'Sommeil',
+    lifeline:'Votre ligne de vie estimée', analysis:'Analyse IA Personnalisée',
     askAI:'Demandez à votre IA vitale',
     chips:['Que changer en premier?','Impact de plus de sommeil','Eau et cognition','Mon risque principal','Plan 30 jours'],
-    qph:'Écrivez votre question...', ask:'Demander',
-    eey:'// Suivi hebdomadaire', eti:'Votre Vital Score change chaque semaine',
-    etx:'Suivez vos habitudes et observez comment votre espérance de vie évolue en temps réel.',
-    ejoin:'Accès gratuit', enote:'Sans frais · Vos données toujours à vous',
-    reset:'← Recalculer',
-    footer:'VIVIX · BETA 1.0 · AVRIL 2026',
-    disclaimer:'Indicatif. Ne remplace pas un diagnostic médical professionnel.',
-    aiPrompt:(p)=>`Vous êtes médecin spécialiste en médecine préventive. Analysez ce profil en français, max 300 mots, sans markdown, deuxième personne (vous).\n\nProfil: ${p.age}ans, ${p.sex==='F'?'Féminin':'Masculin'}, ${p.country}, IMC ${p.bmi}, eau ${p.water}L, sommeil ${p.sleep}h. Vital Score: ${p.score}/100. Espérance ~${p.le} ans.`,
-    qaPrompt:(p,q)=>`Médecin préventif. Profil: ${p.age}ans, IMC ${p.bmi}, eau ${p.water}L, sommeil ${p.sleep}h, Score ${p.score}/100.\nRépondez en français, max 150 mots: ${q}`,
+    qph:'Posez une question sur votre profil...',
+    eti:'Suivez Votre Score Chaque Semaine', etx:'Votre Vital Score évolue avec vos habitudes.',
+    ejoin:'Accès Gratuit', enote:'Gratuit · Vos données toujours à vous',
+    reset:'← Nouvelle analyse', disclaimer:'Indicatif. Ne remplace pas un diagnostic médical.',
+    nowLabel:'Vous maintenant', expectLabel:'Espérance: ~',
     bmiLabels:{low:'Insuffisance pondérale',ok:'Optimal',over:'Surpoids',ob1:'Obésité I',ob2:'Obésité II+'},
     watLabels:{dehy:'Déshydraté',low:'Bas',ok2:'Acceptable',opt:'Optimal',exc:'Léger excès'},
     slpLabels:{sev:'Privation grave',insuf:'Insuffisant',border:'Limite',opt:'Optimal',exc:'Léger excès',hyp:'Hypersomnie'},
-    nowLabel:'Vous maintenant', expectLabel:'Espérance',
-    emailSuccess:'✓ Sur la liste ! Nous vous notifierons.',
+    aiPrompt:(p)=>`Vous êtes médecin spécialiste. Analysez ce profil en français. Sans markdown. Max 280 mots. Deuxième personne.\n\nProfil: ${p.age}ans, ${p.sex==='F'?'Féminin':'Masculin'}, ${p.country}, IMC ${p.bmi}, eau ${p.water}L, sommeil ${p.sleep}h. Score: ${p.score}/100. Espérance: ~${p.le} ans.`,
+    qaPrompt:(p,q)=>`Médecin préventif. Profil: ${p.age}ans, IMC ${p.bmi}, eau ${p.water}L, sommeil ${p.sleep}h, Score ${p.score}/100. Répondez en français, max 140 mots: ${q}`,
+    emailSuccess:'✓ Sur la liste!'
   },
   hi: {
-    over:'// वैज्ञानिक स्वास्थ्य उपकरण',
-    badge:'AI इंजन — Claude Sonnet',
-    deck:'7 डेटा बिंदु। AI द्वारा व्यक्तिगत वैज्ञानिक विश्लेषण।\nआपकी वास्तविक जीवन प्रत्याशा, जोखिम और कार्य योजना।',
-    rule:'WHO · Harvard · NIH · The Lancet · eBioMedicine',
-    stat1:'विश्लेषित प्रोफ़ाइल', stat2:'भाषाएं', stat3:'विज्ञान स्रोत',
-    secnum:'// 7 प्रश्न · 45 सेकंड', sectitle:'आपका बायोमेट्रिक प्रोफ़ाइल',
-    secsub:'स्थानीय रूप से संसाधित। आपकी सहमति के बिना कोई डेटा संग्रहीत नहीं।',
+    badge:'AI इंजन — Claude Sonnet', h1:'अपना<br><em>Vital Score</em> जानें',
+    sub:'7 डेटा बिंदु। AI द्वारा व्यक्तिगत वैज्ञानिक विश्लेषण।',
+    stat1:'प्रोफाइल', stat2:'भाषाएं', stat3:'स्रोत',
+    step:'// 7 प्रश्न · 45 सेकंड', ftitle:'आपका बायोमेट्रिक प्रोफाइल',
+    fsub:'स्थानीय रूप से संसाधित। आपकी सहमति के बिना कोई डेटा संग्रहीत नहीं।',
     age:'आयु', sex:'जैविक लिंग', weight:'वजन (kg)', height:'ऊंचाई (cm)',
-    country:'देश', water:'प्रतिदिन पानी (लीटर)', sleep:'रात में नींद के घंटे',
-    sel:'— चुनें —', male:'पुरुष', female:'महिला',
-    btn:'AI से विश्लेषण करें →',
+    country:'देश', water:'प्रतिदिन पानी (लीटर)', sleep:'रात में नींद (घंटे)',
+    sel:'— चुनें —', male:'पुरुष', female:'महिला', btn:'✦ AI से विश्लेषण करें',
     privacy:'🔒 कोई कुकीज़ नहीं · कोई ट्रैकिंग नहीं · गुमनाम डेटा',
-    ldt:'आपके वाइटल प्रोफाइल का विश्लेषण...', lds:'AI आपकी जानकारी संसाधित कर रहा है',
-    rl:'आपका व्यक्तिगत परिणाम', rsl:'ग्लोबल वाइटल स्कोर',
-    bmi:'BMI', hyd:'जलयोजन', slp:'नींद',
-    lifeline:'// आपकी अनुमानित जीवन रेखा', analysis:'व्यक्तिगत विश्लेषण',
+    ldt:'आपके प्रोफाइल का विश्लेषण...', lds:'AI आपकी जानकारी संसाधित कर रहा है',
+    rsl:'ग्लोबल वाइटल स्कोर', bmi:'BMI', hyd:'जलयोजन', slp:'नींद',
+    lifeline:'आपकी अनुमानित जीवन रेखा', analysis:'व्यक्तिगत AI विश्लेषण',
     askAI:'अपने वाइटल AI से पूछें',
     chips:['पहले क्या बदलूं?','अधिक नींद का प्रभाव','पानी और संज्ञान','मुख्य जोखिम','30 दिन योजना'],
-    qph:'अपना प्रश्न लिखें...', ask:'पूछें',
-    eey:'// साप्ताहिक निगरानी', eti:'आपका Vital Score हर हफ्ते बदलता है',
-    etx:'अपनी आदतें ट्रैक करें और देखें कि आपकी जीवन प्रत्याशा कैसे बदलती है।',
-    ejoin:'मुफ्त पहुंच', enote:'कोई लागत नहीं · आपका डेटा हमेशा आपका',
-    reset:'← पुनर्गणना',
-    footer:'VIVIX · BETA 1.0 · अप्रैल 2026',
-    disclaimer:'संकेतात्मक। पेशेवर चिकित्सा निदान का विकल्प नहीं।',
-    aiPrompt:(p)=>`You are a preventive medicine specialist. Analyze this profile and respond in Hindi (Devanagari script), max 300 words, no markdown, second person.\n\nProfile: ${p.age}y, ${p.sex==='F'?'Female':'Male'}, ${p.country}, BMI ${p.bmi}, water ${p.water}L, sleep ${p.sleep}h. Vital Score: ${p.score}/100. Life expectancy ~${p.le} years.`,
-    qaPrompt:(p,q)=>`Preventive medicine specialist. Profile: ${p.age}y, BMI ${p.bmi}, water ${p.water}L, sleep ${p.sleep}h, Score ${p.score}/100.\nAnswer in Hindi, max 150 words: ${q}`,
+    qph:'अपना प्रश्न पूछें...',
+    eti:'साप्ताहिक स्कोर ट्रैक करें', etx:'आपका Vital Score आपकी आदतों से बदलता है।',
+    ejoin:'मुफ्त पहुंच', enote:'मुफ्त · आपका डेटा हमेशा आपका',
+    reset:'← नया विश्लेषण', disclaimer:'संकेतात्मक। पेशेवर चिकित्सा का विकल्प नहीं।',
+    nowLabel:'आप अभी', expectLabel:'प्रत्याशा: ~',
     bmiLabels:{low:'कम वजन',ok:'इष्टतम',over:'अधिक वजन',ob1:'मोटापा I',ob2:'मोटापा II+'},
     watLabels:{dehy:'निर्जलित',low:'कम',ok2:'स्वीकार्य',opt:'इष्टतम',exc:'हल्का अधिक'},
-    slpLabels:{sev:'गंभीर वंचना',insuf:'अपर्याप्त',border:'सीमा रेखा',opt:'इष्टतम',exc:'हल्का अधिक',hyp:'अतिनिद्रा'},
-    nowLabel:'आप अभी', expectLabel:'प्रत्याशा',
-    emailSuccess:'✓ सूची में! हम आपको सूचित करेंगे।',
+    slpLabels:{sev:'गंभीर वंचना',insuf:'अपर्याप्त',border:'सीमा',opt:'इष्टतम',exc:'हल्का अधिक',hyp:'अतिनिद्रा'},
+    aiPrompt:(p)=>`You are a preventive medicine specialist. Respond in Hindi (Devanagari). No markdown. Max 280 words. Second person.\n\nProfile: ${p.age}y, ${p.sex==='F'?'Female':'Male'}, ${p.country}, BMI ${p.bmi}, water ${p.water}L, sleep ${p.sleep}h. Score: ${p.score}/100. Expectancy: ~${p.le} years.`,
+    qaPrompt:(p,q)=>`Preventive doctor. Profile: ${p.age}y, BMI ${p.bmi}, water ${p.water}L, sleep ${p.sleep}h, Score ${p.score}/100. Answer in Hindi, max 140 words: ${q}`,
+    emailSuccess:'✓ सूची में!'
   },
   zh: {
-    over:'// 科学生命活力工具',
-    badge:'AI引擎 — Claude Sonnet',
-    deck:'7个数据点。AI个性化科学分析。\n您的真实预期寿命、风险和行动计划。',
-    rule:'世卫组织 · 哈佛 · NIH · 柳叶刀 · eBioMedicine',
-    stat1:'已分析档案', stat2:'语言', stat3:'科学来源',
-    secnum:'// 7个问题 · 45秒', sectitle:'您的生物特征档案',
-    secsub:'本地处理。未经您同意不存储可识别数据。',
+    badge:'AI引擎 — Claude Sonnet', h1:'了解您的<br><em>活力评分</em>',
+    sub:'7个数据点。AI个性化科学分析。',
+    stat1:'档案数', stat2:'语言', stat3:'来源',
+    step:'// 7个问题 · 45秒', ftitle:'您的生物特征档案',
+    fsub:'本地处理。未经您同意不存储可识别数据。',
     age:'年龄', sex:'生理性别', weight:'体重 (kg)', height:'身高 (cm)',
     country:'国家', water:'每日饮水量（升）', sleep:'每晚睡眠小时数',
-    sel:'— 请选择 —', male:'男性', female:'女性',
-    btn:'AI分析 →',
+    sel:'— 请选择 —', male:'男性', female:'女性', btn:'✦ AI分析',
     privacy:'🔒 无cookie · 无追踪 · 匿名数据',
-    ldt:'正在分析您的生命体征档案...', lds:'AI正在处理您的信息',
-    rl:'您的个人结果', rsl:'全球生命活力评分',
-    bmi:'BMI', hyd:'水分状态', slp:'睡眠',
-    lifeline:'// 您的预计生命线', analysis:'个性化分析',
+    ldt:'正在分析您的档案...', lds:'AI正在处理您的信息',
+    rsl:'全球生命活力评分', bmi:'BMI', hyd:'水分状态', slp:'睡眠',
+    lifeline:'您的预计生命线', analysis:'个性化AI分析',
     askAI:'向您的AI询问',
     chips:['我首先改变什么？','更多睡眠的影响','水分与认知','我的主要风险','30天计划'],
-    qph:'写下您的问题...', ask:'提问',
-    eey:'// 每周监测', eti:'您的生命活力评分每周都在变化',
-    etx:'追踪您的习惯，实时观察您的预期寿命如何变化。',
+    qph:'询问您的档案相关问题...',
+    eti:'每周追踪您的评分', etx:'您的活力评分随习惯而变化。',
     ejoin:'免费加入', enote:'免费 · 数据始终属于您',
-    reset:'← 重新计算',
-    footer:'VIVIX · BETA 1.0 · 2026年4月',
-    disclaimer:'仅供参考。不替代专业医疗诊断。',
-    aiPrompt:(p)=>`你是预防医学专科医生。用中文分析此档案，最多300字，无markdown，第二人称（您）。\n\n档案：${p.age}岁，${p.sex==='F'?'女性':'男性'}，${p.country}，BMI ${p.bmi}，饮水${p.water}L，睡眠${p.sleep}h。活力评分：${p.score}/100。预期寿命~${p.le}岁。`,
-    qaPrompt:(p,q)=>`预防医学医生。档案：${p.age}岁，BMI ${p.bmi}，饮水${p.water}L，睡眠${p.sleep}h，评分${p.score}/100。\n用中文回答，最多150字：${q}`,
+    reset:'← 重新分析', disclaimer:'仅供参考。不替代专业医疗诊断。',
+    nowLabel:'您现在', expectLabel:'预期: ~',
     bmiLabels:{low:'体重不足',ok:'正常',over:'超重',ob1:'肥胖I级',ob2:'肥胖II级+'},
     watLabels:{dehy:'脱水',low:'不足',ok2:'尚可',opt:'最佳',exc:'轻微过量'},
     slpLabels:{sev:'严重睡眠剥夺',insuf:'不足',border:'临界',opt:'最佳',exc:'轻微过量',hyp:'嗜睡'},
-    nowLabel:'您现在', expectLabel:'预期',
-    emailSuccess:'✓ 已加入列表！我们将通知您。',
+    aiPrompt:(p)=>`你是预防医学专科医生。用中文分析此档案。无markdown。最多280字。第二人称（您）。\n\n档案：${p.age}岁，${p.sex==='F'?'女性':'男性'}，${p.country}，BMI ${p.bmi}，饮水${p.water}L，睡眠${p.sleep}h。评分：${p.score}/100。预期：~${p.le}岁。`,
+    qaPrompt:(p,q)=>`预防医学医生。档案：${p.age}岁，BMI ${p.bmi}，饮水${p.water}L，睡眠${p.sleep}h，评分${p.score}/100。用中文回答，最多140字：${q}`,
+    emailSuccess:'✓ 已加入!'
   }
 };
 
-// ─── STATE ───
-let lang = 'en';
-let P = {}, isLocked = false;
-const COUNTRY = {MX:'Mexico',US:'USA',CO:'Colombia',AR:'Argentina',BR:'Brazil',CL:'Chile',PE:'Peru',ES:'Spain',FR:'France',IN:'India',CN:'China',GB:'UK',DE:'Germany',OTHER:'Other'};
+let lang='en', P={}, isLocked=false;
+const COUNTRY={MX:'Mexico',US:'USA',CO:'Colombia',AR:'Argentina',BR:'Brazil',CL:'Chile',PE:'Peru',ES:'Spain',FR:'France',IN:'India',CN:'China',GB:'UK',DE:'Germany',OTHER:'Other'};
 
-// ─── DETECT LANGUAGE ───
-function detectLang() {
-  const bl = navigator.language || navigator.userLanguage || 'en';
-  const code = bl.substring(0,2).toLowerCase();
-  const map = {es:'es',pt:'pt',fr:'fr',hi:'hi',zh:'zh'};
-  return map[code] || 'en';
-}
-
-// ─── SET LANGUAGE ───
 function setLang(l) {
-  lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
-  const t = T[l];
-  const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
-  const setph = (id, val) => { const el = document.getElementById(id); if(el) el.placeholder = val; };
-
-  set('t-over', t.over); set('t-badge', t.badge); set('t-deck', t.deck); set('t-rule', t.rule);
-  set('t-stat1', t.stat1); set('t-stat2', t.stat2); set('t-stat3', t.stat3);
-  set('t-secnum', t.secnum); set('t-sectitle', t.sectitle); set('t-secsub', t.secsub);
-  set('t-age', t.age + ' *'); set('t-sex', t.sex + ' *');
-  set('t-weight', t.weight + ' *'); set('t-height', t.height + ' *');
-  set('t-country', t.country + ' *'); set('t-water', t.water + ' *'); set('t-sleep', t.sleep + ' *');
-  set('t-sel', t.sel); set('t-male', t.male); set('t-female', t.female);
-  set('t-btn', t.btn); set('t-privacy', t.privacy);
-  set('t-ldt', t.ldt); set('t-lds', t.lds);
-  set('t-rl', t.rl); set('t-rsl', t.rsl);
-  set('t-bmi', t.bmi); set('t-hyd', t.hyd); set('t-slp', t.slp);
-  set('t-lifeline', t.lifeline); set('t-analysis', t.analysis);
-  set('t-askAI', t.askAI);
-  set('t-ask', t.ask);
-  set('t-eey', t.eey); set('t-eti', t.eti); set('t-etx', t.etx);
-  set('t-ejoin', t.ejoin); set('t-enote', t.enote);
-  set('t-reset', t.reset);
-  set('t-footer', t.footer); set('t-disclaimer', t.disclaimer);
-  setph('qi', t.qph);
-  document.title = 'VIVIX — ' + t.rsl;
-
-  // Rebuild chips
-  const chipsEl = document.getElementById('chipsEl');
-  if(chipsEl) {
-    chipsEl.innerHTML = '';
-    const qMap = [
-      p => t.chips[0], p => t.chips[1], p => t.chips[2], p => t.chips[3], p => t.chips[4]
-    ];
-    t.chips.forEach((chip, i) => {
-      const el = document.createElement('div');
-      el.className = 'chip';
-      el.textContent = chip;
-      const fullQ = [
-        `${t.chips[0]}`,
-        `${t.chips[1]}`,
-        `${t.chips[2]}`,
-        `${t.chips[3]}`,
-        `${t.chips[4]}`
-      ][i];
-      el.onclick = () => ask(el, fullQ);
-      chipsEl.appendChild(el);
-    });
-  }
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  const t=T[l];
+  const s=(id,v)=>{const e=document.getElementById(id);if(e&&v!==undefined)e.innerHTML=v;};
+  const sp=(id,v)=>{const e=document.getElementById(id);if(e)e.placeholder=v;};
+  s('t-badge',t.badge); s('t-h1',t.h1); s('t-sub',t.sub);
+  s('t-stat1',t.stat1); s('t-stat2',t.stat2); s('t-stat3',t.stat3);
+  s('t-step',t.step); s('t-ftitle',t.ftitle); s('t-fsub',t.fsub);
+  s('t-age',t.age+' <span class="req">*</span>');
+  s('t-sex',t.sex+' <span class="req">*</span>');
+  s('t-weight',t.weight+' <span class="req">*</span>');
+  s('t-height',t.height+' <span class="req">*</span>');
+  s('t-country',t.country+' <span class="req">*</span>');
+  s('t-water',t.water+' <span class="req">*</span>');
+  s('t-sleep',t.sleep+' <span class="req">*</span>');
+  s('t-sel',t.sel); s('t-male',t.male); s('t-female',t.female);
+  s('t-btn',t.btn); s('t-privacy',t.privacy);
+  s('t-ldt',t.ldt); s('t-lds',t.lds);
+  s('t-rsl',t.rsl); s('t-bmi',t.bmi); s('t-hyd',t.hyd); s('t-slp',t.slp);
+  s('t-lifeline',t.lifeline); s('t-analysis',t.analysis); s('t-askAI',t.askAI);
+  s('t-eti',t.eti); s('t-etx',t.etx); s('t-ejoin',t.ejoin); s('t-enote',t.enote);
+  s('t-reset',t.reset); s('t-disclaimer',t.disclaimer);
+  sp('qi',t.qph);
+  // Chips
+  const ch=document.getElementById('chipsEl');
+  if(ch){ch.innerHTML='';t.chips.forEach((c,i)=>{const el=document.createElement('div');el.className='chip';el.textContent=c;el.onclick=()=>ask(el,c);ch.appendChild(el);});}
 }
 
-// ─── SLIDERS ───
-document.getElementById('wS').oninput = e => document.getElementById('wV').textContent = (+e.target.value).toFixed(1)+' L';
-document.getElementById('sS').oninput = e => document.getElementById('sV').textContent = (+e.target.value).toFixed(1)+' h';
+document.getElementById('wS').oninput=e=>document.getElementById('wV').textContent=(+e.target.value).toFixed(1)+' L';
+document.getElementById('sS').oninput=e=>document.getElementById('sV').textContent=(+e.target.value).toFixed(1)+' h';
 
-// ─── COUNTER ANIMATION ───
-function animateCounter(el, target, duration=2000) {
-  let start = null;
-  const step = ts => {
-    if(!start) start = ts;
-    const progress = Math.min((ts - start) / duration, 1);
-    el.textContent = Math.floor(progress * target).toLocaleString();
-    if(progress < 1) requestAnimationFrame(step);
-  };
+function animCounter(el,target,dur=2000){
+  let start=null;
+  const step=ts=>{if(!start)start=ts;const p=Math.min((ts-start)/dur,1);el.textContent=Math.floor(p*target).toLocaleString();if(p<1)requestAnimationFrame(step);};
   requestAnimationFrame(step);
 }
 
-// ─── MAIN FLOW ───
-function go() {
-  const t = T[lang];
-  const age = +document.getElementById('age').value;
-  const sex = document.getElementById('sex').value;
-  const weight = +document.getElementById('weight').value;
-  const height = +document.getElementById('height').value;
-  const country = document.getElementById('country').value;
-  const water = +document.getElementById('wS').value;
-  const sleep = +document.getElementById('sS').value;
-  if(!age||!sex||!weight||!height||!country) { alert('Please complete all fields.'); return; }
+function go(){
+  const t=T[lang];
+  const age=+document.getElementById('age').value;
+  const sex=document.getElementById('sex').value;
+  const weight=+document.getElementById('weight').value;
+  const height=+document.getElementById('height').value;
+  const country=document.getElementById('country').value;
+  const water=+document.getElementById('wS').value;
+  const sleep=+document.getElementById('sS').value;
+  if(!age||!sex||!weight||!height||!country){alert('Please complete all fields.');return;}
 
-  const hm = height/100, bmi = weight/(hm*hm);
-  const wOpt = sex==='F' ? 2.7 : 3.7, wR = water/wOpt;
-
-  const getBMI = () => {
-    if(bmi<18.5) return {s:55,l:t.bmiLabels.low,c:'warn'};
-    if(bmi<25)   return {s:100,l:t.bmiLabels.ok,c:'good'};
-    if(bmi<30)   return {s:70,l:t.bmiLabels.over,c:'warn'};
-    if(bmi<35)   return {s:45,l:t.bmiLabels.ob1,c:'bad'};
-    return {s:25,l:t.bmiLabels.ob2,c:'bad'};
-  };
-  const getWat = () => {
-    if(wR<0.5)      return {s:30,l:t.watLabels.dehy,c:'bad'};
-    if(wR<0.75)     return {s:55,l:t.watLabels.low,c:'warn'};
-    if(wR<0.9)      return {s:75,l:t.watLabels.ok2,c:'warn'};
-    if(wR<=1.3)     return {s:100,l:t.watLabels.opt,c:'good'};
-    return {s:80,l:t.watLabels.exc,c:'warn'};
-  };
-  const getSlp = () => {
-    if(sleep<5)     return {s:20,l:t.slpLabels.sev,c:'bad'};
-    if(sleep<6)     return {s:45,l:t.slpLabels.insuf,c:'bad'};
-    if(sleep<7)     return {s:70,l:t.slpLabels.border,c:'warn'};
-    if(sleep<=9)    return {s:100,l:t.slpLabels.opt,c:'good'};
-    if(sleep<=10)   return {s:75,l:t.slpLabels.exc,c:'warn'};
-    return {s:50,l:t.slpLabels.hyp,c:'warn'};
-  };
-
-  const B=getBMI(), W=getWat(), S=getSlp();
-  const score = Math.round(B.s*0.30+W.s*0.35+S.s*0.35);
-  const baseLE = sex==='F'?76:72;
-  const le = Math.round(baseLE+(sleep<6?-4:sleep<7?-1.5:sleep>9?-2:2)+(wR<0.5?-3:wR<0.75?-1:wR>=0.9&&wR<=1.3?2.5:0)+(bmi<18.5?-2:bmi<25?2:bmi<30?-1:bmi<35?-3:-6));
-
-  P = {age,sex,weight,height,country:COUNTRY[country]||country,water,sleep,bmi:bmi.toFixed(1),wOpt,bmiL:B.l,watL:W.l,slpL:S.l,score,le,yl:Math.max(0,le-age)};
+  const hm=height/100,bmi=weight/(hm*hm);
+  const wOpt=sex==='F'?2.7:3.7,wR=water/wOpt;
+  const B=bmi<18.5?{s:55,l:t.bmiLabels.low,c:'c-warn'}:bmi<25?{s:100,l:t.bmiLabels.ok,c:'c-good'}:bmi<30?{s:70,l:t.bmiLabels.over,c:'c-warn'}:bmi<35?{s:45,l:t.bmiLabels.ob1,c:'c-bad'}:{s:25,l:t.bmiLabels.ob2,c:'c-bad'};
+  const W=wR<0.5?{s:30,l:t.watLabels.dehy,c:'c-bad'}:wR<0.75?{s:55,l:t.watLabels.low,c:'c-warn'}:wR<0.9?{s:75,l:t.watLabels.ok2,c:'c-warn'}:wR<=1.3?{s:100,l:t.watLabels.opt,c:'c-good'}:{s:80,l:t.watLabels.exc,c:'c-warn'};
+  const S=sleep<5?{s:20,l:t.slpLabels.sev,c:'c-bad'}:sleep<6?{s:45,l:t.slpLabels.insuf,c:'c-bad'}:sleep<7?{s:70,l:t.slpLabels.border,c:'c-warn'}:sleep<=9?{s:100,l:t.slpLabels.opt,c:'c-good'}:sleep<=10?{s:75,l:t.slpLabels.exc,c:'c-warn'}:{s:50,l:t.slpLabels.hyp,c:'c-warn'};
+  const score=Math.round(B.s*0.30+W.s*0.35+S.s*0.35);
+  const baseLE=sex==='F'?76:72;
+  const le=Math.round(baseLE+(sleep<6?-4:sleep<7?-1.5:sleep>9?-2:2)+(wR<0.5?-3:wR<0.75?-1:wR>=0.9&&wR<=1.3?2.5:0)+(bmi<18.5?-2:bmi<25?2:bmi<30?-1:bmi<35?-3:-6));
+  P={age,sex,weight,height,country:COUNTRY[country]||country,water,sleep,bmi:bmi.toFixed(1),wOpt,bmiL:B.l,watL:W.l,slpL:S.l,score,le,yl:Math.max(0,le-age)};
 
   document.getElementById('formSec').style.display='none';
   document.getElementById('loadSec').style.display='block';
-  const steps=['s1','s2','s3','s4'];
-  steps.forEach((id,i)=>setTimeout(()=>{
-    if(i>0)document.getElementById(steps[i-1]).classList.add('ok');
+  ['s1','s2','s3','s4'].forEach((id,i)=>setTimeout(()=>{
+    if(i>0)document.getElementById(['s1','s2','s3','s4'][i-1]).classList.add('ok');
     document.getElementById(id).classList.add('on');
-  },i*580));
+  },i*600));
 
   setTimeout(()=>{
     document.getElementById('loadSec').style.display='none';
     document.getElementById('resSec').style.display='block';
-
-    document.getElementById('rp').textContent=`${age} · ${sex==='F'?t.female:t.male} · BMI ${P.bmi} · ${COUNTRY[country]||country}`;
+    document.getElementById('rp').textContent=`${age}y · ${sex==='F'?T[lang].female:T[lang].male} · BMI ${P.bmi} · ${COUNTRY[country]||country}`;
     document.getElementById('rsn').textContent=score;
-    sv('vBmi',P.bmi,B.l,B.c); sv('vWat',water.toFixed(1)+'L',W.l,W.c); sv('vSlp',sleep.toFixed(1)+'h',S.l,S.c);
+
+    // Animate score ring
+    const circumference=2*Math.PI*70;
+    const offset=circumference-(score/100)*circumference;
+    setTimeout(()=>{document.getElementById('scoreRing').style.strokeDashoffset=offset;},300);
+
+    sv('vBmi',P.bmi,B.l,B.c);
+    sv('vWat',water.toFixed(1)+'L',W.l,W.c);
+    sv('vSlp',sleep.toFixed(1)+'h',S.l,S.c);
+
     setTimeout(()=>{
       document.getElementById('lbv').style.width=Math.min(100,age)+'%';
       document.getElementById('lbp').style.width=Math.min(100,le)+'%';
-    },300);
-    document.getElementById('lbAge').textContent=`${t.nowLabel} (${age})`;
-    document.getElementById('lbExp').textContent=`${t.expectLabel}: ~${le}`;
+    },400);
+    document.getElementById('lbAge').textContent=`${T[lang].nowLabel} (${age})`;
+    document.getElementById('lbExp').textContent=`${T[lang].expectLabel}${le} yrs`;
 
-    // Rebuild chips for current lang
     setLang(lang);
     runAI();
+    window.scrollTo({top:0,behavior:'smooth'});
   },2800);
 }
 
-function sv(id, val, lbl, cls) {
+function sv(id,val,lbl,cls){
   document.getElementById(id).innerHTML=`<span class="${cls}">${val}</span>`;
   const l=document.getElementById(id+'L');
-  l.textContent=lbl; l.className=`vcs ${cls}`;
+  l.textContent=lbl;l.className=`vital-status ${cls}`;
 }
 
-// ─── AI ENGINE ───
-async function callClaude(userMsg, onToken) {
-  const res = await fetch('/api/chat', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ message: userMsg })
-  });
-  if(!res.ok) throw new Error('API error');
-  const reader = res.body.getReader();
-  const dec = new TextDecoder();
-  let buf='';
-  while(true){
-    const {done,value}=await reader.read();
-    if(done)break;
-    buf+=dec.decode(value,{stream:true});
-    const lines=buf.split('\n');
-    buf=lines.pop();
-    for(const l of lines){
-      if(!l.startsWith('data: '))continue;
-      const raw=l.slice(6).trim();
-      if(raw==='[DONE]')continue;
-      try{const p=JSON.parse(raw); if(p.delta?.text)onToken(p.delta.text);}catch{}
-    }
-  }
+async function callClaude(msg,onTok){
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});
+  if(!r.ok)throw new Error('API error');
+  const reader=r.body.getReader();const dec=new TextDecoder();let buf='';
+  while(true){const{done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});const lines=buf.split('\n');buf=lines.pop();for(const l of lines){if(!l.startsWith('data: '))continue;const raw=l.slice(6).trim();if(raw==='[DONE]')continue;try{const p=JSON.parse(raw);if(p.delta?.text)onTok(p.delta.text);}catch{}}}
 }
 
-async function runAI() {
+async function runAI(){
   const t=T[lang];
   const txtEl=document.getElementById('aiTxt');
   const cur=document.getElementById('aiCur');
   const src=document.getElementById('aiSrc');
-  txtEl.textContent=''; cur.style.display='inline-block'; src.style.display='none';
-  try {
-    await callClaude(t.aiPrompt(P), tok=>{txtEl.textContent+=tok;});
-  } catch {
-    txtEl.textContent = buildFallback();
-  }
-  cur.style.display='none'; src.style.display='flex';
+  txtEl.textContent='';cur.style.display='inline-block';src.style.display='none';
+  try{await callClaude(t.aiPrompt(P),tok=>{txtEl.textContent+=tok;});}
+  catch{txtEl.textContent=fallback();}
+  cur.style.display='none';src.style.display='flex';
   document.getElementById('fuSec').style.display='block';
 }
 
-function ask(el, q) {
-  if(isLocked)return;
-  el.classList.add('off');
-  document.getElementById('qi').value=q;
-  send();
-}
+function ask(el,q){if(isLocked)return;el.classList.add('off');document.getElementById('qi').value=q;send();}
 
-async function send() {
+async function send(){
   if(isLocked)return;
   const t=T[lang];
   const q=document.getElementById('qi').value.trim();
@@ -918,45 +1504,29 @@ async function send() {
   document.getElementById('qbtn').disabled=true;
   document.getElementById('qi').disabled=true;
   document.getElementById('qi').value='';
-
-  const card=document.createElement('div');
-  card.className='ac';
+  const card=document.createElement('div');card.className='answer-card';
   const uid='a'+Date.now();
-  card.innerHTML=`<div class="aq">"${q}"</div><div class="aa" id="${uid}"></div>`;
+  card.innerHTML=`<div class="answer-q">"${q}"</div><div class="answer-a" id="${uid}"></div>`;
   document.getElementById('answers').prepend(card);
   card.scrollIntoView({behavior:'smooth',block:'nearest'});
-
   const ansEl=document.getElementById(uid);
-  const cur=document.createElement('span'); cur.className='cursor'; ansEl.appendChild(cur);
-
-  try {
-    await callClaude(t.qaPrompt(P,q), tok=>{ansEl.insertBefore(document.createTextNode(tok),cur);});
-  } catch {
-    cur.remove(); ansEl.textContent='Connection unavailable. Please try again.';
-  }
-  cur.remove(); isLocked=false;
+  const cur=document.createElement('span');cur.className='ai-cursor';ansEl.appendChild(cur);
+  try{await callClaude(t.qaPrompt(P,q),tok=>{ansEl.insertBefore(document.createTextNode(tok),cur);});}
+  catch{cur.remove();ansEl.textContent='Connection unavailable. Please try again.';}
+  cur.remove();isLocked=false;
   document.getElementById('qbtn').disabled=false;
   document.getElementById('qi').disabled=false;
 }
 
-function buildFallback(){
-  const t=T[lang];
-  return `Vital Score: ${P.score}/100. ${P.yl} years remaining at current habits. ${P.sleep<7?'Sleep deficit is your highest priority risk.':''} ${P.water<P.wOpt*0.75?'Hydration is below optimal threshold.':''} Every habit you correct today compounds like interest.`;
-}
+function fallback(){return `Vital Score: ${P.score}/100. ${P.yl} years remaining at current habits. ${P.sleep<7?'Sleep deficit is your highest priority.':''} ${P.water<P.wOpt*0.75?'Hydration is below optimal.':''} Every habit corrected today compounds over time.`;}
 
-async function captureEmail() {
+async function captureEmail(){
   const t=T[lang];
   const email=document.getElementById('emailInput').value.trim();
-  if(!email||!email.includes('@')) return;
-  try {
-    await fetch('/api/waitlist', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({email, profile: P, lang, timestamp: new Date().toISOString()})
-    });
-  } catch{}
+  if(!email||!email.includes('@'))return;
+  try{await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,profile:P,lang,timestamp:new Date().toISOString()})});}catch{}
   document.getElementById('emailInput').value='';
-  document.querySelector('.email-btn').textContent=t.emailSuccess;
+  document.getElementById('t-ejoin').textContent=t.emailSuccess;
 }
 
 function resetForm(){
@@ -968,17 +1538,17 @@ function resetForm(){
   document.getElementById('answers').innerHTML='';
   document.getElementById('fuSec').style.display='none';
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('off'));
-  isLocked=false; P={};
+  document.getElementById('scoreRing').style.strokeDashoffset='440';
+  isLocked=false;P={};
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ─── INIT ───
-window.addEventListener('DOMContentLoaded', () => {
-  const detected = detectLang();
+window.addEventListener('DOMContentLoaded',()=>{
+  const bl=navigator.language||'en';
+  const map={es:'es',pt:'pt',fr:'fr',hi:'hi',zh:'zh'};
+  const detected=map[bl.substring(0,2).toLowerCase()]||'en';
   setLang(detected);
-  document.querySelector(`[onclick="setLang('${detected}')"]`)?.classList.add('active');
-  // Animate user counter
-  animateCounter(document.getElementById('userCount'), 1247, 2500);
+  animCounter(document.getElementById('userCount'),1247,2500);
 });
 </script>
 
