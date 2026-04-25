@@ -1,66 +1,62 @@
-export const config = { runtime: ‘edge’ };
+export default async function handler(req, res) {
+res.setHeader(‘Access-Control-Allow-Origin’, ‘*’);
+res.setHeader(‘Access-Control-Allow-Methods’, ‘POST, OPTIONS’);
+res.setHeader(‘Access-Control-Allow-Headers’, ‘Content-Type’);
 
-export default async function handler(req) {
 if (req.method === ‘OPTIONS’) {
-return new Response(null, {
-status: 200,
-headers: {
-‘Access-Control-Allow-Origin’: ‘*’,
-‘Access-Control-Allow-Methods’: ‘POST, OPTIONS’,
-‘Access-Control-Allow-Headers’: ‘Content-Type’,
-},
-});
+return res.status(200).end();
 }
 
 if (req.method !== ‘POST’) {
-return new Response(‘Method not allowed’, { status: 405 });
+return res.status(405).json({ error: ‘Method not allowed’ });
+}
+
+const { message } = req.body;
+
+if (!message) {
+return res.status(400).json({ error: ‘No message provided’ });
 }
 
 try {
-const { message } = await req.json();
+const response = await fetch(‘https://api.anthropic.com/v1/messages’, {
+method: ‘POST’,
+headers: {
+‘Content-Type’: ‘application/json’,
+‘x-api-key’: process.env.ANTHROPIC_API_KEY,
+‘anthropic-version’: ‘2023-06-01’,
+},
+body: JSON.stringify({
+model: ‘claude-sonnet-4-20250514’,
+max_tokens: 1024,
+stream: true,
+messages: [{ role: ‘user’, content: message }],
+}),
+});
 
 ```
-if (!message) {
-  return new Response('No message provided', { status: 400 });
+if (!response.ok) {
+  const error = await response.text();
+  return res.status(500).json({ error });
 }
 
-const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'x-api-key': process.env.ANTHROPIC_API_KEY,
-    'anthropic-version': '2023-06-01',
-  },
-  body: JSON.stringify({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 1024,
-    stream: true,
-    messages: [
-      {
-        role: 'user',
-        content: message,
-      },
-    ],
-  }),
-});
+res.setHeader('Content-Type', 'text/event-stream');
+res.setHeader('Cache-Control', 'no-cache');
+res.setHeader('Connection', 'keep-alive');
 
-if (!anthropicResponse.ok) {
-  const error = await anthropicResponse.text();
-  return new Response(`Anthropic error: ${error}`, { status: 500 });
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  const chunk = decoder.decode(value, { stream: true });
+  res.write(chunk);
 }
 
-return new Response(anthropicResponse.body, {
-  status: 200,
-  headers: {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
-    'Access-Control-Allow-Origin': '*',
-  },
-});
+res.end();
 ```
 
 } catch (err) {
-return new Response(`Error: ${err.message}`, { status: 500 });
+return res.status(500).json({ error: err.message });
 }
 }
