@@ -1,45 +1,66 @@
-export const config = { runtime: 'edge' };
+export const config = { runtime: ‘edge’ };
 
 export default async function handler(req) {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-    });
-  }
+if (req.method === ‘OPTIONS’) {
+return new Response(null, {
+status: 200,
+headers: {
+‘Access-Control-Allow-Origin’: ‘*’,
+‘Access-Control-Allow-Methods’: ‘POST, OPTIONS’,
+‘Access-Control-Allow-Headers’: ‘Content-Type’,
+},
+});
+}
 
-  try {
-    const { message } = await req.json();
+if (req.method !== ‘POST’) {
+return new Response(‘Method not allowed’, { status: 405 });
+}
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        stream: true,
-        messages: [{ role: 'user', content: message }],
-      }),
-    });
+try {
+const { message } = await req.json();
 
-    return new Response(response.body, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'no-cache',
+```
+if (!message) {
+  return new Response('No message provided', { status: 400 });
+}
+
+const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-api-key': process.env.ANTHROPIC_API_KEY,
+    'anthropic-version': '2023-06-01',
+  },
+  body: JSON.stringify({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1024,
+    stream: true,
+    messages: [
+      {
+        role: 'user',
+        content: message,
       },
-    });
-  } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+    ],
+  }),
+});
+
+if (!anthropicResponse.ok) {
+  const error = await anthropicResponse.text();
+  return new Response(`Anthropic error: ${error}`, { status: 500 });
+}
+
+return new Response(anthropicResponse.body, {
+  status: 200,
+  headers: {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'Access-Control-Allow-Origin': '*',
+  },
+});
+```
+
+} catch (err) {
+return new Response(`Error: ${err.message}`, { status: 500 });
+}
 }
