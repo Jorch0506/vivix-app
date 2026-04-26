@@ -678,23 +678,13 @@ async function callAI(msg,cb){
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({message:msg})
   });
-  if(!r.ok){const e=await r.text();throw new Error(e);}
-  const rd=r.body.getReader();const dc=new TextDecoder();let buf='';
-  while(true){
-    const{done,value}=await rd.read();
-    if(done)break;
-    buf+=dc.decode(value,{stream:true});
-    const ls=buf.split('\n');buf=ls.pop();
-    for(const l of ls){
-      if(!l.startsWith('data: '))continue;
-      const raw=l.slice(6).trim();
-      if(raw==='[DONE]')continue;
-      try{
-        const p=JSON.parse(raw);
-        if(p.type==='content_block_delta'&&p.delta&&p.delta.type==='text_delta'){
-          cb(p.delta.text);
-        }
-      }catch(e){}
+  if(!r.ok) throw new Error('API error '+r.status);
+  const data=await r.json();
+  if(data.text){
+    const words=data.text.split(' ');
+    for(const word of words){
+      cb(word+' ');
+      await new Promise(resolve=>setTimeout(resolve,25));
     }
   }
 }
