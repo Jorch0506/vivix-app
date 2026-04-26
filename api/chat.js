@@ -1,5 +1,57 @@
-{
-  "code" : "export default async function handler(req, res) {\n  res.setHeader('Access-Control-Allow-Origin', '*');\n  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');\n  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');\n\n  if (req.method === 'OPTIONS') {\n    return res.status(200).end();\n  }\n\n  if (req.method !== 'POST') {\n    return res.status(405).json({ error: 'Method not allowed' });\n  }\n\n  try {\n    const { message } = req.body;\n\n    if (!message) {\n      return res.status(400).json({ error: 'No message' });\n    }\n\n    const response = await fetch('https:\/\/api.anthropic.com\/v1\/messages', {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application\/json',\n        'x-api-key': process.env.ANTHROPIC_API_KEY,\n        'anthropic-version': '2023-06-01',\n      },\n      body: JSON.stringify({\n        model: 'claude-sonnet-4-20250514',\n        max_tokens: 1024,\n        messages: [{ role: 'user', content: message }],\n      }),\n    });\n\n    const data = await response.json();\n\n    if (!response.ok) {\n      return res.status(500).json({ error: data });\n    }\n\n    const text = data.content?.[0]?.text || '';\n    return res.status(200).json({ text });\n\n  } catch (err) {\n    return res.status(500).json({ error: err.message });\n  }\n}\n",
-  "filename" : "\/mnt\/user-data\/outputs\/api_chat_v4.js",
-  "language" : "javascript"
-}
+const https = require('https');
+
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).end();
+
+  try {
+    const { message } = req.body;
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+
+    const body = JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: message }]
+    });
+
+    const data = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'api.anthropic.com',
+        path: '/v1/messages',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'Content-Length': Buffer.byteLength(body)
+        }
+      };
+
+      const request = https.request(options, (response) => {
+        let rawData = '';
+        response.on('data', chunk => rawData += chunk);
+        response.on('end', () => {
+          try {
+            resolve(JSON.parse(rawData));
+          } catch(e) {
+            reject(e);
+          }
+        });
+      });
+
+      request.on('error', reject);
+      request.write(body);
+      request.end();
+    });
+
+    const text = data.content?.[0]?.text || 'No response';
+    return res.status(200).json({ text });
+
+  } catch(err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
