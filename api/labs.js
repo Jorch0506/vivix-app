@@ -1,5 +1,6 @@
 const https = require(‘https’);
 
+// Increase body size limit for PDF uploads
 module.exports = async function handler(req, res) {
 res.setHeader(‘Access-Control-Allow-Origin’, ‘*’);
 res.setHeader(‘Access-Control-Allow-Methods’, ‘POST, OPTIONS’);
@@ -10,9 +11,12 @@ if (req.method !== ‘POST’) return res.status(405).end();
 
 try {
 const { pdf, system } = req.body;
-const apiKey = process.env.ANTHROPIC_API_KEY;
+if (!pdf) return res.status(400).json({ text: ‘Error: No PDF data received’ });
 
 ```
+const apiKey = process.env.ANTHROPIC_API_KEY;
+if (!apiKey) return res.status(500).json({ text: 'Error: API key not configured' });
+
 const body = JSON.stringify({
   model: 'claude-haiku-4-5-20251001',
   max_tokens: 2048,
@@ -56,7 +60,7 @@ const data = await new Promise((resolve, reject) => {
     response.on('data', chunk => rawData += chunk);
     response.on('end', () => {
       try { resolve(JSON.parse(rawData)); }
-      catch(e) { reject(new Error(rawData)); }
+      catch(e) { reject(new Error('Parse error: ' + rawData.slice(0, 200))); }
     });
   });
 
@@ -65,11 +69,24 @@ const data = await new Promise((resolve, reject) => {
   request.end();
 });
 
+if (data.error) {
+  return res.status(200).json({ text: 'API Error: ' + data.error.message });
+}
+
 const text = data.content?.[0]?.text || JSON.stringify(data);
 return res.status(200).json({ text });
 ```
 
 } catch(err) {
 return res.status(200).json({ text: ’Error: ’ + err.message });
+}
+};
+
+// Tell Vercel to allow larger request bodies (up to 10MB)
+module.exports.config = {
+api: {
+bodyParser: {
+sizeLimit: ‘10mb’
+}
 }
 };
