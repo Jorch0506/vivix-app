@@ -141,7 +141,7 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
       <div class="card-accent"></div>
       <div class="card-title" id="t-title">Sube tu archivo</div>
       <div class="card-sub" id="t-sub2">PDF de laboratorio clínico. Procesado en tiempo real, no almacenado.</div>
-      <label for="fileIn" class="drop-zone" id="dropZone" onclick="if(currentFile)return false;">
+      <label for="fileIn" class="drop-zone" id="dropZone">
         <input type="file" id="fileIn" accept=".pdf" style="display:none" onchange="handleFile(this.files[0])">
         <div id="dropEmpty">
           <div class="drop-ico">📋</div>
@@ -239,17 +239,6 @@ const sz=document.getElementById(‘fileSize’);
 if(sz&&currentFile)sz.textContent=(currentFile.size/1024).toFixed(0)+’ KB · ’+t.ready;
 }
 
-function clearFile(e){
-e.preventDefault();
-e.stopPropagation();
-currentFile=null;
-document.getElementById(‘fileIn’).value=’’;
-document.getElementById(‘dropEmpty’).style.display=‘block’;
-document.getElementById(‘dropReady’).style.display=‘none’;
-document.getElementById(‘dropZone’).classList.remove(‘ready’);
-document.getElementById(‘analyzeBtn’).disabled=true;
-}
-
 function handleFile(f){
 if(!f)return;
 if(f.type!==‘application/pdf’){showError(‘Por favor sube un archivo PDF válido.’);return;}
@@ -258,6 +247,7 @@ const t=T[currentLang];
 document.getElementById(‘dropEmpty’).style.display=‘none’;
 document.getElementById(‘dropReady’).style.display=‘block’;
 document.getElementById(‘dropZone’).classList.add(‘ready’);
+document.getElementById(‘dropZone’).setAttribute(‘for’,’’);
 document.getElementById(‘fileName’).textContent=f.name;
 document.getElementById(‘fileSize’).textContent=(f.size/1024).toFixed(0)+’ KB · ’+t.ready;
 document.getElementById(‘analyzeBtn’).disabled=false;
@@ -265,11 +255,14 @@ hideError();
 }
 
 function clearFile(e){
-e.stopPropagation();currentFile=null;
+e.preventDefault();
+e.stopPropagation();
+currentFile=null;
 document.getElementById(‘fileIn’).value=’’;
 document.getElementById(‘dropEmpty’).style.display=‘block’;
 document.getElementById(‘dropReady’).style.display=‘none’;
 document.getElementById(‘dropZone’).classList.remove(‘ready’);
+document.getElementById(‘dropZone’).setAttribute(‘for’,‘fileIn’);
 document.getElementById(‘analyzeBtn’).disabled=true;
 }
 
