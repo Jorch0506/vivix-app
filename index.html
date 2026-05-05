@@ -450,9 +450,9 @@ line-height:2.4;letter-spacing:.5px;
 
 <div style="text-align:center;margin-bottom:28px;">
   <a href="/labs" style="display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:white;border:1.5px solid #6366f1;color:#6366f1;border-radius:14px;font-family:'Outfit',sans-serif;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 2px 8px rgba(99,102,241,.12);transition:all .2s;" onmouseover="this.style.background='#eef2ff'" onmouseout="this.style.background='white'">
-    🧪 <span>Interpretar resultados de laboratorio</span> <span style="opacity:.5">→</span>
+    🧪 <span id="t-labs">Interpretar resultados de laboratorio</span> <span style="opacity:.5">→</span>
   </a>
-  <div style="font-size:11px;color:#9ca3af;margin-top:8px;font-family:'Outfit',sans-serif;">Sube tu PDF · Análisis en segundos · Sin registro</div>
+  <div id="t-labssub" style="font-size:11px;color:#9ca3af;margin-top:8px;font-family:'Outfit',sans-serif;">Sube tu PDF · Análisis en segundos · Sin registro</div>
 </div>
 
 <!-- STATS -->
@@ -645,6 +645,9 @@ function setLang(l){
   s('t-ll',t.ll);s('t-an',t.an);s('t-ask',t.ask);
   s('t-cti',t.cti);s('t-ctx',t.ctx);s('t-cjoin',t.cjoin);s('t-cnote',t.cnote);
   s('t-rst',t.rst);s('t-disc',t.disc);
+  const labsT={en:{labs:'Interpret lab results',labssub:'Upload your PDF · Analysis in seconds · No signup'},es:{labs:'Interpretar resultados de laboratorio',labssub:'Sube tu PDF · Análisis en segundos · Sin registro'},pt:{labs:'Interpretar resultados de laboratório',labssub:'Envie seu PDF · Análise em segundos · Sem cadastro'},fr:{labs:'Interpréter les résultats de laboratoire',labssub:'Téléchargez votre PDF · Analyse en secondes · Sans inscription'},hi:{labs:'प्रयोगशाला परिणाम समझें',labssub:'PDF अपलोड करें · सेकंड में विश्लेषण'},zh:{labs:'解读检验报告',labssub:'上传PDF · 秒速分析 · 无需注册'}};
+  const lt=labsT[l]||labsT.en;
+  s('t-labs',lt.labs);s('t-labssub',lt.labssub);
   const el=document.getElementById('qi');if(el)el.placeholder=t.qph;
   const ch=document.getElementById('chipsEl');
   if(ch){ch.innerHTML='';t.chips.forEach(c=>{const el=document.createElement('div');el.className='chip';el.textContent=c;el.onclick=()=>askQ(el,c);ch.appendChild(el);})}
