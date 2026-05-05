@@ -386,7 +386,7 @@ Exact format:
     const response=await fetch('/api/labs',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({pdf:base64Data,system:SYSTEM_PROMPT})
+      body:JSON.stringify({pdf:base64Data,lang:currentLang})
     });
 
     if(!response.ok) throw new Error('API error '+response.status);
