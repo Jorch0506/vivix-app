@@ -117,16 +117,16 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 <div class="page">
   <nav class="nav">
     <div class="logo">VIVIX</div>
-    <div style="display:flex;align-items:center;gap:8px;">
+    <div style="display:flex;align-items:center;gap:6px;">
       <div class="langs">
-        <button class="lb" onclick="event.stopPropagation();setLang('es')">ES</button>
-        <button class="lb" onclick="event.stopPropagation();setLang('en')">EN</button>
-        <button class="lb" onclick="event.stopPropagation();setLang('pt')">PT</button>
-        <button class="lb" onclick="event.stopPropagation();setLang('fr')">FR</button>
-        <button class="lb" onclick="event.stopPropagation();setLang('hi')">HI</button>
-        <button class="lb" onclick="event.stopPropagation();setLang('zh')">ZH</button>
+        <button class="lb" onclick="setLang('es')">ES</button>
+        <button class="lb" onclick="setLang('en')">EN</button>
+        <button class="lb" onclick="setLang('pt')">PT</button>
+        <button class="lb" onclick="setLang('fr')">FR</button>
+        <button class="lb" onclick="setLang('hi')">HI</button>
+        <button class="lb" onclick="setLang('zh')">ZH</button>
       </div>
-      <a href="/" class="back-btn" id="t-back">← Score</a>
+      <a href="/" class="back-btn" id="t-back" style="padding:5px 10px;font-size:11px;">← Score</a>
     </div>
   </nav>
   <div class="hero">
@@ -139,12 +139,12 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
       <div class="card-accent"></div>
       <div class="card-title" id="t-title">Sube tu archivo</div>
       <div class="card-sub" id="t-sub2">PDF de laboratorio clínico. Procesado en tiempo real, no almacenado.</div>
-      <div class="drop-zone" id="dropZone" onclick="triggerFile()">
+      <label for="fileIn" class="drop-zone" id="dropZone" onclick="if(currentFile)return false;">
         <input type="file" id="fileIn" accept=".pdf" style="display:none" onchange="handleFile(this.files[0])">
         <div id="dropEmpty">
           <div class="drop-ico">📋</div>
-          <div class="drop-title" id="t-drag">Arrastra tu PDF aquí</div>
-          <div class="drop-sub" id="t-tap">o toca para seleccionar</div>
+          <div class="drop-title" id="t-drag">Toca para seleccionar tu PDF</div>
+          <div class="drop-sub" id="t-tap">Formatos: PDF · Máx. 10MB</div>
         </div>
         <div id="dropReady" style="display:none">
           <div class="drop-ico">✅</div>
@@ -152,7 +152,7 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
           <div class="drop-size" id="fileSize">—</div>
           <button class="drop-change" id="t-change" onclick="clearFile(event)">Cambiar archivo</button>
         </div>
-      </div>
+      </label>
       <div id="errorBox" class="error-box" style="display:none"></div>
       <button class="btn" id="analyzeBtn" onclick="analyze()" disabled>Interpretar resultados →</button>
       <p class="priv" id="t-priv">🔒 Tu archivo se procesa en tiempo real y no se almacena · Esto no es diagnóstico médico</p>
@@ -237,7 +237,16 @@ const sz=document.getElementById(‘fileSize’);
 if(sz&&currentFile)sz.textContent=(currentFile.size/1024).toFixed(0)+’ KB · ’+t.ready;
 }
 
-function triggerFile(){if(currentFile)return;document.getElementById(‘fileIn’).click();}
+function clearFile(e){
+e.preventDefault();
+e.stopPropagation();
+currentFile=null;
+document.getElementById(‘fileIn’).value=’’;
+document.getElementById(‘dropEmpty’).style.display=‘block’;
+document.getElementById(‘dropReady’).style.display=‘none’;
+document.getElementById(‘dropZone’).classList.remove(‘ready’);
+document.getElementById(‘analyzeBtn’).disabled=true;
+}
 
 function handleFile(f){
 if(!f)return;
