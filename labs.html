@@ -27,7 +27,7 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 .card-accent{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);}
 .card-title{font-size:20px;font-weight:800;color:#1a1d2e;margin-bottom:4px;}
 .card-sub{font-size:12px;color:#9ca3af;line-height:1.5;margin-bottom:22px;}
-.drop-zone{border:2px dashed #e5e7eb;border-radius:16px;padding:36px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbff;}
+.drop-zone{display:block;border:2px dashed #e5e7eb;border-radius:16px;padding:36px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbff;width:100%;box-sizing:border-box;}
 .drop-zone:hover,.drop-zone.drag{border-color:#6366f1;background:#eef2ff;}
 .drop-zone.ready{border-color:#10b981;background:#f0fdf4;cursor:default;}
 .drop-ico{font-size:40px;margin-bottom:14px;}
@@ -115,9 +115,12 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 <body>
 <div class="top-bar"></div>
 <div class="page">
-  <nav class="nav">
-    <div class="logo">VIVIX</div>
-    <div style="display:flex;align-items:center;gap:6px;">
+  <nav style="padding:16px 0 24px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div class="logo">VIVIX</div>
+      <a href="/" class="back-btn" id="t-back">← Vital Score</a>
+    </div>
+    <div style="display:flex;justify-content:center;">
       <div class="langs">
         <button class="lb" onclick="setLang('es')">ES</button>
         <button class="lb" onclick="setLang('en')">EN</button>
@@ -126,7 +129,6 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
         <button class="lb" onclick="setLang('hi')">HI</button>
         <button class="lb" onclick="setLang('zh')">ZH</button>
       </div>
-      <a href="/" class="back-btn" id="t-back" style="padding:5px 10px;font-size:11px;">← Score</a>
     </div>
   </nav>
   <div class="hero">
@@ -229,7 +231,7 @@ const t=T[l];
 const s=(id,v)=>{const e=document.getElementById(id);if(e)e.innerHTML=v;};
 s(‘t-back’,t.back);s(‘t-badge’,t.badge);s(‘t-h1’,t.h1);s(‘t-sub’,t.sub);
 s(‘t-title’,t.title);s(‘t-sub2’,t.sub2);s(‘t-drag’,t.drag);s(‘t-tap’,t.tap);
-s(‘t-change’,t.change);s(‘t-lang’,t.lang);s(‘t-priv’,t.priv);
+s(‘t-change’,t.change);s(‘t-priv’,t.priv);
 s(‘t-lt’,t.lt);s(‘t-ls’,t.ls);s(‘t-s1’,t.s1);s(‘t-s2’,t.s2);s(‘t-s3’,t.s3);s(‘t-s4’,t.s4);
 s(‘t-sumLabel’,t.sumLabel);s(‘t-planTitle’,t.planTitle);s(‘t-reset’,t.reset);s(‘t-disc’,t.disc);
 const btn=document.getElementById(‘analyzeBtn’);if(btn)btn.textContent=t.btn;
