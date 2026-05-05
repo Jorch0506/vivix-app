@@ -404,10 +404,41 @@ Formato exacto:
     if (!data.text) throw new Error('No response text');
 
     const rawText = data.text;
-    const firstBrace = rawText.indexOf('{');
-    const lastBrace = rawText.lastIndexOf('}');
-    if (firstBrace === -1 || lastBrace === -1) throw new Error('No JSON found');
-    const parsed = JSON.parse(rawText.slice(firstBrace, lastBrace + 1));
+
+    // Ultra-robust parsing: try multiple strategies
+    let parsed = null;
+
+    // Strategy 1: direct parse
+    try { parsed = JSON.parse(rawText); } catch(e) {}
+
+    // Strategy 2: extract between first { and last }
+    if (!parsed) {
+      try {
+        const first = rawText.indexOf('{');
+        const last = rawText.lastIndexOf('}');
+        if (first !== -1 && last !== -1) {
+          parsed = JSON.parse(rawText.slice(first, last + 1));
+        }
+      } catch(e) {}
+    }
+
+    // Strategy 3: strip markdown fences and retry
+    if (!parsed) {
+      try {
+        const clean = rawText.replace(/```json|```/g, '').trim();
+        parsed = JSON.parse(clean);
+      } catch(e) {}
+    }
+
+    // Strategy 4: if all parsing fails, build a basic result from raw text
+    if (!parsed) {
+      parsed = {
+        resumen: rawText.slice(0, 500),
+        vital_insight: 'Consulta con tu médico para interpretar estos resultados.',
+        categorias: [],
+        alerta_medica: null
+      };
+    }
 
     currentResult = parsed;
     activeCategory = 0;
