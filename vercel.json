@@ -3,5 +3,10 @@
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/labs", "dest": "/labs.html" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ]
+  ],
+  "functions": {
+    "api/labs.js": {
+      "maxDuration": 60
+    }
+  }
 }
