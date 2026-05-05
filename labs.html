@@ -117,7 +117,17 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 <div class="page">
   <nav class="nav">
     <div class="logo">VIVIX</div>
-    <a href="/" class="back-btn" id="t-back">← Vital Score</a>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="langs">
+        <button class="lb" onclick="event.stopPropagation();setLang('es')">ES</button>
+        <button class="lb" onclick="event.stopPropagation();setLang('en')">EN</button>
+        <button class="lb" onclick="event.stopPropagation();setLang('pt')">PT</button>
+        <button class="lb" onclick="event.stopPropagation();setLang('fr')">FR</button>
+        <button class="lb" onclick="event.stopPropagation();setLang('hi')">HI</button>
+        <button class="lb" onclick="event.stopPropagation();setLang('zh')">ZH</button>
+      </div>
+      <a href="/" class="back-btn" id="t-back">← Score</a>
+    </div>
   </nav>
   <div class="hero">
     <div class="badge"><div class="badge-dot"></div><span id="t-badge">Lab Interpreter · Claude Sonnet</span></div>
@@ -141,17 +151,6 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
           <div class="drop-file" id="fileName">—</div>
           <div class="drop-size" id="fileSize">—</div>
           <button class="drop-change" id="t-change" onclick="clearFile(event)">Cambiar archivo</button>
-        </div>
-      </div>
-      <div class="lang-row">
-        <span class="lang-label" id="t-lang">Idioma</span>
-        <div class="langs">
-          <button class="lb" onclick="setLang('es')">ES</button>
-          <button class="lb" onclick="setLang('en')">EN</button>
-          <button class="lb" onclick="setLang('pt')">PT</button>
-          <button class="lb" onclick="setLang('fr')">FR</button>
-          <button class="lb" onclick="setLang('hi')">HI</button>
-          <button class="lb" onclick="setLang('zh')">ZH</button>
         </div>
       </div>
       <div id="errorBox" class="error-box" style="display:none"></div>
@@ -410,7 +409,7 @@ window.scrollTo({top:0,behavior:‘smooth’});
 window.addEventListener(‘DOMContentLoaded’,()=>{
 const bl=navigator.language||‘es’;
 const map={es:‘es’,pt:‘pt’,fr:‘fr’,hi:‘hi’,zh:‘zh’};
-setLang(map[bl.substring(0,2).toLowerCase()]||‘en’);
+setLang(map[bl.substring(0,2).toLowerCase()]||‘es’);
 });
 </script>
 
