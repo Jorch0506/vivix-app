@@ -12,7 +12,7 @@ const { pdf, system } = req.body;
 if (!pdf) return res.status(400).json({ error: ‘No PDF data provided’ });
 
 const payload = JSON.stringify({
-model: ‘claude-haiku-4-5-20251001’,
+model: ‘claude-sonnet-4-5-20251015’,
 max_tokens: 4000,
 system: system || ‘You are a medical lab interpreter. Respond only with valid JSON.’,
 messages: [
