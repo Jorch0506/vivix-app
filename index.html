@@ -765,9 +765,27 @@ async function joinList(){
   const t=T[lg];
   const em=document.getElementById('emailIn').value.trim();
   if(!em||!em.includes('@'))return;
-  try{await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,profile:P,lang:lg,ts:new Date().toISOString()})});}catch(e){}
+  const btn=document.getElementById('t-cjoin');
+  btn.textContent='...';
+  btn.disabled=true;
+  try{
+    await fetch('https://formspree.io/f/xqenbplz',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        email:em,
+        lang:lg,
+        vital_score:P.sc||'',
+        age:P.age||'',
+        country:P.co||'',
+        source:'vivix.app',
+        ts:new Date().toISOString()
+      })
+    });
+  }catch(e){}
   document.getElementById('emailIn').value='';
-  document.getElementById('t-cjoin').textContent=t.ok;
+  btn.textContent=t.ok;
+  btn.disabled=false;
 }
 
 function rst(){
