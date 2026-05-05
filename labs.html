@@ -190,6 +190,8 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
       <button class="lb" onclick="setLang('en')">EN</button>
       <button class="lb" onclick="setLang('pt')">PT</button>
       <button class="lb" onclick="setLang('fr')">FR</button>
+      <button class="lb" onclick="setLang('hi')">HI</button>
+      <button class="lb" onclick="setLang('zh')">ZH</button>
     </div>
   </div>
 
@@ -259,7 +261,9 @@ const LANG_PROMPTS = {
   es: 'Responde en español.',
   en: 'Respond in English.',
   pt: 'Responda em português.',
-  fr: 'Répondez en français.'
+  fr: 'Répondez en français.',
+  hi: 'हिंदी में जवाब दें।',
+  zh: '请用中文回答。'
 };
 
 const STATUS_MAP = {
@@ -453,7 +457,7 @@ Formato exacto:
   } catch (e) {
     document.getElementById('loadSec').style.display = 'none';
     document.getElementById('uploadSec').style.display = 'block';
-    showError('No se pudo interpretar el documento. Asegúrate de que sea un PDF con resultados de laboratorio legibles.');
+    showError('Error: ' + e.message);
   }
 }
 
