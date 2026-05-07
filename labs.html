@@ -521,7 +521,7 @@ function generatePDF(){
 
   // ── EXECUTIVE SUMMARY ──────────────────────────
   doc.setFillColor(...indigo);
-  doc.roundedRect(margin,y,contentW,7,2,2,'F');
+  doc.rect(margin,y,contentW,7,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(9);
   doc.setTextColor(255,255,255);
   doc.text((t.sumLabel||'RESUMEN EJECUTIVO').toUpperCase(),margin+4,y+4.8);
@@ -536,7 +536,7 @@ function generatePDF(){
   // ── VITAL INSIGHT ──────────────────────────────
   addPageIfNeeded(20);
   doc.setFillColor(238,242,255);
-  doc.roundedRect(margin,y,contentW,5,'F');
+  doc.rect(margin,y,contentW,5,'F');
   doc.setDrawColor(...indigo);doc.setLineWidth(0.5);
   doc.line(margin,y,margin,y+5);
 
@@ -544,7 +544,7 @@ function generatePDF(){
   const insightLines=doc.splitTextToSize('⚡ '+(currentResult.vital_insight||''),contentW-8);
   const insightH=Math.max(14,insightLines.length*4.8+8);
   doc.setFillColor(238,242,255);
-  doc.roundedRect(margin,y,contentW,insightH,2,2,'F');
+  doc.rect(margin,y,contentW,insightH,'F');
   doc.setDrawColor(...indigo);doc.setLineWidth(1);
   doc.line(margin,y,margin,y+insightH);
 
@@ -563,7 +563,7 @@ function generatePDF(){
   if(currentResult.plan_accion&&currentResult.plan_accion.length>0){
     addPageIfNeeded(14);
     doc.setFillColor(...green);
-    doc.roundedRect(margin,y,contentW,7,2,2,'F');
+    doc.rect(margin,y,contentW,7,'F');
     doc.setFont('helvetica','bold');doc.setFontSize(9);
     doc.setTextColor(255,255,255);
     doc.text((t.planTitle||'🗓 PLAN DE ACCIÓN').replace('🗓 ','').toUpperCase(),margin+4,y+4.8);
@@ -575,9 +575,9 @@ function generatePDF(){
       addPageIfNeeded(stepH+3);
 
       doc.setFillColor(248,255,254);
-      doc.roundedRect(margin,y,contentW,stepH,2,2,'F');
+      doc.rect(margin,y,contentW,stepH,'F');
       doc.setDrawColor(...green);doc.setLineWidth(0.4);
-      doc.roundedRect(margin,y,contentW,stepH,2,2,'S');
+      doc.rect(margin,y,contentW,stepH,'S');
 
       // Number circle
       doc.setFillColor(...green);
@@ -613,9 +613,9 @@ function generatePDF(){
     const alertLines=doc.splitTextToSize(currentResult.alerta_medica,contentW-12);
     const alertH=alertLines.length*4.8+14;
     doc.setFillColor(254,242,242);
-    doc.roundedRect(margin,y,contentW,alertH,2,2,'F');
+    doc.rect(margin,y,contentW,alertH,'F');
     doc.setDrawColor(...red);doc.setLineWidth(0.5);
-    doc.roundedRect(margin,y,contentW,alertH,2,2,'S');
+    doc.rect(margin,y,contentW,alertH,'S');
     doc.setFont('helvetica','bold');doc.setFontSize(9);
     doc.setTextColor(...red);
     doc.text('⚠️ '+((currentLang==='es'||currentLang==='pt')?'Atención médica recomendada':'Medical attention recommended'),margin+4,y+6);
@@ -631,7 +631,7 @@ function generatePDF(){
       addPageIfNeeded(16);
       // Category header
       doc.setFillColor(...dark);
-      doc.roundedRect(margin,y,contentW,7,2,2,'F');
+      doc.rect(margin,y,contentW,7,'F');
       doc.setFont('helvetica','bold');doc.setFontSize(9);
       doc.setTextColor(255,255,255);
       doc.text(cat.nombre.toUpperCase(),margin+4,y+4.8);
@@ -650,12 +650,12 @@ function generatePDF(){
         addPageIfNeeded(rowH+2);
 
         doc.setFillColor(250,251,255);
-        doc.roundedRect(margin,y,contentW,rowH,1.5,1.5,'F');
+        doc.rect(margin,y,contentW,rowH,'F');
         doc.setDrawColor(229,231,235);doc.setLineWidth(0.3);
-        doc.roundedRect(margin,y,contentW,rowH,1.5,1.5,'S');
+        doc.rect(margin,y,contentW,rowH,'S');
         // Status bar
         doc.setFillColor(...statusColor);
-        doc.roundedRect(margin,y,2.5,rowH,1,1,'F');
+        doc.rect(margin,y,2.5,rowH,'F');
 
         // Param name
         doc.setFont('helvetica','bold');doc.setFontSize(8.5);
@@ -675,7 +675,7 @@ function generatePDF(){
         // Status badge
         doc.setFillColor(...statusColor);
         const badgeW=22;
-        doc.roundedRect(W-margin-badgeW,y+2,badgeW,6,3,3,'F');
+        doc.rect(W-margin-badgeW,y+2,badgeW,6,'F');
         doc.setFont('helvetica','bold');doc.setFontSize(7);
         doc.setTextColor(255,255,255);
         doc.text(p.estado||'',W-margin-badgeW/2,y+5.8,{align:'center'});
