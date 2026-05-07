@@ -6,6 +6,7 @@
 <meta name="description" content="VIVIX — Lab Results Interpreter. Understand your lab results in plain language, powered by AI.">
 <title>VIVIX — Lab Interpreter</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -28,7 +29,7 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 .card-sub{font-size:12px;color:#9ca3af;line-height:1.5;margin-bottom:22px;}
 .drop-zone{display:block;border:2px dashed #e5e7eb;border-radius:16px;padding:36px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbff;width:100%;box-sizing:border-box;}
 .drop-zone:hover,.drop-zone.drag{border-color:#6366f1;background:#eef2ff;}
-.drop-zone.ready{border-color:#10b981;background:#f0fdf4;cursor:default;}
+.drop-zone.ready{border-color:#10b981;background:#f0fdf4;}
 .drop-ico{font-size:40px;margin-bottom:14px;}
 .drop-title{font-size:15px;font-weight:700;color:#374151;margin-bottom:5px;}
 .drop-sub{font-size:12px;color:#9ca3af;}
@@ -59,10 +60,8 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 .sum-text{font-size:14px;color:#374151;line-height:1.85;margin-bottom:18px;}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
 .pill{display:flex;align-items:center;gap:5px;padding:5px 13px;border-radius:100px;font-size:12px;font-weight:700;}
-.pill-opt{background:#ecfdf5;color:#10b981;}
-.pill-acc{background:#eff6ff;color:#3b82f6;}
-.pill-att{background:#fffbeb;color:#f59e0b;}
-.pill-cri{background:#fef2f2;color:#ef4444;}
+.pill-opt{background:#ecfdf5;color:#10b981;}.pill-acc{background:#eff6ff;color:#3b82f6;}
+.pill-att{background:#fffbeb;color:#f59e0b;}.pill-cri{background:#fef2f2;color:#ef4444;}
 .insight{background:linear-gradient(135deg,#eef2ff,#e0f2fe);border:1px solid #c7d2fe;border-radius:14px;padding:16px 18px;margin-bottom:14px;}
 .insight-label{font-size:10px;font-weight:700;color:#6366f1;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;}
 .insight-text{font-size:14px;color:#1e40af;line-height:1.7;font-weight:500;}
@@ -77,50 +76,32 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 .plan-step-desc{font-size:12px;color:#374151;line-height:1.6;}
 .plan-step-time{font-size:10px;font-weight:700;color:#10b981;margin-top:4px;letter-spacing:.5px;text-transform:uppercase;}
 .alert-box{background:#fef2f2;border:1px solid #fecaca;border-radius:14px;padding:16px 18px;margin-bottom:14px;font-size:13px;color:#dc2626;line-height:1.7;}
-
-/* ── TABS WITH ARROWS ─────────────────────── */
 .tabs-wrap{position:relative;margin-bottom:14px;}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;padding-right:16px;scrollbar-width:none;scroll-behavior:smooth;}
 .tabs::-webkit-scrollbar{display:none;}
 .tab-arrow{display:none;position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;background:white;border:1.5px solid #e5e7eb;border-radius:50%;cursor:pointer;font-size:15px;align-items:center;justify-content:center;z-index:2;box-shadow:0 2px 6px rgba(0,0,0,.08);transition:all .15s;line-height:1;padding:0;font-family:'Outfit',sans-serif;}
 .tab-arrow:hover{border-color:#6366f1;color:#6366f1;}
-.tab-arrow.left{left:-4px;}
-.tab-arrow.right{right:-4px;}
+.tab-arrow.left{left:-4px;}.tab-arrow.right{right:-4px;}
 @media(min-width:480px){.tab-arrow{display:flex;}}
 .tabs-fade-right{pointer-events:none;position:absolute;right:0;top:0;bottom:0;width:40px;background:linear-gradient(to right,transparent,#f8f9ff);}
-
 .tab{padding:7px 15px;border-radius:100px;border:1.5px solid #e5e7eb;background:white;color:#6b7280;font-size:12px;font-family:'Outfit',sans-serif;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0;}
 .tab.on{border-color:#6366f1;background:#eef2ff;color:#6366f1;}
-
 .params{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
 .param{background:white;border:1px solid #f1f5f9;border-radius:14px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.03);}
-.param.opt{border-left:3px solid #10b981;}
-.param.acc{border-left:3px solid #3b82f6;}
-.param.att{border-left:3px solid #f59e0b;}
-.param.cri{border-left:3px solid #ef4444;}
+.param.opt{border-left:3px solid #10b981;}.param.acc{border-left:3px solid #3b82f6;}
+.param.att{border-left:3px solid #f59e0b;}.param.cri{border-left:3px solid #ef4444;}
 .param-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:8px;}
 .param-name{font-size:14px;font-weight:700;color:#1a1d2e;line-height:1.3;}
 .param-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;flex-shrink:0;}
-.badge-opt{background:#ecfdf5;color:#10b981;}
-.badge-acc{background:#eff6ff;color:#3b82f6;}
-.badge-att{background:#fffbeb;color:#f59e0b;}
-.badge-cri{background:#fef2f2;color:#ef4444;}
+.badge-opt{background:#ecfdf5;color:#10b981;}.badge-acc{background:#eff6ff;color:#3b82f6;}
+.badge-att{background:#fffbeb;color:#f59e0b;}.badge-cri{background:#fef2f2;color:#ef4444;}
 .param-vals{display:flex;gap:16px;margin-bottom:8px;}
 .param-val-label{font-size:11px;color:#9ca3af;}
 .param-val-num{font-size:13px;font-weight:800;}
 .val-opt{color:#10b981;}.val-acc{color:#3b82f6;}.val-att{color:#f59e0b;}.val-cri{color:#ef4444;}
 .param-ref{font-size:13px;color:#6b7280;}
 .param-note{font-size:12px;color:#6b7280;line-height:1.6;border-top:1px solid #f8fafc;padding-top:8px;}
-
-/* ── PDF EXPORT BUTTON ──────────────────── */
-.pdf-btn{
-  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
-  background:white;border:1.5px solid #6366f1;
-  border-radius:14px;padding:14px;
-  font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;
-  color:#6366f1;cursor:pointer;margin-bottom:10px;
-  letter-spacing:.2px;transition:all .2s;
-}
+.pdf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:white;border:1.5px solid #6366f1;border-radius:14px;padding:14px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#6366f1;cursor:pointer;margin-bottom:10px;letter-spacing:.2px;transition:all .2s;}
 .pdf-btn:hover{background:#eef2ff;transform:translateY(-1px);}
 .pdf-note{font-size:11px;color:#9ca3af;text-align:center;margin-bottom:14px;}
 .reset-btn{display:block;background:none;border:1.5px solid #e5e7eb;border-radius:12px;padding:11px 24px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#9ca3af;cursor:pointer;margin:0 auto;transition:all .2s;}
@@ -129,12 +110,10 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="top-bar"></div>
 <div class="page">
-
 <nav style="padding:16px 0 24px;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
     <div class="logo">VIVIX</div>
@@ -151,20 +130,18 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
     </div>
   </div>
 </nav>
-
 <div class="hero">
   <div class="badge"><div class="badge-dot"></div><span id="t-badge">Lab Interpreter · Claude Sonnet</span></div>
   <h1 id="t-h1">Interpreta tus<br><em>Resultados</em></h1>
   <p id="t-sub">Sube tu PDF de laboratorio y obtén un análisis claro, en lenguaje humano, respaldado por evidencia científica.</p>
 </div>
-
 <div id="uploadSec">
   <div class="card">
     <div class="card-accent"></div>
     <div class="card-title" id="t-title">Sube tu archivo</div>
     <div class="card-sub" id="t-sub2">PDF de laboratorio clínico. Procesado en tiempo real, no almacenado.</div>
-    <label for="fileIn" class="drop-zone" id="dropZone" onclick="if(currentFile)return false;">
-      <input type="file" id="fileIn" accept=".pdf" style="display:none" onchange="handleFile(this.files[0])">
+    <input type="file" id="fileIn" accept=".pdf" style="display:none">
+    <div class="drop-zone" id="dropZone">
       <div id="dropEmpty">
         <div class="drop-ico">📋</div>
         <div class="drop-title" id="t-drag">Toca para seleccionar tu PDF</div>
@@ -176,13 +153,12 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
         <div class="drop-size" id="fileSize">—</div>
         <button class="drop-change" id="t-change" onclick="clearFile(event)">Cambiar archivo</button>
       </div>
-    </label>
+    </div>
     <div id="errorBox" class="error-box" style="display:none"></div>
     <button class="btn" id="analyzeBtn" onclick="analyze()" disabled>Interpretar resultados →</button>
     <p class="priv" id="t-priv">🔒 Tu archivo se procesa en tiempo real y no se almacena · Esto no es diagnóstico médico</p>
   </div>
 </div>
-
 <div id="loadSec">
   <div class="load-emoji">🧬</div>
   <div class="load-t" id="t-lt">Analizando tu laboratorio...</div>
@@ -194,57 +170,46 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
     <div class="lstep" id="ls4"><div class="lstep-ico">✦</div><span id="t-s4">Generando interpretación</span></div>
   </div>
 </div>
-
 <div id="resSec">
   <div class="sum-card">
     <div class="sum-label" id="t-sumLabel">Resumen ejecutivo</div>
     <div class="sum-text" id="sumText"></div>
     <div class="pills" id="pillsEl"></div>
     <div class="insight">
-      <div class="insight-label">⚡ Vital Insight</div>
+      <div class="insight-label">VITAL INSIGHT</div>
       <div class="insight-text" id="insightText"></div>
     </div>
   </div>
-
   <div id="planCard" class="plan-card" style="display:none">
-    <div class="plan-title" id="t-planTitle">🗓 Plan de Acción Personalizado</div>
+    <div class="plan-title" id="t-planTitle">Plan de Accion Personalizado</div>
     <div class="plan-steps" id="planSteps"></div>
   </div>
-
   <div id="alertBox" class="alert-box" style="display:none"></div>
-
-  <!-- TABS WITH ARROWS -->
   <div class="tabs-wrap">
-    <button class="tab-arrow left" id="tabLeft" onclick="scrollTabs(-1)">‹</button>
+    <button class="tab-arrow left" id="tabLeft" onclick="scrollTabs(-1)">&#8249;</button>
     <div class="tabs" id="tabsEl"></div>
-    <button class="tab-arrow right" id="tabRight" onclick="scrollTabs(1)">›</button>
+    <button class="tab-arrow right" id="tabRight" onclick="scrollTabs(1)">&#8250;</button>
     <div class="tabs-fade-right" id="tabsFade"></div>
   </div>
-
   <div class="params" id="paramsEl"></div>
-    <button class="pdf-btn" onclick="generatePDF()" id="t-pdfbtn" style="display:none">
-    📄 <span id="t-pdftxt">Descargar resumen en PDF</span>
-  </button>
-  <p class="pdf-note" id="t-pdfnote" style="display:none">Para compartir con tu médico · Sin datos personales identificables</p>
-
-<button class="reset-btn" id="t-reset" onclick="resetAll()">Analizar otro documento</button>
+  <button class="pdf-btn" id="pdfBtn" onclick="generatePDF()" style="display:none">Descargar resumen en PDF</button>
+  <p class="pdf-note" id="pdfNote" style="display:none">Para compartir con tu medico</p>
+  <button class="reset-btn" id="t-reset" onclick="resetAll()">Analizar otro documento</button>
 </div>
-
 <div class="footer">
   VIVIX · Lab Interpreter · Beta 1.0 · 2026<br>
   AI: Claude Sonnet · WHO · NIH · Harvard · The Lancet<br>
   <span id="t-disc">Este análisis es informativo y no reemplaza la consulta médica profesional.</span>
 </div>
 </div>
-
 <script>
 const T={
-es:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interpreta tus<br><em>Resultados</em>',sub:'Sube tu PDF de laboratorio y obtén un análisis claro, en lenguaje humano, respaldado por evidencia científica.',title:'Sube tu archivo',sub2:'PDF de laboratorio clínico. Procesado en tiempo real, no almacenado.',drag:'Arrastra tu PDF aquí',tap:'o toca para seleccionar',change:'Cambiar archivo',btn:'Interpretar resultados →',priv:'🔒 Tu archivo se procesa en tiempo real y no se almacena · Esto no es diagnóstico médico',lt:'Analizando tu laboratorio...',ls:'Claude Sonnet está revisando tu documento',s1:'Leyendo documento',s2:'Identificando parámetros',s3:'Comparando con rangos de referencia',s4:'Generando interpretación',sumLabel:'Resumen ejecutivo',planTitle:'🗓 Plan de Acción Personalizado',reset:'Analizar otro documento',pdfbtn:'📄 Descargar resumen en PDF',pdfnote:'Para compartir con tu médico · Sin datos personales identificables',disc:'Este análisis es informativo y no reemplaza la consulta médica profesional.',ready:'Listo para analizar',valLabel:'Tu valor',normalLabel:'Normal'},
-en:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interpret your<br><em>Lab Results</em>',sub:'Upload your lab PDF and get a clear analysis, in plain language, backed by scientific evidence.',title:'Upload your file',sub2:'Clinical lab PDF. Processed in real time, not stored.',drag:'Drag your PDF here',tap:'or tap to select',change:'Change file',btn:'Interpret results →',priv:'🔒 Your file is processed in real time and not stored · This is not medical diagnosis',lt:'Analyzing your lab...',ls:'Claude Sonnet is reviewing your document',s1:'Reading document',s2:'Identifying parameters',s3:'Comparing with reference ranges',s4:'Generating interpretation',sumLabel:'Executive summary',planTitle:'🗓 Personalized Action Plan',reset:'Analyze another document',pdfbtn:'📄 Download summary as PDF',pdfnote:'Share with your doctor · No personal data stored',disc:'This analysis is informational and does not replace professional medical consultation.',ready:'Ready to analyze',valLabel:'Your value',normalLabel:'Normal'},
-pt:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interprete seus<br><em>Resultados</em>',sub:'Envie seu PDF de laboratório e obtenha uma análise clara, em linguagem humana.',title:'Envie seu arquivo',sub2:'PDF de laboratório clínico. Processado em tempo real, não armazenado.',drag:'Arraste seu PDF aqui',tap:'ou toque para selecionar',change:'Trocar arquivo',btn:'Interpretar resultados →',priv:'🔒 Seu arquivo é processado em tempo real e não é armazenado',lt:'Analisando seu laboratório...',ls:'Claude Sonnet está revisando seu documento',s1:'Lendo documento',s2:'Identificando parâmetros',s3:'Comparando com valores de referência',s4:'Gerando interpretação',sumLabel:'Resumo executivo',planTitle:'🗓 Plano de Ação Personalizado',reset:'Analisar outro documento',pdfbtn:'📄 Baixar resumo em PDF',pdfnote:'Para compartilhar com seu médico',disc:'Esta análise é informativa e não substitui a consulta médica profissional.',ready:'Pronto para analisar',valLabel:'Seu valor',normalLabel:'Normal'},
-fr:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interprétez vos<br><em>Résultats</em>',sub:"Téléchargez votre PDF de laboratoire et obtenez une analyse claire, en langage humain.",title:'Téléchargez votre fichier',sub2:'PDF de laboratoire clinique. Traité en temps réel, non stocké.',drag:'Glissez votre PDF ici',tap:'ou appuyez pour sélectionner',change:'Changer de fichier',btn:'Interpréter les résultats →',priv:"🔒 Votre fichier est traité en temps réel et non stocké",lt:'Analyse en cours...',ls:'Claude Sonnet examine votre document',s1:'Lecture du document',s2:'Identification des paramètres',s3:'Comparaison avec les valeurs de référence',s4:"Génération de l'interprétation",sumLabel:'Résumé exécutif',planTitle:"🗓 Plan d'Action Personnalisé",reset:'Analyser un autre document',pdfbtn:'📄 Télécharger en PDF',pdfnote:'À partager avec votre médecin',disc:'Cette analyse est informative et ne remplace pas la consultation médicale.',ready:'Prêt à analyser',valLabel:'Votre valeur',normalLabel:'Normal'},
-hi:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'अपने<br><em>परिणाम</em> समझें',sub:'अपनी लैब PDF अपलोड करें और स्पष्ट विश्लेषण प्राप्त करें।',title:'अपनी फ़ाइल अपलोड करें',sub2:'क्लिनिकल लैब PDF। रीयल टाइम में प्रोसेस।',drag:'अपनी PDF यहाँ खींचें',tap:'या चुनने के लिए टैप करें',change:'फ़ाइल बदलें',btn:'परिणाम समझें →',priv:'🔒 आपकी फ़ाइल रीयल टाइम में प्रोसेस होती है',lt:'लैब विश्लेषण हो रहा है...',ls:'Claude Sonnet आपका दस्तावेज़ देख रहा है',s1:'दस्तावेज़ पढ़ना',s2:'पैरामीटर पहचानना',s3:'संदर्भ सीमाओं से तुलना',s4:'व्याख्या तैयार करना',sumLabel:'सारांश',planTitle:'🗓 व्यक्तिगत कार्य योजना',reset:'दूसरा दस्तावेज़ विश्लेषण करें',pdfbtn:'📄 PDF डाउनलोड करें',pdfnote:'अपने डॉक्टर के साथ साझा करें',disc:'यह विश्लेषण सूचनात्मक है।',ready:'विश्लेषण के लिए तैयार',valLabel:'आपका मान',normalLabel:'सामान्य'},
-zh:{back:'← 活力评分',badge:'Lab Interpreter · Claude Sonnet',h1:'解读您的<br><em>检验报告</em>',sub:'上传您的检验PDF，获得清晰的分析，用通俗语言。',title:'上传您的文件',sub2:'临床实验室PDF。实时处理，不存储。',drag:'将PDF拖到这里',tap:'或点击选择',change:'更换文件',btn:'解读结果 →',priv:'🔒 您的文件实时处理，不存储',lt:'正在分析您的检验报告...',ls:'Claude Sonnet正在审查您的文件',s1:'读取文件',s2:'识别参数',s3:'与参考范围比较',s4:'生成解读',sumLabel:'执行摘要',planTitle:'🗓 个性化行动计划',reset:'分析另一份文件',pdfbtn:'📄 下载PDF摘要',pdfnote:'与您的医生分享',disc:'此分析仅供参考。',ready:'准备好分析',valLabel:'您的值',normalLabel:'正常'}
+es:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interpreta tus<br><em>Resultados</em>',sub:'Sube tu PDF de laboratorio y obtén un análisis claro, en lenguaje humano, respaldado por evidencia científica.',title:'Sube tu archivo',sub2:'PDF de laboratorio clínico. Procesado en tiempo real, no almacenado.',drag:'Arrastra tu PDF aquí',tap:'o toca para seleccionar',change:'Cambiar archivo',btn:'Interpretar resultados →',priv:'Tu archivo se procesa en tiempo real y no se almacena',lt:'Analizando tu laboratorio...',ls:'Claude Sonnet está revisando tu documento',s1:'Leyendo documento',s2:'Identificando parámetros',s3:'Comparando con rangos de referencia',s4:'Generando interpretación',sumLabel:'Resumen ejecutivo',planTitle:'Plan de Acción Personalizado',reset:'Analizar otro documento',disc:'Este análisis es informativo y no reemplaza la consulta médica profesional.',ready:'Listo para analizar',valLabel:'Tu valor',normalLabel:'Normal',pdfbtn:'Descargar resumen en PDF',pdfnote:'Para compartir con tu médico · Sin datos personales identificables'},
+en:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interpret your<br><em>Lab Results</em>',sub:'Upload your lab PDF and get a clear analysis, in plain language, backed by scientific evidence.',title:'Upload your file',sub2:'Clinical lab PDF. Processed in real time, not stored.',drag:'Drag your PDF here',tap:'or tap to select',change:'Change file',btn:'Interpret results →',priv:'Your file is processed in real time and not stored',lt:'Analyzing your lab...',ls:'Claude Sonnet is reviewing your document',s1:'Reading document',s2:'Identifying parameters',s3:'Comparing with reference ranges',s4:'Generating interpretation',sumLabel:'Executive summary',planTitle:'Personalized Action Plan',reset:'Analyze another document',disc:'This analysis is informational and does not replace professional medical consultation.',ready:'Ready to analyze',valLabel:'Your value',normalLabel:'Normal',pdfbtn:'Download summary as PDF',pdfnote:'Share with your doctor · No personal data stored'},
+pt:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interprete seus<br><em>Resultados</em>',sub:'Envie seu PDF de laboratório e obtenha uma análise clara.',title:'Envie seu arquivo',sub2:'PDF de laboratório clínico. Processado em tempo real.',drag:'Arraste seu PDF aqui',tap:'ou toque para selecionar',change:'Trocar arquivo',btn:'Interpretar resultados →',priv:'Seu arquivo é processado em tempo real',lt:'Analisando seu laboratório...',ls:'Claude Sonnet está revisando seu documento',s1:'Lendo documento',s2:'Identificando parâmetros',s3:'Comparando com valores de referência',s4:'Gerando interpretação',sumLabel:'Resumo executivo',planTitle:'Plano de Ação Personalizado',reset:'Analisar outro documento',disc:'Esta análise é informativa e não substitui a consulta médica.',ready:'Pronto para analisar',valLabel:'Seu valor',normalLabel:'Normal',pdfbtn:'Baixar resumo em PDF',pdfnote:'Para compartilhar com seu médico'},
+fr:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interprétez vos<br><em>Résultats</em>',sub:"Téléchargez votre PDF de laboratoire et obtenez une analyse claire.",title:'Téléchargez votre fichier',sub2:'PDF de laboratoire clinique. Traité en temps réel.',drag:'Glissez votre PDF ici',tap:'ou appuyez pour sélectionner',change:'Changer de fichier',btn:'Interpréter les résultats →',priv:"Votre fichier est traité en temps réel",lt:'Analyse en cours...',ls:'Claude Sonnet examine votre document',s1:'Lecture du document',s2:'Identification des paramètres',s3:'Comparaison avec les valeurs de référence',s4:"Génération de l'interprétation",sumLabel:'Résumé exécutif',planTitle:"Plan d'Action Personnalisé",reset:'Analyser un autre document',disc:'Cette analyse est informative.',ready:'Prêt à analyser',valLabel:'Votre valeur',normalLabel:'Normal',pdfbtn:'Télécharger en PDF',pdfnote:'À partager avec votre médecin'},
+hi:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'अपने<br><em>परिणाम</em> समझें',sub:'अपनी लैब PDF अपलोड करें।',title:'अपनी फ़ाइल अपलोड करें',sub2:'क्लिनिकल लैब PDF। रीयल टाइम में प्रोसेस।',drag:'अपनी PDF यहाँ खींचें',tap:'या चुनने के लिए टैप करें',change:'फ़ाइल बदलें',btn:'परिणाम समझें →',priv:'आपकी फ़ाइल रीयल टाइम में प्रोसेस होती है',lt:'लैब विश्लेषण हो रहा है...',ls:'Claude Sonnet आपका दस्तावेज़ देख रहा है',s1:'दस्तावेज़ पढ़ना',s2:'पैरामीटर पहचानना',s3:'संदर्भ सीमाओं से तुलना',s4:'व्याख्या तैयार करना',sumLabel:'सारांश',planTitle:'व्यक्तिगत कार्य योजना',reset:'दूसरा दस्तावेज़ विश्लेषण करें',disc:'यह विश्लेषण सूचनात्मक है।',ready:'विश्लेषण के लिए तैयार',valLabel:'आपका मान',normalLabel:'सामान्य',pdfbtn:'PDF डाउनलोड करें',pdfnote:'अपने डॉक्टर के साथ साझा करें'},
+zh:{back:'← 活力评分',badge:'Lab Interpreter · Claude Sonnet',h1:'解读您的<br><em>检验报告</em>',sub:'上传您的检验PDF，获得清晰的分析。',title:'上传您的文件',sub2:'临床实验室PDF。实时处理，不存储。',drag:'将PDF拖到这里',tap:'或点击选择',change:'更换文件',btn:'解读结果 →',priv:'您的文件实时处理，不存储',lt:'正在分析您的检验报告...',ls:'Claude Sonnet正在审查您的文件',s1:'读取文件',s2:'识别参数',s3:'与参考范围比较',s4:'生成解读',sumLabel:'执行摘要',planTitle:'个性化行动计划',reset:'分析另一份文件',disc:'此分析仅供参考。',ready:'准备好分析',valLabel:'您的值',normalLabel:'正常',pdfbtn:'下载PDF摘要',pdfnote:'与您的医生分享'}
 };
 
 const SM={
@@ -265,39 +230,50 @@ function gs(s){return SM[s]||{cls:'acc',pc:'pill-acc',bc:'badge-acc',vc:'val-acc
 
 let currentFile=null,currentLang='es',currentResult=null,activeCategory=0;
 
-function setLang(l){
-  currentLang=l;
-  document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.textContent===l.toUpperCase()));
-  const t=T[l];
-  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.innerHTML=v;};
-  s('t-back',t.back);s('t-badge',t.badge);s('t-h1',t.h1);s('t-sub',t.sub);
-  s('t-title',t.title);s('t-sub2',t.sub2);s('t-drag',t.drag);s('t-tap',t.tap);
-  s('t-change',t.change);s('t-priv',t.priv);
-  s('t-lt',t.lt);s('t-ls',t.ls);s('t-s1',t.s1);s('t-s2',t.s2);s('t-s3',t.s3);s('t-s4',t.s4);
-  s('t-sumLabel',t.sumLabel);s('t-planTitle',t.planTitle);s('t-reset',t.reset);s('t-disc',t.disc);
-  s('t-pdftxt',t.pdfbtn||'📄 Download PDF');
-  s('t-pdfnote',t.pdfnote||'Share with your doctor');
-  const btn=document.getElementById('analyzeBtn');if(btn)btn.textContent=t.btn;
-  const sz=document.getElementById('fileSize');
-  if(sz&&currentFile)sz.textContent=(currentFile.size/1024).toFixed(0)+' KB · '+t.ready;
-}
+// ── FILE INPUT ──────────────────────────────────
+document.addEventListener('DOMContentLoaded',function(){
+  var dz=document.getElementById('dropZone');
+  var fi=document.getElementById('fileIn');
+
+  dz.addEventListener('click',function(){
+    if(!currentFile) fi.click();
+  });
+  fi.addEventListener('change',function(){
+    if(this.files[0]) handleFile(this.files[0]);
+  });
+  dz.addEventListener('dragover',function(e){
+    e.preventDefault();
+    if(!currentFile) dz.classList.add('drag');
+  });
+  dz.addEventListener('dragleave',function(){dz.classList.remove('drag');});
+  dz.addEventListener('drop',function(e){
+    e.preventDefault();
+    dz.classList.remove('drag');
+    if(!currentFile&&e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+
+  var bl=navigator.language||'es';
+  var map={es:'es',pt:'pt',fr:'fr',hi:'hi',zh:'zh'};
+  setLang(map[bl.substring(0,2).toLowerCase()]||'es');
+});
 
 function handleFile(f){
   if(!f)return;
   if(f.type!=='application/pdf'){showError('Por favor sube un archivo PDF válido.');return;}
   currentFile=f;
-  const t=T[currentLang];
+  var t=T[currentLang];
   document.getElementById('dropEmpty').style.display='none';
   document.getElementById('dropReady').style.display='block';
   document.getElementById('dropZone').classList.add('ready');
   document.getElementById('fileName').textContent=f.name;
-  document.getElementById('fileSize').textContent=(f.size/1024).toFixed(0)+' KB · '+t.ready;
+  document.getElementById('fileSize').textContent=(f.size/1024).toFixed(0)+' KB · '+(t.ready||'Ready');
   document.getElementById('analyzeBtn').disabled=false;
   hideError();
 }
 
 function clearFile(e){
-  e.stopPropagation();currentFile=null;
+  e.stopPropagation();
+  currentFile=null;
   document.getElementById('fileIn').value='';
   document.getElementById('dropEmpty').style.display='block';
   document.getElementById('dropReady').style.display='none';
@@ -305,19 +281,31 @@ function clearFile(e){
   document.getElementById('analyzeBtn').disabled=true;
 }
 
-function showError(msg){const b=document.getElementById('errorBox');b.textContent=msg;b.style.display='block';}
+function showError(msg){var b=document.getElementById('errorBox');b.textContent=msg;b.style.display='block';}
 function hideError(){document.getElementById('errorBox').style.display='none';}
 
-const dz=document.getElementById('dropZone');
-dz.addEventListener('dragover',e=>{e.preventDefault();if(!currentFile)dz.classList.add('drag');});
-dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
-dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if(!currentFile)handleFile(e.dataTransfer.files[0]);});
+function setLang(l){
+  currentLang=l;
+  document.querySelectorAll('.lb').forEach(function(b){b.classList.toggle('on',b.textContent===l.toUpperCase());});
+  var t=T[l];
+  function s(id,v){var e=document.getElementById(id);if(e)e.innerHTML=v;}
+  s('t-back',t.back);s('t-badge',t.badge);s('t-h1',t.h1);s('t-sub',t.sub);
+  s('t-title',t.title);s('t-sub2',t.sub2);s('t-drag',t.drag);s('t-tap',t.tap);
+  s('t-change',t.change);s('t-priv',t.priv);
+  s('t-lt',t.lt);s('t-ls',t.ls);s('t-s1',t.s1);s('t-s2',t.s2);s('t-s3',t.s3);s('t-s4',t.s4);
+  s('t-sumLabel',t.sumLabel);s('t-planTitle',t.planTitle);s('t-reset',t.reset);s('t-disc',t.disc);
+  var btn=document.getElementById('analyzeBtn');if(btn)btn.textContent=t.btn;
+  var pb=document.getElementById('pdfBtn');if(pb)pb.textContent=t.pdfbtn||'Download PDF';
+  var pn=document.getElementById('pdfNote');if(pn)pn.textContent=t.pdfnote||'Share with your doctor';
+  var sz=document.getElementById('fileSize');
+  if(sz&&currentFile)sz.textContent=(currentFile.size/1024).toFixed(0)+' KB · '+(t.ready||'Ready');
+}
 
 function toBase64(f){
-  return new Promise((res,rej)=>{
-    const r=new FileReader();
-    r.onload=()=>res(r.result.split(',')[1]);
-    r.onerror=()=>rej(new Error('Error leyendo archivo'));
+  return new Promise(function(res,rej){
+    var r=new FileReader();
+    r.onload=function(){res(r.result.split(',')[1]);};
+    r.onerror=function(){rej(new Error('Error leyendo archivo'));};
     r.readAsDataURL(f);
   });
 }
@@ -327,26 +315,31 @@ async function analyze(){
   hideError();
   document.getElementById('uploadSec').style.display='none';
   document.getElementById('loadSec').style.display='block';
-  const steps=['ls1','ls2','ls3','ls4'];
-  steps.forEach((id,i)=>setTimeout(()=>{if(i>0)document.getElementById(steps[i-1]).classList.add('ok');document.getElementById(id).classList.add('on');},i*700));
+  var steps=['ls1','ls2','ls3','ls4'];
+  steps.forEach(function(id,i){
+    setTimeout(function(){
+      if(i>0)document.getElementById(steps[i-1]).classList.add('ok');
+      document.getElementById(id).classList.add('on');
+    },i*700);
+  });
   try{
-    const base64Data=await toBase64(currentFile);
-    const response=await fetch('/api/labs',{
+    var base64Data=await toBase64(currentFile);
+    var response=await fetch('/api/labs',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({pdf:base64Data,lang:currentLang})
     });
     if(!response.ok)throw new Error('API error '+response.status);
-    const data=await response.json();
+    var data=await response.json();
     if(!data.text)throw new Error('No response from API');
-    const raw=data.text;
-    let parsed=null;
+    var raw=data.text;
+    var parsed=null;
     try{parsed=JSON.parse(raw);}catch(e){}
-    if(!parsed){try{const f=raw.indexOf('{'),l=raw.lastIndexOf('}');if(f!==-1&&l!==-1)parsed=JSON.parse(raw.slice(f,l+1));}catch(e){}}
+    if(!parsed){try{var f=raw.indexOf('{'),l=raw.lastIndexOf('}');if(f!==-1&&l!==-1)parsed=JSON.parse(raw.slice(f,l+1));}catch(e){}}
     if(!parsed){try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){}}
     if(!parsed){parsed={resumen:raw.slice(0,600),vital_insight:'Consulta con tu médico.',plan_accion:[],categorias:[],alerta_medica:null};}
     currentResult=parsed;activeCategory=0;
-    setTimeout(()=>{
+    setTimeout(function(){
       document.getElementById('loadSec').style.display='none';
       document.getElementById('resSec').style.display='block';
       renderResults(parsed);
@@ -360,67 +353,65 @@ async function analyze(){
 }
 
 function countStatuses(result){
-  const c={};
-  result.categorias?.forEach(cat=>cat.parametros?.forEach(p=>{c[p.estado]=(c[p.estado]||0)+1;}));
+  var c={};
+  (result.categorias||[]).forEach(function(cat){
+    (cat.parametros||[]).forEach(function(p){c[p.estado]=(c[p.estado]||0)+1;});
+  });
   return c;
 }
 
 function renderResults(result){
-  const t=T[currentLang];
+  var t=T[currentLang];
   document.getElementById('sumText').textContent=result.resumen||'';
   document.getElementById('insightText').textContent=result.vital_insight||'';
-  const counts=countStatuses(result);
-  const pillsEl=document.getElementById('pillsEl');
+  var counts=countStatuses(result);
+  var pillsEl=document.getElementById('pillsEl');
   pillsEl.innerHTML='';
-  Object.entries(counts).forEach(([status,count])=>{
-    const cfg=gs(status);
-    const p=document.createElement('div');
+  Object.entries(counts).forEach(function(entry){
+    var status=entry[0],count=entry[1];
+    var cfg=gs(status);
+    var p=document.createElement('div');
     p.className='pill '+cfg.pc;
     p.textContent=cfg.icon+' '+count+' '+status;
     pillsEl.appendChild(p);
   });
-  const planCard=document.getElementById('planCard');
-  const planSteps=document.getElementById('planSteps');
+  var planCard=document.getElementById('planCard');
+  var planSteps=document.getElementById('planSteps');
   if(result.plan_accion&&result.plan_accion.length>0){
     planSteps.innerHTML='';
-    result.plan_accion.forEach((step,i)=>{
-      const div=document.createElement('div');
+    result.plan_accion.forEach(function(step,i){
+      var div=document.createElement('div');
       div.className='plan-step';
-      div.innerHTML=`<div class="plan-step-num">${i+1}</div><div class="plan-step-content"><div class="plan-step-title">${step.titulo||step.title||''}</div><div class="plan-step-desc">${step.descripcion||step.description||''}</div>${(step.plazo||step.timeframe)?`<div class="plan-step-time">${step.plazo||step.timeframe}</div>`:''}</div>`;
+      div.innerHTML='<div class="plan-step-num">'+(i+1)+'</div><div class="plan-step-content"><div class="plan-step-title">'+(step.titulo||step.title||'')+'</div><div class="plan-step-desc">'+(step.descripcion||step.description||'')+'</div>'+((step.plazo||step.timeframe)?'<div class="plan-step-time">'+(step.plazo||step.timeframe)+'</div>':'')+'</div>';
       planSteps.appendChild(div);
     });
     planCard.style.display='block';
   }else{planCard.style.display='none';}
-  const alertBox=document.getElementById('alertBox');
+  var alertBox=document.getElementById('alertBox');
   if(result.alerta_medica&&result.alerta_medica!=='null'&&result.alerta_medica!==null){
-    alertBox.innerHTML='<strong>⚠️ Atención médica recomendada:</strong> '+result.alerta_medica;
+    alertBox.innerHTML='<strong>Atención médica recomendada:</strong> '+result.alerta_medica;
     alertBox.style.display='block';
   }else{alertBox.style.display='none';}
   renderTabs(result);
   renderParams(result,0);
-  // Show PDF button only if we have real results (not a parse error)
-  const hasCats=result.categorias&&result.categorias.length>0;
-  const hasResumen=result.resumen&&!result.resumen.startsWith('Parse error')&&!result.resumen.startsWith('Error');
-  if(hasCats||hasResumen){
-    const pb=document.getElementById('t-pdfbtn');
-    const pn=document.getElementById('t-pdfnote');
-    if(pb)pb.style.display='flex';
-    if(pn)pn.style.display='block';
+  var hasCats=result.categorias&&result.categorias.length>0;
+  var hasGoodResumen=result.resumen&&!result.resumen.startsWith('Parse error')&&!result.resumen.startsWith('Error');
+  if(hasCats||hasGoodResumen){
+    document.getElementById('pdfBtn').style.display='flex';
+    document.getElementById('pdfNote').style.display='block';
   }
 }
 
 function renderTabs(result){
-  const tabsEl=document.getElementById('tabsEl');
+  var tabsEl=document.getElementById('tabsEl');
   tabsEl.innerHTML='';
-  result.categorias?.forEach((cat,i)=>{
-    const tab=document.createElement('button');
+  (result.categorias||[]).forEach(function(cat,i){
+    var tab=document.createElement('button');
     tab.className='tab'+(i===0?' on':'');
     tab.textContent=cat.nombre;
-    tab.onclick=()=>{
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-      tab.classList.add('on');
-      activeCategory=i;
-      renderParams(result,i);
+    tab.onclick=function(){
+      document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+      tab.classList.add('on');activeCategory=i;renderParams(result,i);
     };
     tabsEl.appendChild(tab);
   });
@@ -429,35 +420,34 @@ function renderTabs(result){
 }
 
 function renderParams(result,catIndex){
-  const t=T[currentLang];
-  const paramsEl=document.getElementById('paramsEl');
+  var t=T[currentLang];
+  var paramsEl=document.getElementById('paramsEl');
   paramsEl.innerHTML='';
-  const cat=result.categorias?.[catIndex];
+  var cat=(result.categorias||[])[catIndex];
   if(!cat)return;
-  cat.parametros?.forEach(p=>{
-    const cfg=gs(p.estado);
-    const div=document.createElement('div');
+  (cat.parametros||[]).forEach(function(p){
+    var cfg=gs(p.estado);
+    var div=document.createElement('div');
     div.className='param '+cfg.cls;
-    div.innerHTML=`<div class="param-top"><div class="param-name">${p.nombre}</div><div class="param-badge ${cfg.bc}">${cfg.icon} ${p.estado}</div></div><div class="param-vals"><div><div class="param-val-label">${t.valLabel}</div><div class="param-val-num ${cfg.vc}">${p.valor}</div></div><div><div class="param-val-label">${t.normalLabel}</div><div class="param-ref">${p.referencia}</div></div></div>${p.nota?`<div class="param-note">${p.nota}</div>`:''}`;
+    div.innerHTML='<div class="param-top"><div class="param-name">'+p.nombre+'</div><div class="param-badge '+cfg.bc+'">'+cfg.icon+' '+p.estado+'</div></div><div class="param-vals"><div><div class="param-val-label">'+(t.valLabel||'Valor')+'</div><div class="param-val-num '+cfg.vc+'">'+p.valor+'</div></div><div><div class="param-val-label">'+(t.normalLabel||'Normal')+'</div><div class="param-ref">'+p.referencia+'</div></div></div>'+(p.nota?'<div class="param-note">'+p.nota+'</div>':'');
     paramsEl.appendChild(div);
   });
 }
 
-// ── TAB ARROW NAVIGATION ──────────────────────
 function scrollTabs(dir){
-  const el=document.getElementById('tabsEl');
+  var el=document.getElementById('tabsEl');
   el.scrollBy({left:dir*160,behavior:'smooth'});
   setTimeout(updateTabArrows,320);
 }
 
 function updateTabArrows(){
-  const el=document.getElementById('tabsEl');
+  var el=document.getElementById('tabsEl');
   if(!el)return;
-  const atStart=el.scrollLeft<=4;
-  const atEnd=el.scrollLeft+el.clientWidth>=el.scrollWidth-8;
-  const btnL=document.getElementById('tabLeft');
-  const btnR=document.getElementById('tabRight');
-  const fade=document.getElementById('tabsFade');
+  var atStart=el.scrollLeft<=4;
+  var atEnd=el.scrollLeft+el.clientWidth>=el.scrollWidth-8;
+  var btnL=document.getElementById('tabLeft');
+  var btnR=document.getElementById('tabRight');
+  var fade=document.getElementById('tabsFade');
   if(btnL)btnL.style.opacity=atStart?'0.3':'1';
   if(btnR)btnR.style.opacity=atEnd?'0.3':'1';
   if(fade)fade.style.display=atEnd?'none':'block';
@@ -473,44 +463,38 @@ function resetAll(){
   document.getElementById('resSec').style.display='none';
   document.getElementById('uploadSec').style.display='block';
   document.getElementById('planCard').style.display='none';
-  const pb=document.getElementById('t-pdfbtn');
-  const pn=document.getElementById('t-pdfnote');
-  if(pb)pb.style.display='none';
-  if(pn)pn.style.display='none';
-  ['ls1','ls2','ls3','ls4'].forEach(id=>{const e=document.getElementById(id);e.classList.remove('on','ok');});
+  document.getElementById('pdfBtn').style.display='none';
+  document.getElementById('pdfNote').style.display='none';
+  ['ls1','ls2','ls3','ls4'].forEach(function(id){
+    var e=document.getElementById(id);e.classList.remove('on','ok');
+  });
   hideError();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ── PDF GENERATOR ────────────────────────────────
+// ── PDF GENERATOR ─────────────────────────────
 function generatePDF(){
-  if(!currentResult) return;
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  const t=T[currentLang];
-  const W=210, margin=18, contentW=W-margin*2;
-  let y=margin;
-
-  const indigo=[99,102,241],teal=[6,182,212],green=[16,185,129];
-  const amber=[245,158,11],red=[239,68,68],dark=[26,29,46];
-  const gray=[107,114,128],lightGray=[229,231,235],bgGray=[248,249,255];
+  if(!currentResult)return;
+  var jsPDFLib=window.jspdf;
+  if(!jsPDFLib){alert('PDF library not loaded. Please try again.');return;}
+  var doc=new jsPDFLib.jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var t=T[currentLang];
+  var W=210,margin=18,contentW=W-margin*2;
+  var y=margin;
+  var indigo=[99,102,241],teal=[6,182,212],green=[16,185,129];
+  var amber=[245,158,11],red=[239,68,68],dark=[26,29,46];
+  var gray=[107,114,128],lightGray=[229,231,235],bgGray=[248,249,255];
 
   function clean(str){
     if(!str)return'';
-    return String(str)
-      .replace(/\p{Emoji}/gu,' ')
-      .replace(/[^\x00-\x7E\xC0-\xFF]/g,' ')
-      .replace(/[""]/g,'"').replace(/\u2264/g,'<=').replace(/\u2265/g,'>=')
-      .replace(/\s+/g,' ').trim();
+    return String(str).replace(/[^\x00-\x7E\xC0-\xFF]/g,' ').replace(/[""]/g,'"').replace(/\s+/g,' ').trim();
   }
+  function addPage(){if(y>275){doc.addPage();y=margin;}}
+  function needSpace(n){if(y+n>278){doc.addPage();y=margin;}}
 
-  function addPageIfNeeded(needed){
-    if(y+needed>282){doc.addPage();y=margin;}
-  }
-
-  function sectionHeader(label,color){
-    addPageIfNeeded(12);
-    doc.setFillColor(...color);
+  function secHeader(label,color){
+    needSpace(12);
+    doc.setFillColor(color[0],color[1],color[2]);
     doc.rect(margin,y,contentW,8,'F');
     doc.setFont('helvetica','bold');doc.setFontSize(9);
     doc.setTextColor(255,255,255);
@@ -519,132 +503,126 @@ function generatePDF(){
   }
 
   // TOP BAR
-  doc.setFillColor(...indigo);doc.rect(0,0,70,5,'F');
-  doc.setFillColor(...teal);doc.rect(70,0,70,5,'F');
-  doc.setFillColor(...green);doc.rect(140,0,70,5,'F');
+  doc.setFillColor(99,102,241);doc.rect(0,0,70,5,'F');
+  doc.setFillColor(6,182,212);doc.rect(70,0,70,5,'F');
+  doc.setFillColor(16,185,129);doc.rect(140,0,70,5,'F');
 
   // LOGO
   doc.setFont('helvetica','bolditalic');doc.setFontSize(24);
-  doc.setTextColor(...indigo);doc.text('VIVIX',margin,20);
+  doc.setTextColor(99,102,241);doc.text('VIVIX',margin,20);
   doc.setFont('helvetica','normal');doc.setFontSize(8);
-  doc.setTextColor(...gray);
-  doc.text('Lab Interpreter · AI Report',W-margin,14,{align:'right'});
+  doc.setTextColor(107,114,128);
+  doc.text('Lab Interpreter - AI Report',W-margin,14,{align:'right'});
   doc.text(new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'}),W-margin,20,{align:'right'});
 
   y=27;
-  doc.setDrawColor(...lightGray);doc.setLineWidth(0.4);
+  doc.setDrawColor(229,231,235);doc.setLineWidth(0.4);
   doc.line(margin,y,W-margin,y);y+=7;
 
   // RESUMEN
-  sectionHeader(t.sumLabel||'Resumen Ejecutivo',indigo);
-  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...dark);
-  const summaryLines=doc.splitTextToSize(clean(currentResult.resumen),contentW);
-  summaryLines.forEach(line=>{addPageIfNeeded(6);doc.text(line,margin,y);y+=5;});
+  secHeader(clean(t.sumLabel||'Resumen Ejecutivo'),indigo);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(26,29,46);
+  var sumLines=doc.splitTextToSize(clean(currentResult.resumen||''),contentW);
+  sumLines.forEach(function(line){needSpace(6);doc.text(line,margin,y);y+=5;});
   y+=5;
 
   // VITAL INSIGHT
-  addPageIfNeeded(26);
-  const insightText=clean(currentResult.vital_insight);
-  const insightLines=doc.splitTextToSize(insightText,contentW-10);
-  const insightH=insightLines.length*5+18;
-  doc.setFillColor(238,242,255);doc.rect(margin,y,contentW,insightH,'F');
-  doc.setFillColor(...indigo);doc.rect(margin,y,3,insightH,'F');
-  doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...indigo);
+  needSpace(26);
+  var insText=clean(currentResult.vital_insight||'');
+  var insLines=doc.splitTextToSize(insText,contentW-10);
+  var insH=insLines.length*5+18;
+  doc.setFillColor(238,242,255);doc.rect(margin,y,contentW,insH,'F');
+  doc.setFillColor(99,102,241);doc.rect(margin,y,3,insH,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(99,102,241);
   doc.text('VITAL INSIGHT',margin+6,y+6);
   doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(30,64,175);
-  insightLines.forEach((line,i)=>doc.text(line,margin+6,y+13+i*5));
-  y+=insightH+7;
+  insLines.forEach(function(line,i){doc.text(line,margin+6,y+13+i*5);});
+  y+=insH+7;
 
-  // PLAN DE ACCION
+  // PLAN
   if(currentResult.plan_accion&&currentResult.plan_accion.length>0){
-    sectionHeader(clean(t.planTitle||'Plan de Accion'),green);
-    currentResult.plan_accion.forEach((step,i)=>{
-      const titleText=clean(step.titulo||step.title||'');
-      const descText=clean(step.descripcion||step.description||'');
-      const plazoText=clean(step.plazo||step.timeframe||'');
-      const descLines=doc.splitTextToSize(descText,contentW-18);
-      const rowH=descLines.length*4.8+18;
-      addPageIfNeeded(rowH+3);
-      doc.setFillColor(...bgGray);doc.rect(margin,y,contentW,rowH,'F');
-      doc.setDrawColor(...lightGray);doc.setLineWidth(0.3);doc.rect(margin,y,contentW,rowH,'S');
-      doc.setFillColor(...green);doc.circle(margin+5,y+rowH/2,3.2,'F');
+    secHeader(clean(t.planTitle||'Plan de Accion'),green);
+    currentResult.plan_accion.forEach(function(step,i){
+      var title=clean(step.titulo||step.title||'');
+      var desc=clean(step.descripcion||step.description||'');
+      var plazo=clean(step.plazo||step.timeframe||'');
+      var dLines=doc.splitTextToSize(desc,contentW-18);
+      var rH=dLines.length*4.8+18;
+      needSpace(rH+3);
+      doc.setFillColor(248,255,254);doc.rect(margin,y,contentW,rH,'F');
+      doc.setDrawColor(209,250,229);doc.setLineWidth(0.3);doc.rect(margin,y,contentW,rH,'S');
+      doc.setFillColor(16,185,129);doc.circle(margin+5,y+rH/2,3.2,'F');
       doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,255,255);
-      doc.text(String(i+1),margin+5,y+rowH/2+0.8,{align:'center'});
+      doc.text(String(i+1),margin+5,y+rH/2+0.8,{align:'center'});
       doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(6,95,70);
-      doc.text(titleText,margin+12,y+7);
-      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(...dark);
-      descLines.forEach((line,li)=>doc.text(line,margin+12,y+13+li*4.8));
-      if(plazoText){
-        doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(...green);
-        doc.text(plazoText.toUpperCase(),margin+12,y+rowH-3.5);
-      }
-      y+=rowH+3;
+      doc.text(title,margin+12,y+7);
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(26,29,46);
+      dLines.forEach(function(line,li){doc.text(line,margin+12,y+13+li*4.8);});
+      if(plazo){doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(16,185,129);doc.text(plazo.toUpperCase(),margin+12,y+rH-3.5);}
+      y+=rH+3;
     });
     y+=3;
   }
 
   // ALERTA
   if(currentResult.alerta_medica&&currentResult.alerta_medica!=='null'){
-    addPageIfNeeded(24);
-    const alertText=clean(currentResult.alerta_medica);
-    const alertLines=doc.splitTextToSize(alertText,contentW-10);
-    const alertH=alertLines.length*5+18;
-    doc.setFillColor(254,242,242);doc.rect(margin,y,contentW,alertH,'F');
-    doc.setFillColor(...red);doc.rect(margin,y,3,alertH,'F');
-    doc.setDrawColor(...red);doc.setLineWidth(0.5);doc.rect(margin,y,contentW,alertH,'S');
-    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...red);
-    const alertLabel=(currentLang==='es'||currentLang==='pt')?'ATENCION MEDICA RECOMENDADA':'MEDICAL ATTENTION RECOMMENDED';
-    doc.text(alertLabel,margin+6,y+6);
+    needSpace(24);
+    var alertText=clean(currentResult.alerta_medica);
+    var aLines=doc.splitTextToSize(alertText,contentW-10);
+    var aH=aLines.length*5+18;
+    doc.setFillColor(254,242,242);doc.rect(margin,y,contentW,aH,'F');
+    doc.setFillColor(239,68,68);doc.rect(margin,y,3,aH,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(239,68,68);
+    doc.text('ATENCION MEDICA RECOMENDADA',margin+6,y+6);
     doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(185,28,28);
-    alertLines.forEach((line,i)=>doc.text(line,margin+6,y+13+i*5));
-    y+=alertH+6;
+    aLines.forEach(function(line,i){doc.text(line,margin+6,y+13+i*5);});
+    y+=aH+6;
   }
 
   // PARAMETROS
-  if(currentResult.categorias&&currentResult.categorias.length>0){
-    const statusColors={'Optimo':green,'Optimo':green,'Optimal':green,'Aceptable':teal,'Acceptable':teal,'Atencion':amber,'Atencion':amber,'Attention':amber,'Critico':red,'Critico':red,'Critical':red};
-    currentResult.categorias.forEach(cat=>{
-      sectionHeader(clean(cat.nombre),dark);
-      cat.parametros&&cat.parametros.forEach(p=>{
-        const sc=statusColors[p.estado]||gray;
-        const noteText=clean(p.nota||'');
-        const noteLines=noteText?doc.splitTextToSize(noteText,contentW-8):[];
-        const rowH=noteLines.length>0?noteLines.length*4.5+18:15;
-        addPageIfNeeded(rowH+2);
-        doc.setFillColor(...bgGray);doc.rect(margin,y,contentW,rowH,'F');
-        doc.setDrawColor(...lightGray);doc.setLineWidth(0.3);doc.rect(margin,y,contentW,rowH,'S');
-        doc.setFillColor(...sc);doc.rect(margin,y,3,rowH,'F');
-        doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...dark);
-        doc.text(clean(p.nombre||''),margin+6,y+6);
-        doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...sc);
-        doc.text(clean(p.valor||''),margin+6,y+12);
-        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...gray);
-        doc.text('Ref: '+clean(p.referencia||''),margin+38,y+12);
-        const badgeW=24;
-        doc.setFillColor(...sc);doc.rect(W-margin-badgeW,y+3,badgeW,6,'F');
-        doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(255,255,255);
-        doc.text(clean(p.estado||''),W-margin-badgeW/2,y+7,{align:'center'});
-        if(noteLines.length>0){
-          doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...gray);
-          noteLines.forEach((line,li)=>doc.text(line,margin+6,y+17+li*4.5));
-        }
-        y+=rowH+2;
-      });
-      y+=3;
+  var scMap={'Optimo':green,'Optimo':green,'Optimal':green,'Aceptable':teal,'Acceptable':teal,'Atencion':amber,'Atencion':amber,'Attention':amber,'Critico':red,'Critico':red,'Critical':red};
+  (currentResult.categorias||[]).forEach(function(cat){
+    secHeader(clean(cat.nombre),dark);
+    (cat.parametros||[]).forEach(function(p){
+      var sc=scMap[p.estado]||gray;
+      var noteText=clean(p.nota||'');
+      var nLines=noteText?doc.splitTextToSize(noteText,contentW-8):[];
+      var rH=nLines.length>0?nLines.length*4.5+18:15;
+      needSpace(rH+2);
+      doc.setFillColor(248,249,255);doc.rect(margin,y,contentW,rH,'F');
+      doc.setDrawColor(229,231,235);doc.setLineWidth(0.3);doc.rect(margin,y,contentW,rH,'S');
+      doc.setFillColor(sc[0],sc[1],sc[2]);doc.rect(margin,y,3,rH,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(26,29,46);
+      doc.text(clean(p.nombre||''),margin+6,y+6);
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(sc[0],sc[1],sc[2]);
+      doc.text(clean(p.valor||''),margin+6,y+12);
+      doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(107,114,128);
+      doc.text('Ref: '+clean(p.referencia||''),margin+38,y+12);
+      var bW=24;
+      doc.setFillColor(sc[0],sc[1],sc[2]);doc.rect(W-margin-bW,y+3,bW,6,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(255,255,255);
+      doc.text(clean(p.estado||''),W-margin-bW/2,y+7,{align:'center'});
+      if(nLines.length>0){
+        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(107,114,128);
+        nLines.forEach(function(line,li){doc.text(line,margin+6,y+17+li*4.5);});
+      }
+      y+=rH+2;
     });
-  }
+    y+=3;
+  });
 
   // FOOTER
-  const pageCount=doc.internal.getNumberOfPages();
-  for(let i=1;i<=pageCount;i++){
+  var pc=doc.internal.getNumberOfPages();
+  for(var i=1;i<=pc;i++){
     doc.setPage(i);
-    doc.setDrawColor(...lightGray);doc.setLineWidth(0.4);
+    doc.setDrawColor(229,231,235);doc.setLineWidth(0.4);
     doc.line(margin,290,W-margin,290);
-    doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...gray);
+    doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(107,114,128);
     doc.text('VIVIX · vivix.app · AI: Claude Sonnet · WHO · NIH · Harvard',margin,295);
-    const discText=clean(t.disc||'Informativo. No reemplaza diagnostico medico.');
-    doc.text(discText+' | Pag. '+i+'/'+pageCount,W-margin,295,{align:'right'});
+    doc.text(clean(t.disc||'Informativo.')+' | Pag. '+i+'/'+pc,W-margin,295,{align:'right'});
   }
-
   doc.save('vivix-labs-report.pdf');
 }
+</script>
+</body>
+</html>
