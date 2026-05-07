@@ -247,13 +247,85 @@ input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;
       <div class="f full"><label id="t-ct">Country<span class="req"> *</span></label>
         <select id="country">
           <option value="">— Select —</option>
-          <option value="MX">🇲🇽 Mexico</option><option value="US">🇺🇸 United States</option>
-          <option value="CO">🇨🇴 Colombia</option><option value="AR">🇦🇷 Argentina</option>
-          <option value="BR">🇧🇷 Brazil</option><option value="CL">🇨🇱 Chile</option>
-          <option value="PE">🇵🇪 Peru</option><option value="ES">🇪🇸 Spain</option>
-          <option value="FR">🇫🇷 France</option><option value="IN">🇮🇳 India</option>
-          <option value="CN">🇨🇳 China</option><option value="GB">🇬🇧 UK</option>
-          <option value="DE">🇩🇪 Germany</option><option value="OTHER">🌍 Other</option>
+          <optgroup label="── LATAM ──">
+          <option value="MX">🇲🇽 Mexico</option>
+          <option value="CO">🇨🇴 Colombia</option>
+          <option value="AR">🇦🇷 Argentina</option>
+          <option value="BR">🇧🇷 Brazil</option>
+          <option value="CL">🇨🇱 Chile</option>
+          <option value="PE">🇵🇪 Peru</option>
+          <option value="VE">🇻🇪 Venezuela</option>
+          <option value="EC">🇪🇨 Ecuador</option>
+          <option value="GT">🇬🇹 Guatemala</option>
+          <option value="CU">🇨🇺 Cuba</option>
+          <option value="BO">🇧🇴 Bolivia</option>
+          <option value="DO">🇩🇴 Dominican Republic</option>
+          <option value="HN">🇭🇳 Honduras</option>
+          <option value="PY">🇵🇾 Paraguay</option>
+          <option value="SV">🇸🇻 El Salvador</option>
+          <option value="NI">🇳🇮 Nicaragua</option>
+          <option value="CR">🇨🇷 Costa Rica</option>
+          <option value="PA">🇵🇦 Panama</option>
+          <option value="UY">🇺🇾 Uruguay</option>
+          </optgroup>
+          <optgroup label="── NORTH AMERICA ──">
+          <option value="US">🇺🇸 United States</option>
+          <option value="CA">🇨🇦 Canada</option>
+          </optgroup>
+          <optgroup label="── EUROPE ──">
+          <option value="ES">🇪🇸 Spain</option>
+          <option value="FR">🇫🇷 France</option>
+          <option value="DE">🇩🇪 Germany</option>
+          <option value="GB">🇬🇧 United Kingdom</option>
+          <option value="IT">🇮🇹 Italy</option>
+          <option value="PT">🇵🇹 Portugal</option>
+          <option value="NL">🇳🇱 Netherlands</option>
+          <option value="BE">🇧🇪 Belgium</option>
+          <option value="SE">🇸🇪 Sweden</option>
+          <option value="CH">🇨🇭 Switzerland</option>
+          <option value="AT">🇦🇹 Austria</option>
+          <option value="NO">🇳🇴 Norway</option>
+          <option value="DK">🇩🇰 Denmark</option>
+          <option value="FI">🇫🇮 Finland</option>
+          <option value="PL">🇵🇱 Poland</option>
+          <option value="RU">🇷🇺 Russia</option>
+          <option value="UA">🇺🇦 Ukraine</option>
+          <option value="RO">🇷🇴 Romania</option>
+          <option value="CZ">🇨🇿 Czech Republic</option>
+          <option value="GR">🇬🇷 Greece</option>
+          </optgroup>
+          <optgroup label="── ASIA ──">
+          <option value="CN">🇨🇳 China</option>
+          <option value="IN">🇮🇳 India</option>
+          <option value="JP">🇯🇵 Japan</option>
+          <option value="KR">🇰🇷 South Korea</option>
+          <option value="ID">🇮🇩 Indonesia</option>
+          <option value="PH">🇵🇭 Philippines</option>
+          <option value="VN">🇻🇳 Vietnam</option>
+          <option value="TH">🇹🇭 Thailand</option>
+          <option value="MY">🇲🇾 Malaysia</option>
+          <option value="SG">🇸🇬 Singapore</option>
+          <option value="PK">🇵🇰 Pakistan</option>
+          <option value="BD">🇧🇩 Bangladesh</option>
+          <option value="TR">🇹🇷 Turkey</option>
+          <option value="SA">🇸🇦 Saudi Arabia</option>
+          <option value="AE">🇦🇪 UAE</option>
+          <option value="IL">🇮🇱 Israel</option>
+          </optgroup>
+          <optgroup label="── AFRICA ──">
+          <option value="NG">🇳🇬 Nigeria</option>
+          <option value="ET">🇪🇹 Ethiopia</option>
+          <option value="EG">🇪🇬 Egypt</option>
+          <option value="ZA">🇿🇦 South Africa</option>
+          <option value="KE">🇰🇪 Kenya</option>
+          <option value="GH">🇬🇭 Ghana</option>
+          <option value="MA">🇲🇦 Morocco</option>
+          </optgroup>
+          <optgroup label="── OCEANIA ──">
+          <option value="AU">🇦🇺 Australia</option>
+          <option value="NZ">🇳🇿 New Zealand</option>
+          </optgroup>
+          <option value="OTHER">🌍 Other</option>
         </select>
       </div>
 
@@ -475,7 +547,17 @@ qa:(p,q)=>`预防医学医生。档案：${p.age}岁，BMI ${p.bmi}，饮水${p.
 let lg='en',P={},lk=false;
 let actVal=null,smkVal=null;
 
-const CO={MX:'Mexico',US:'USA',CO:'Colombia',AR:'Argentina',BR:'Brazil',CL:'Chile',PE:'Peru',ES:'Spain',FR:'France',IN:'India',CN:'China',GB:'UK',DE:'Germany',OTHER:'Other'};
+const CO={MX:'Mexico',CO:'Colombia',AR:'Argentina',BR:'Brazil',CL:'Chile',PE:'Peru',
+VE:'Venezuela',EC:'Ecuador',GT:'Guatemala',CU:'Cuba',BO:'Bolivia',DO:'Dominican Republic',
+HN:'Honduras',PY:'Paraguay',SV:'El Salvador',NI:'Nicaragua',CR:'Costa Rica',PA:'Panama',UY:'Uruguay',
+US:'USA',CA:'Canada',ES:'Spain',FR:'France',DE:'Germany',GB:'UK',IT:'Italy',PT:'Portugal',
+NL:'Netherlands',BE:'Belgium',SE:'Sweden',CH:'Switzerland',AT:'Austria',NO:'Norway',
+DK:'Denmark',FI:'Finland',PL:'Poland',RU:'Russia',UA:'Ukraine',RO:'Romania',CZ:'Czech Republic',GR:'Greece',
+CN:'China',IN:'India',JP:'Japan',KR:'South Korea',ID:'Indonesia',PH:'Philippines',
+VN:'Vietnam',TH:'Thailand',MY:'Malaysia',SG:'Singapore',PK:'Pakistan',BD:'Bangladesh',
+TR:'Turkey',SA:'Saudi Arabia',AE:'UAE',IL:'Israel',
+NG:'Nigeria',ET:'Ethiopia',EG:'Egypt',ZA:'South Africa',KE:'Kenya',GH:'Ghana',MA:'Morocco',
+AU:'Australia',NZ:'New Zealand',OTHER:'Other'};
 
 // ─── TOGGLE SELECTOR ───────────────────────
 function selectToggle(groupId,btn){
