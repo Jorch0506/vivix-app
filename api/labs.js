@@ -9,59 +9,13 @@ module.exports = async function handler(req, res) {
 
   try {
     const { pdf, lang } = req.body;
-    if (!pdf) return res.status(200).json({ text: 'Error: No PDF' });
+    if (!pdf) return res.status(200).json({ text: JSON.stringify(fallback('No PDF recibido')) });
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
-
-    const langMap = {
-      es: 'español',
-      en: 'English',
-      pt: 'português',
-      fr: 'français',
-      hi: 'Hindi',
-      zh: '中文'
-    };
+    const langMap = { es: 'español', en: 'English', pt: 'português', fr: 'français', hi: 'Hindi', zh: '中文' };
     const langName = langMap[lang] || 'español';
 
-    // Strict system prompt — JSON only, no markdown, no preamble
-    const sys = [
-      'You are VIVIX, an expert clinical lab interpreter.',
-      'OUTPUT RULES — CRITICAL:',
-      '1. Your ENTIRE response must be a single valid JSON object. Nothing before it. Nothing after it.',
-      '2. Do NOT use markdown fences (no ```json, no ```).',
-      '3. Do NOT add any explanation, greeting, or text outside the JSON.',
-      '4. All text content inside the JSON must be written in ' + langName + '.',
-      '',
-      'JSON SCHEMA (follow exactly):',
-      '{',
-      '  "resumen": "2-3 sentence executive summary of findings in ' + langName + '",',
-      '  "vital_insight": "single most important action for this patient in ' + langName + '",',
-      '  "plan_accion": [',
-      '    {"titulo": "step title", "descripcion": "specific action", "plazo": "timeframe"}',
-      '  ],',
-      '  "categorias": [',
-      '    {',
-      '      "nombre": "category name in ' + langName + '",',
-      '      "parametros": [',
-      '        {',
-      '          "nombre": "test name",',
-      '          "valor": "result + unit",',
-      '          "referencia": "normal range",',
-      '          "estado": "Óptimo|Aceptable|Atención|Crítico",',
-      '          "nota": "plain language explanation in ' + langName + '"',
-      '        }',
-      '      ]',
-      '    }',
-      '  ],',
-      '  "alerta_medica": null',
-      '}',
-      '',
-      'ESTADO values: use exactly "Óptimo" (in range), "Aceptable" (borderline), "Atención" (out of range, not dangerous), "Crítico" (requires prompt medical attention).',
-      'plan_accion: include 4-5 specific, actionable steps based on the actual patient results.',
-      'alerta_medica: null if no urgent findings, or a short alert string if critical values are present.',
-      'Include ALL parameters found in the document, grouped by category.',
-      'Consider patient age and sex when interpreting reference ranges — pediatric patients have different normal values than adults.'
-    ].join('\n');
+    const sys = 'You are a clinical lab interpreter. You MUST respond with ONLY a JSON object. No markdown. No backticks. No explanation. No text before or after the JSON. Start your response with { and end with }.\n\nJSON structure:\n{"resumen":"summary in ' + langName + '","vital_insight":"top action in ' + langName + '","plan_accion":[{"titulo":"title","descripcion":"detail","plazo":"when"}],"categorias":[{"nombre":"category in ' + langName + '","parametros":[{"nombre":"test","valor":"result","referencia":"range","estado":"Óptimo|Aceptable|Atención|Crítico","nota":"explanation in ' + langName + '"}]}],"alerta_medica":null}\n\nRules:\n- estado must be exactly one of: Óptimo, Aceptable, Atención, Crítico\n- Include ALL parameters from the document\n- For pediatric patients, use age-appropriate reference ranges\n- alerta_medica is null or a short string\n- plan_accion has 4-5 steps\n- Write ALL descriptive text in ' + langName;
 
     const requestBody = JSON.stringify({
       model: 'claude-sonnet-4-6',
@@ -72,21 +26,17 @@ module.exports = async function handler(req, res) {
         content: [
           {
             type: 'document',
-            source: {
-              type: 'base64',
-              media_type: 'application/pdf',
-              data: pdf
-            }
+            source: { type: 'base64', media_type: 'application/pdf', data: pdf }
           },
           {
             type: 'text',
-            text: 'Analyze all pages of this clinical lab report. Respond with the JSON object only — no markdown, no extra text.'
+            text: 'Analyze this clinical lab report. Respond with JSON only — start with { end with }.'
           }
         ]
       }]
     });
 
-    const data = await new Promise(function(resolve, reject) {
+    const apiResponse = await new Promise(function(resolve, reject) {
       const opts = {
         hostname: 'api.anthropic.com',
         path: '/v1/messages',
@@ -98,66 +48,85 @@ module.exports = async function handler(req, res) {
           'Content-Length': Buffer.byteLength(requestBody)
         }
       };
-
       const r = https.request(opts, function(resp) {
         let d = '';
         resp.on('data', function(c) { d += c; });
         resp.on('end', function() {
           try { resolve(JSON.parse(d)); }
-          catch(e) { reject(new Error(d.slice(0, 300))); }
+          catch(e) { reject(new Error('Anthropic parse failed: ' + d.slice(0, 400))); }
         });
       });
-
       r.on('error', reject);
       r.write(requestBody);
       r.end();
     });
 
-    if (data.error) {
-      return res.status(200).json({ text: 'API Error: ' + data.error.message });
+    if (apiResponse.error) {
+      return res.status(200).json({ text: JSON.stringify(fallback('API Error: ' + apiResponse.error.message)) });
     }
 
-    // ── AGGRESSIVE JSON CLEANING ─────────────────────────────────────────
-    // Even with strict instructions, models sometimes wrap in ```json fences.
-    // We clean at the backend so the frontend always receives pure JSON.
-    let raw = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '';
-
-    // Step 1: strip markdown fences
-    raw = raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-
-    // Step 2: extract first complete JSON object (handles preamble text)
-    const firstBrace = raw.indexOf('{');
-    const lastBrace = raw.lastIndexOf('}');
-    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-      raw = raw.slice(firstBrace, lastBrace + 1);
+    let raw = '';
+    if (apiResponse.content && apiResponse.content[0] && apiResponse.content[0].text) {
+      raw = apiResponse.content[0].text;
+    } else {
+      return res.status(200).json({ text: JSON.stringify(fallback('Respuesta inesperada del modelo')) });
     }
 
-    // Step 3: validate it's parseable — if not, return structured error
+    // Stage 1: strip markdown fences
+    let cleaned = raw
+      .replace(/^```json\s*/im, '')
+      .replace(/^```\s*/im, '')
+      .replace(/```\s*$/im, '')
+      .trim();
+
+    // Stage 2: find outermost { ... }
+    const start = cleaned.indexOf('{');
+    const end = cleaned.lastIndexOf('}');
+    if (start === -1 || end === -1 || end <= start) {
+      return res.status(200).json({ text: JSON.stringify(fallback('No JSON en respuesta. Fragmento: ' + raw.slice(0, 120))) });
+    }
+    cleaned = cleaned.slice(start, end + 1);
+
+    // Stage 3: parse — with sanitization fallback
+    let parsed;
     try {
-      JSON.parse(raw);
-    } catch(parseErr) {
-      // Return a safe fallback JSON that the frontend can render
-      const fallback = {
-        resumen: 'El análisis no pudo completarse correctamente. Por favor intenta de nuevo o sube un PDF con mejor resolución.',
-        vital_insight: 'Consulta directamente con tu médico para interpretar estos resultados.',
-        plan_accion: [],
-        categorias: [],
-        alerta_medica: null
-      };
-      return res.status(200).json({ text: JSON.stringify(fallback) });
+      parsed = JSON.parse(cleaned);
+    } catch(e1) {
+      try {
+        const sanitized = cleaned.replace(/[\u0000-\u001F\u007F]/g, function(c) {
+          if (c === '\n') return '\\n';
+          if (c === '\r') return '\\r';
+          if (c === '\t') return '\\t';
+          return '';
+        });
+        parsed = JSON.parse(sanitized);
+      } catch(e2) {
+        return res.status(200).json({ text: JSON.stringify(fallback('Parse error: ' + e2.message + ' | ' + cleaned.slice(0, 150))) });
+      }
     }
 
-    return res.status(200).json({ text: raw });
+    // Stage 4: ensure shape
+    parsed.resumen = parsed.resumen || '';
+    parsed.vital_insight = parsed.vital_insight || '';
+    parsed.plan_accion = parsed.plan_accion || [];
+    parsed.categorias = parsed.categorias || [];
+    if (parsed.alerta_medica === undefined) parsed.alerta_medica = null;
+
+    return res.status(200).json({ text: JSON.stringify(parsed) });
 
   } catch(err) {
-    return res.status(200).json({ text: JSON.stringify({
-      resumen: 'Error al procesar: ' + err.message,
-      vital_insight: 'Por favor intenta nuevamente.',
-      plan_accion: [],
-      categorias: [],
-      alerta_medica: null
-    })});
+    return res.status(200).json({ text: JSON.stringify(fallback('Error interno: ' + err.message)) });
   }
 };
+
+function fallback(msg) {
+  return {
+    resumen: msg || 'Error al procesar el documento.',
+    vital_insight: 'Por favor intenta nuevamente o contacta soporte.',
+    plan_accion: [],
+    categorias: [],
+    alerta_medica: null
+  };
+}
 
 module.exports.config = { api: { bodyParser: { sizeLimit: '10mb' } } };
