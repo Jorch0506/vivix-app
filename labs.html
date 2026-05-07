@@ -491,241 +491,160 @@ function generatePDF(){
   const W=210, margin=18, contentW=W-margin*2;
   let y=margin;
 
-  // Color palette
-  const indigo=[99,102,241];
-  const teal=[6,182,212];
-  const green=[16,185,129];
-  const amber=[245,158,11];
-  const red=[239,68,68];
-  const dark=[26,29,46];
-  const gray=[107,114,128];
-  const lightGray=[243,244,246];
+  const indigo=[99,102,241],teal=[6,182,212],green=[16,185,129];
+  const amber=[245,158,11],red=[239,68,68],dark=[26,29,46];
+  const gray=[107,114,128],lightGray=[229,231,235],bgGray=[248,249,255];
 
-  function addPageIfNeeded(needed){
-    if(y+needed>285){doc.addPage();y=margin;}
+  function clean(str){
+    if(!str)return'';
+    return String(str)
+      .replace(/\p{Emoji}/gu,' ')
+      .replace(/[^\x00-\x7E\xC0-\xFF]/g,' ')
+      .replace(/[""]/g,'"').replace(/\u2264/g,'<=').replace(/\u2265/g,'>=')
+      .replace(/\s+/g,' ').trim();
   }
 
-  // ── HEADER ─────────────────────────────────────
-  // Gradient bar simulation
-  doc.setFillColor(...indigo);
-  doc.rect(0,0,70,4,'F');
-  doc.setFillColor(...teal);
-  doc.rect(70,0,70,4,'F');
-  doc.setFillColor(...green);
-  doc.rect(140,0,70,4,'F');
+  function addPageIfNeeded(needed){
+    if(y+needed>282){doc.addPage();y=margin;}
+  }
 
-  // VIVIX logo
-  doc.setFont('helvetica','bolditalic');
-  doc.setFontSize(26);
-  doc.setTextColor(...indigo);
-  doc.text('VIVIX',margin,18);
-
-  // Title right
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(9);
-  doc.setTextColor(...gray);
-  doc.text('Lab Interpreter · AI Report',W-margin,14,{align:'right'});
-  doc.text(new Date().toLocaleDateString(currentLang==='zh'?'zh-CN':currentLang==='hi'?'hi-IN':'es-MX',{year:'numeric',month:'long',day:'numeric'}),W-margin,19,{align:'right'});
-
-  y=28;
-  // Divider
-  doc.setDrawColor(...lightGray);doc.setLineWidth(0.4);
-  doc.line(margin,y,W-margin,y);y+=8;
-
-  // ── EXECUTIVE SUMMARY ──────────────────────────
-  doc.setFillColor(...indigo);
-  doc.rect(margin,y,contentW,7,'F');
-  doc.setFont('helvetica','bold');doc.setFontSize(9);
-  doc.setTextColor(255,255,255);
-  doc.text((t.sumLabel||'RESUMEN EJECUTIVO').toUpperCase(),margin+4,y+4.8);
-  y+=11;
-
-  doc.setFont('helvetica','normal');doc.setFontSize(9);
-  doc.setTextColor(...dark);
-  const summaryLines=doc.splitTextToSize(currentResult.resumen||'',contentW);
-  summaryLines.forEach(line=>{addPageIfNeeded(5);doc.text(line,margin,y);y+=4.8;});
-  y+=4;
-
-  // ── VITAL INSIGHT ──────────────────────────────
-  addPageIfNeeded(20);
-  doc.setFillColor(238,242,255);
-  doc.rect(margin,y,contentW,5,'F');
-  doc.setDrawColor(...indigo);doc.setLineWidth(0.5);
-  doc.line(margin,y,margin,y+5);
-
-  // Calc insight box height
-  const insightLines=doc.splitTextToSize('⚡ '+(currentResult.vital_insight||''),contentW-8);
-  const insightH=Math.max(14,insightLines.length*4.8+8);
-  doc.setFillColor(238,242,255);
-  doc.rect(margin,y,contentW,insightH,'F');
-  doc.setDrawColor(...indigo);doc.setLineWidth(1);
-  doc.line(margin,y,margin,y+insightH);
-
-  doc.setFont('helvetica','bold');doc.setFontSize(8);
-  doc.setTextColor(...indigo);
-  doc.text('⚡ VITAL INSIGHT',margin+4,y+5);
-  doc.setFont('helvetica','normal');doc.setFontSize(9);
-  doc.setTextColor(30,64,175);
-  insightLines.forEach((line,i)=>{
-    if(i===0) doc.text(line.replace('⚡ ',''),margin+4,y+5);
-    else doc.text(line,margin+4,y+5+i*4.8);
-  });
-  y+=insightH+6;
-
-  // ── ACTION PLAN ────────────────────────────────
-  if(currentResult.plan_accion&&currentResult.plan_accion.length>0){
-    addPageIfNeeded(14);
-    doc.setFillColor(...green);
-    doc.rect(margin,y,contentW,7,'F');
+  function sectionHeader(label,color){
+    addPageIfNeeded(12);
+    doc.setFillColor(...color);
+    doc.rect(margin,y,contentW,8,'F');
     doc.setFont('helvetica','bold');doc.setFontSize(9);
     doc.setTextColor(255,255,255);
-    doc.text((t.planTitle||'🗓 PLAN DE ACCIÓN').replace('🗓 ','').toUpperCase(),margin+4,y+4.8);
-    y+=11;
+    doc.text(label.toUpperCase(),margin+4,y+5.5);
+    y+=12;
+  }
 
+  // TOP BAR
+  doc.setFillColor(...indigo);doc.rect(0,0,70,5,'F');
+  doc.setFillColor(...teal);doc.rect(70,0,70,5,'F');
+  doc.setFillColor(...green);doc.rect(140,0,70,5,'F');
+
+  // LOGO
+  doc.setFont('helvetica','bolditalic');doc.setFontSize(24);
+  doc.setTextColor(...indigo);doc.text('VIVIX',margin,20);
+  doc.setFont('helvetica','normal');doc.setFontSize(8);
+  doc.setTextColor(...gray);
+  doc.text('Lab Interpreter · AI Report',W-margin,14,{align:'right'});
+  doc.text(new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'}),W-margin,20,{align:'right'});
+
+  y=27;
+  doc.setDrawColor(...lightGray);doc.setLineWidth(0.4);
+  doc.line(margin,y,W-margin,y);y+=7;
+
+  // RESUMEN
+  sectionHeader(t.sumLabel||'Resumen Ejecutivo',indigo);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...dark);
+  const summaryLines=doc.splitTextToSize(clean(currentResult.resumen),contentW);
+  summaryLines.forEach(line=>{addPageIfNeeded(6);doc.text(line,margin,y);y+=5;});
+  y+=5;
+
+  // VITAL INSIGHT
+  addPageIfNeeded(26);
+  const insightText=clean(currentResult.vital_insight);
+  const insightLines=doc.splitTextToSize(insightText,contentW-10);
+  const insightH=insightLines.length*5+18;
+  doc.setFillColor(238,242,255);doc.rect(margin,y,contentW,insightH,'F');
+  doc.setFillColor(...indigo);doc.rect(margin,y,3,insightH,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...indigo);
+  doc.text('VITAL INSIGHT',margin+6,y+6);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(30,64,175);
+  insightLines.forEach((line,i)=>doc.text(line,margin+6,y+13+i*5));
+  y+=insightH+7;
+
+  // PLAN DE ACCION
+  if(currentResult.plan_accion&&currentResult.plan_accion.length>0){
+    sectionHeader(clean(t.planTitle||'Plan de Accion'),green);
     currentResult.plan_accion.forEach((step,i)=>{
-      const stepLines=doc.splitTextToSize((step.descripcion||step.description||''),contentW-22);
-      const stepH=Math.max(16,stepLines.length*4.5+10);
-      addPageIfNeeded(stepH+3);
-
-      doc.setFillColor(248,255,254);
-      doc.rect(margin,y,contentW,stepH,'F');
-      doc.setDrawColor(...green);doc.setLineWidth(0.4);
-      doc.rect(margin,y,contentW,stepH,'S');
-
-      // Number circle
-      doc.setFillColor(...green);
-      doc.circle(margin+5,y+stepH/2,3.5,'F');
-      doc.setFont('helvetica','bold');doc.setFontSize(8);
-      doc.setTextColor(255,255,255);
-      doc.text(String(i+1),margin+5,y+stepH/2+0.8,{align:'center'});
-
-      // Title
-      doc.setFont('helvetica','bold');doc.setFontSize(9);
-      doc.setTextColor(6,95,70);
-      doc.text(step.titulo||step.title||'',margin+12,y+5.5);
-
-      // Description
-      doc.setFont('helvetica','normal');doc.setFontSize(8);
-      doc.setTextColor(...dark);
-      stepLines.forEach((line,li)=>doc.text(line,margin+12,y+10+li*4.5));
-
-      // Timeframe
-      if(step.plazo||step.timeframe){
-        doc.setFont('helvetica','bold');doc.setFontSize(7);
-        doc.setTextColor(...green);
-        doc.text((step.plazo||step.timeframe).toUpperCase(),margin+12,y+stepH-3);
+      const titleText=clean(step.titulo||step.title||'');
+      const descText=clean(step.descripcion||step.description||'');
+      const plazoText=clean(step.plazo||step.timeframe||'');
+      const descLines=doc.splitTextToSize(descText,contentW-18);
+      const rowH=descLines.length*4.8+18;
+      addPageIfNeeded(rowH+3);
+      doc.setFillColor(...bgGray);doc.rect(margin,y,contentW,rowH,'F');
+      doc.setDrawColor(...lightGray);doc.setLineWidth(0.3);doc.rect(margin,y,contentW,rowH,'S');
+      doc.setFillColor(...green);doc.circle(margin+5,y+rowH/2,3.2,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,255,255);
+      doc.text(String(i+1),margin+5,y+rowH/2+0.8,{align:'center'});
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(6,95,70);
+      doc.text(titleText,margin+12,y+7);
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(...dark);
+      descLines.forEach((line,li)=>doc.text(line,margin+12,y+13+li*4.8));
+      if(plazoText){
+        doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(...green);
+        doc.text(plazoText.toUpperCase(),margin+12,y+rowH-3.5);
       }
-      y+=stepH+3;
+      y+=rowH+3;
     });
     y+=3;
   }
 
-  // ── MEDICAL ALERT ──────────────────────────────
+  // ALERTA
   if(currentResult.alerta_medica&&currentResult.alerta_medica!=='null'){
-    addPageIfNeeded(20);
-    const alertLines=doc.splitTextToSize(currentResult.alerta_medica,contentW-12);
-    const alertH=alertLines.length*4.8+14;
-    doc.setFillColor(254,242,242);
-    doc.rect(margin,y,contentW,alertH,'F');
-    doc.setDrawColor(...red);doc.setLineWidth(0.5);
-    doc.rect(margin,y,contentW,alertH,'S');
-    doc.setFont('helvetica','bold');doc.setFontSize(9);
-    doc.setTextColor(...red);
-    doc.text('⚠️ '+((currentLang==='es'||currentLang==='pt')?'Atención médica recomendada':'Medical attention recommended'),margin+4,y+6);
-    doc.setFont('helvetica','normal');doc.setFontSize(8.5);
-    doc.setTextColor(185,28,28);
-    alertLines.forEach((line,i)=>doc.text(line,margin+4,y+12+i*4.8));
+    addPageIfNeeded(24);
+    const alertText=clean(currentResult.alerta_medica);
+    const alertLines=doc.splitTextToSize(alertText,contentW-10);
+    const alertH=alertLines.length*5+18;
+    doc.setFillColor(254,242,242);doc.rect(margin,y,contentW,alertH,'F');
+    doc.setFillColor(...red);doc.rect(margin,y,3,alertH,'F');
+    doc.setDrawColor(...red);doc.setLineWidth(0.5);doc.rect(margin,y,contentW,alertH,'S');
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...red);
+    const alertLabel=(currentLang==='es'||currentLang==='pt')?'ATENCION MEDICA RECOMENDADA':'MEDICAL ATTENTION RECOMMENDED';
+    doc.text(alertLabel,margin+6,y+6);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(185,28,28);
+    alertLines.forEach((line,i)=>doc.text(line,margin+6,y+13+i*5));
     y+=alertH+6;
   }
 
-  // ── PARAMETERS BY CATEGORY ─────────────────────
+  // PARAMETROS
   if(currentResult.categorias&&currentResult.categorias.length>0){
+    const statusColors={'Optimo':green,'Optimo':green,'Optimal':green,'Aceptable':teal,'Acceptable':teal,'Atencion':amber,'Atencion':amber,'Attention':amber,'Critico':red,'Critico':red,'Critical':red};
     currentResult.categorias.forEach(cat=>{
-      addPageIfNeeded(16);
-      // Category header
-      doc.setFillColor(...dark);
-      doc.rect(margin,y,contentW,7,'F');
-      doc.setFont('helvetica','bold');doc.setFontSize(9);
-      doc.setTextColor(255,255,255);
-      doc.text(cat.nombre.toUpperCase(),margin+4,y+4.8);
-      y+=10;
-
+      sectionHeader(clean(cat.nombre),dark);
       cat.parametros&&cat.parametros.forEach(p=>{
-        const statusMap={
-          'Óptimo':green,'Optimo':green,'Optimal':green,
-          'Aceptable':teal,'Acceptable':teal,
-          'Atención':amber,'Atencion':amber,'Attention':amber,
-          'Crítico':red,'Critico':red,'Critical':red
-        };
-        const statusColor=statusMap[p.estado]||gray;
-        const noteLines=p.nota?doc.splitTextToSize(p.nota,contentW-8):[];
-        const rowH=noteLines.length>0?Math.max(16,noteLines.length*4+14):14;
+        const sc=statusColors[p.estado]||gray;
+        const noteText=clean(p.nota||'');
+        const noteLines=noteText?doc.splitTextToSize(noteText,contentW-8):[];
+        const rowH=noteLines.length>0?noteLines.length*4.5+18:15;
         addPageIfNeeded(rowH+2);
-
-        doc.setFillColor(250,251,255);
-        doc.rect(margin,y,contentW,rowH,'F');
-        doc.setDrawColor(229,231,235);doc.setLineWidth(0.3);
-        doc.rect(margin,y,contentW,rowH,'S');
-        // Status bar
-        doc.setFillColor(...statusColor);
-        doc.rect(margin,y,2.5,rowH,'F');
-
-        // Param name
-        doc.setFont('helvetica','bold');doc.setFontSize(8.5);
-        doc.setTextColor(...dark);
-        doc.text(p.nombre,margin+6,y+5.5);
-
-        // Value
-        doc.setFont('helvetica','bold');doc.setFontSize(9);
-        doc.setTextColor(...statusColor);
-        doc.text(p.valor||'',margin+6,y+10.5);
-
-        // Reference
-        doc.setFont('helvetica','normal');doc.setFontSize(7.5);
-        doc.setTextColor(...gray);
-        doc.text('Ref: '+(p.referencia||''),margin+40,y+10.5);
-
-        // Status badge
-        doc.setFillColor(...statusColor);
-        const badgeW=22;
-        doc.rect(W-margin-badgeW,y+2,badgeW,6,'F');
-        doc.setFont('helvetica','bold');doc.setFontSize(7);
-        doc.setTextColor(255,255,255);
-        doc.text(p.estado||'',W-margin-badgeW/2,y+5.8,{align:'center'});
-
-        // Note
+        doc.setFillColor(...bgGray);doc.rect(margin,y,contentW,rowH,'F');
+        doc.setDrawColor(...lightGray);doc.setLineWidth(0.3);doc.rect(margin,y,contentW,rowH,'S');
+        doc.setFillColor(...sc);doc.rect(margin,y,3,rowH,'F');
+        doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...dark);
+        doc.text(clean(p.nombre||''),margin+6,y+6);
+        doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...sc);
+        doc.text(clean(p.valor||''),margin+6,y+12);
+        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...gray);
+        doc.text('Ref: '+clean(p.referencia||''),margin+38,y+12);
+        const badgeW=24;
+        doc.setFillColor(...sc);doc.rect(W-margin-badgeW,y+3,badgeW,6,'F');
+        doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(255,255,255);
+        doc.text(clean(p.estado||''),W-margin-badgeW/2,y+7,{align:'center'});
         if(noteLines.length>0){
-          doc.setFont('helvetica','normal');doc.setFontSize(7.5);
-          doc.setTextColor(...gray);
-          noteLines.forEach((line,li)=>doc.text(line,margin+6,y+13+li*4));
+          doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...gray);
+          noteLines.forEach((line,li)=>doc.text(line,margin+6,y+17+li*4.5));
         }
         y+=rowH+2;
       });
-      y+=4;
+      y+=3;
     });
   }
 
-  // ── FOOTER ─────────────────────────────────────
+  // FOOTER
   const pageCount=doc.internal.getNumberOfPages();
   for(let i=1;i<=pageCount;i++){
     doc.setPage(i);
     doc.setDrawColor(...lightGray);doc.setLineWidth(0.4);
     doc.line(margin,290,W-margin,290);
-    doc.setFont('helvetica','normal');doc.setFontSize(7);
-    doc.setTextColor(...gray);
+    doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...gray);
     doc.text('VIVIX · vivix.app · AI: Claude Sonnet · WHO · NIH · Harvard',margin,295);
-    doc.text((t.disc||'Informativo. No reemplaza diagnóstico médico.')+' | Pág. '+i+'/'+pageCount,W-margin,295,{align:'right'});
+    const discText=clean(t.disc||'Informativo. No reemplaza diagnostico medico.');
+    doc.text(discText+' | Pag. '+i+'/'+pageCount,W-margin,295,{align:'right'});
   }
 
   doc.save('vivix-labs-report.pdf');
 }
-
-
-window.addEventListener('DOMContentLoaded',()=>{
-  const bl=navigator.language||'es';
-  const map={es:'es',pt:'pt',fr:'fr',hi:'hi',zh:'zh'};
-  setLang(map[bl.substring(0,2).toLowerCase()]||'es');
-});
-</script>
-</body>
-</html>
