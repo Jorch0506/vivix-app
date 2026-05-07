@@ -222,10 +222,10 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
   </div>
 
   <div class="params" id="paramsEl"></div>
-    <button class="pdf-btn" onclick="generatePDF()" id="t-pdfbtn">
+    <button class="pdf-btn" onclick="generatePDF()" id="t-pdfbtn" style="display:none">
     📄 <span id="t-pdftxt">Descargar resumen en PDF</span>
   </button>
-  <p class="pdf-note" id="t-pdfnote">Para compartir con tu médico · Sin datos personales identificables</p>
+  <p class="pdf-note" id="t-pdfnote" style="display:none">Para compartir con tu médico · Sin datos personales identificables</p>
 
 <button class="reset-btn" id="t-reset" onclick="resetAll()">Analizar otro documento</button>
 </div>
@@ -398,6 +398,15 @@ function renderResults(result){
   }else{alertBox.style.display='none';}
   renderTabs(result);
   renderParams(result,0);
+  // Show PDF button only if we have real results (not a parse error)
+  const hasCats=result.categorias&&result.categorias.length>0;
+  const hasResumen=result.resumen&&!result.resumen.startsWith('Parse error')&&!result.resumen.startsWith('Error');
+  if(hasCats||hasResumen){
+    const pb=document.getElementById('t-pdfbtn');
+    const pn=document.getElementById('t-pdfnote');
+    if(pb)pb.style.display='flex';
+    if(pn)pn.style.display='block';
+  }
 }
 
 function renderTabs(result){
@@ -464,6 +473,10 @@ function resetAll(){
   document.getElementById('resSec').style.display='none';
   document.getElementById('uploadSec').style.display='block';
   document.getElementById('planCard').style.display='none';
+  const pb=document.getElementById('t-pdfbtn');
+  const pn=document.getElementById('t-pdfnote');
+  if(pb)pb.style.display='none';
+  if(pn)pn.style.display='none';
   ['ls1','ls2','ls3','ls4'].forEach(id=>{const e=document.getElementById(id);e.classList.remove('on','ok');});
   hideError();
   window.scrollTo({top:0,behavior:'smooth'});
