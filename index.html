@@ -828,152 +828,228 @@ async function saveScore(){
 function generateShareCard(){
   const canvas=document.getElementById('shareCanvas');
   const ctx=canvas.getContext('2d');
-  const S=1080;
-  canvas.width=S;canvas.height=S;
+  const W=1080,H=1080;
+  canvas.width=W;canvas.height=H;
 
-  // Score color
   const sc=P.sc||0;
-  const scoreColor=sc>=75?'#10b981':sc>=50?'#f59e0b':'#ef4444';
+  const t=T[lg];
 
-  // Background
-  ctx.fillStyle='#f8f9ff';
-  ctx.fillRect(0,0,S,S);
+  // ── BACKGROUND — dark gradient ──────────────────
+  const bgGrad=ctx.createLinearGradient(0,0,W,H);
+  bgGrad.addColorStop(0,'#0f0c29');
+  bgGrad.addColorStop(0.5,'#1a1535');
+  bgGrad.addColorStop(1,'#0d1117');
+  ctx.fillStyle=bgGrad;
+  ctx.fillRect(0,0,W,H);
 
-  // Top gradient bar
-  const bar=ctx.createLinearGradient(0,0,S,0);
+  // Subtle noise grid lines
+  ctx.strokeStyle='rgba(255,255,255,0.03)';
+  ctx.lineWidth=1;
+  for(let i=0;i<W;i+=60){
+    ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,H);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(W,i);ctx.stroke();
+  }
+
+  // ── TOP GLOW ────────────────────────────────────
+  const glow=ctx.createRadialGradient(W/2,0,0,W/2,0,500);
+  glow.addColorStop(0,'rgba(99,102,241,0.25)');
+  glow.addColorStop(1,'rgba(99,102,241,0)');
+  ctx.fillStyle=glow;
+  ctx.fillRect(0,0,W,H);
+
+  // ── TOP GRADIENT BAR ────────────────────────────
+  const bar=ctx.createLinearGradient(0,0,W,0);
   bar.addColorStop(0,'#6366f1');
   bar.addColorStop(0.5,'#06b6d4');
   bar.addColorStop(1,'#10b981');
   ctx.fillStyle=bar;
-  ctx.fillRect(0,0,S,12);
+  ctx.fillRect(0,0,W,6);
 
-  // White card
-  ctx.fillStyle='white';
-  roundRect(ctx,60,80,S-120,S-160,32);
-  ctx.fill();
-
-  // Card top gradient bar
-  const cardBar=ctx.createLinearGradient(0,0,S,0);
-  cardBar.addColorStop(0,'#6366f1');
-  cardBar.addColorStop(0.5,'#06b6d4');
-  cardBar.addColorStop(1,'#10b981');
-  ctx.fillStyle=cardBar;
-  roundRect(ctx,60,80,S-120,10,{tl:32,tr:32,bl:0,br:0});
-  ctx.fill();
-
-  // VIVIX logo
-  ctx.font='italic bold 52px Georgia, serif';
-  const grad=ctx.createLinearGradient(0,0,200,0);
-  grad.addColorStop(0,'#6366f1');
-  grad.addColorStop(1,'#06b6d4');
-  ctx.fillStyle=grad;
+  // ── VIVIX LOGO ──────────────────────────────────
+  ctx.save();
+  ctx.font='italic bold 58px Georgia, serif';
+  const logoGrad=ctx.createLinearGradient(0,0,300,0);
+  logoGrad.addColorStop(0,'#a5b4fc');
+  logoGrad.addColorStop(1,'#67e8f9');
+  ctx.fillStyle=logoGrad;
   ctx.textAlign='center';
-  ctx.fillText('VIVIX',S/2,185);
+  ctx.fillText('VIVIX',W/2,115);
+  ctx.restore();
 
-  // Score ring
-  const cx=S/2,cy=420,r=180;
+  // ── SCORE RING ──────────────────────────────────
+  const cx=W/2,cy=380,r=195;
+  // Outer glow ring
+  ctx.beginPath();
+  ctx.arc(cx,cy,r+8,-Math.PI/2,Math.PI*1.5);
+  ctx.strokeStyle='rgba(99,102,241,0.12)';
+  ctx.lineWidth=28;
+  ctx.stroke();
   // Track
   ctx.beginPath();
   ctx.arc(cx,cy,r,-Math.PI/2,Math.PI*1.5);
-  ctx.strokeStyle='#f3f4f6';
-  ctx.lineWidth=22;
+  ctx.strokeStyle='rgba(255,255,255,0.07)';
+  ctx.lineWidth=18;
   ctx.stroke();
-  // Fill
-  const ringGrad=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
-  ringGrad.addColorStop(0,'#6366f1');
-  ringGrad.addColorStop(1,'#06b6d4');
-  ctx.beginPath();
-  ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+(sc/100)*Math.PI*2);
-  ctx.strokeStyle=ringGrad;
-  ctx.lineWidth=22;
-  ctx.lineCap='round';
-  ctx.stroke();
+  // Fill arc
+  if(sc>0){
+    const ringGrad=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
+    ringGrad.addColorStop(0,'#6366f1');
+    ringGrad.addColorStop(0.5,'#06b6d4');
+    ringGrad.addColorStop(1,'#10b981');
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+(sc/100)*Math.PI*2);
+    ctx.strokeStyle=ringGrad;
+    ctx.lineWidth=18;
+    ctx.lineCap='round';
+    ctx.stroke();
+  }
 
   // Score number
-  ctx.font='italic bold 180px Georgia, serif';
-  ctx.fillStyle='#1a1d2e';
+  ctx.save();
+  ctx.font='italic bold 200px Georgia,serif';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
-  ctx.fillText(sc,cx,cy-18);
+  const numGrad=ctx.createLinearGradient(cx-120,cy,cx+120,cy);
+  numGrad.addColorStop(0,'#e0e7ff');
+  numGrad.addColorStop(1,'#bfdbfe');
+  ctx.fillStyle=numGrad;
+  ctx.fillText(sc,cx,cy-10);
+  ctx.restore();
 
   // /100
-  ctx.font='bold 42px Outfit, sans-serif';
-  ctx.fillStyle='#9ca3af';
-  ctx.fillText('/100',cx,cy+80);
+  ctx.save();
+  ctx.font='600 44px Outfit,sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.35)';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText('/100',cx,cy+90);
+  ctx.restore();
 
   // VITAL SCORE label
-  ctx.font='bold 26px Outfit, sans-serif';
-  ctx.fillStyle='#9ca3af';
-  ctx.letterSpacing='4px';
-  ctx.fillText('VITAL SCORE GLOBAL',cx,cy+145);
+  ctx.save();
+  ctx.font='700 22px Outfit,sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.35)';
+  ctx.textAlign='center';
+  ctx.letterSpacing='6px';
+  ctx.fillText('VITAL  SCORE  GLOBAL',cx,cy+155);
+  ctx.restore();
 
-  // Profile line
-  const t=T[lg];
+  // ── PROFILE LINE ────────────────────────────────
   const sexLabel=P.sx==='F'?(t.f||'Female'):(t.m||'Male');
-  ctx.font='500 30px Outfit, sans-serif';
-  ctx.fillStyle='#6b7280';
-  ctx.fillText(P.age+'y · '+sexLabel+' · BMI '+P.bmi+' · '+P.co,cx,cy+200);
+  ctx.save();
+  ctx.font='400 30px Outfit,sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.50)';
+  ctx.textAlign='center';
+  ctx.fillText(P.age+'y  ·  '+sexLabel+'  ·  BMI '+P.bmi+'  ·  '+P.co,cx,cy+205);
+  ctx.restore();
 
-  // 3 metric pills
+  // ── DIVIDER ─────────────────────────────────────
+  const divGrad=ctx.createLinearGradient(160,0,W-160,0);
+  divGrad.addColorStop(0,'rgba(255,255,255,0)');
+  divGrad.addColorStop(0.3,'rgba(255,255,255,0.15)');
+  divGrad.addColorStop(0.7,'rgba(255,255,255,0.15)');
+  divGrad.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=divGrad;
+  ctx.fillRect(160,cy+230,W-320,1);
+
+  // ── 3 METRIC PILLS ──────────────────────────────
   const metrics=[
-    {ico:'⚖️',lbl:t.bmi||'BMI',val:P.bmi,st:P.bL},
-    {ico:'💧',lbl:t.hyd||'Hydration',val:P.wa+'L',st:P.wL},
-    {ico:'😴',lbl:t.slp||'Sleep',val:P.sl+'h',st:P.sL}
+    {ico:'⚖️',lbl:t.bmi||'BMI',val:P.bmi},
+    {ico:'💧',lbl:t.hyd||'Hydration',val:P.wa+'L'},
+    {ico:'😴',lbl:t.slp||'Sleep',val:P.sl+'h'}
   ];
-  const pillW=240,pillH=90,pillGap=30;
-  const pillsTotal=metrics.length*pillW+(metrics.length-1)*pillGap;
-  const pillX0=(S-pillsTotal)/2;
+  const pillW=260,pillH=108,pillGap=24;
+  const pillsTotal=3*pillW+2*pillGap;
+  const px0=(W-pillsTotal)/2;
   const pillY=cy+255;
 
   metrics.forEach((m,i)=>{
-    const px=pillX0+i*(pillW+pillGap);
-    ctx.fillStyle='#f8f9ff';
-    roundRect(ctx,px,pillY,pillW,pillH,16);
+    const px=px0+i*(pillW+pillGap);
+    // Pill background
+    ctx.save();
+    ctx.fillStyle='rgba(255,255,255,0.06)';
+    roundRect(ctx,px,pillY,pillW,pillH,20);
     ctx.fill();
-    ctx.strokeStyle='#e5e7eb';
-    ctx.lineWidth=2;
-    roundRect(ctx,px,pillY,pillW,pillH,16);
+    ctx.strokeStyle='rgba(255,255,255,0.10)';
+    ctx.lineWidth=1;
+    roundRect(ctx,px,pillY,pillW,pillH,20);
     ctx.stroke();
+    ctx.restore();
 
-    ctx.font='32px sans-serif';
+    // Emoji
+    ctx.font='34px sans-serif';
     ctx.textAlign='center';
-    ctx.fillText(m.ico,px+pillW/2,pillY+34);
-    ctx.font='bold 22px Outfit, sans-serif';
-    ctx.fillStyle='#1a1d2e';
-    ctx.fillText(m.val,px+pillW/2,pillY+60);
-    ctx.font='500 18px Outfit, sans-serif';
-    ctx.fillStyle='#9ca3af';
-    ctx.fillText(m.lbl,px+pillW/2,pillY+80);
+    ctx.fillText(m.ico,px+pillW/2,pillY+38);
+
+    // Value
+    ctx.save();
+    ctx.font='bold 30px Outfit,sans-serif';
+    ctx.fillStyle='rgba(255,255,255,0.92)';
+    ctx.textAlign='center';
+    ctx.fillText(m.val,px+pillW/2,pillY+68);
+    ctx.restore();
+
+    // Label
+    ctx.save();
+    ctx.font='400 19px Outfit,sans-serif';
+    ctx.fillStyle='rgba(255,255,255,0.40)';
+    ctx.textAlign='center';
+    ctx.fillText(m.lbl,px+pillW/2,pillY+90);
+    ctx.restore();
   });
 
-  // Life expectancy bar
-  const barY=pillY+pillH+40;
-  const barX=120,barW=S-240,barH=16;
-  ctx.fillStyle='#f3f4f6';
-  roundRect(ctx,barX,barY,barW,barH,8);
+  // ── LIFE EXPECTANCY ─────────────────────────────
+  const barY=pillY+pillH+36;
+  const barX=120,barW=W-240,barH=10;
+
+  // Track
+  ctx.fillStyle='rgba(255,255,255,0.08)';
+  roundRect(ctx,barX,barY,barW,barH,5);
   ctx.fill();
+
+  // Fill
   const liveW=Math.min(barW,(P.age/100)*barW);
   const liveGrad=ctx.createLinearGradient(barX,0,barX+barW,0);
   liveGrad.addColorStop(0,'#6366f1');
   liveGrad.addColorStop(1,'#06b6d4');
   ctx.fillStyle=liveGrad;
-  roundRect(ctx,barX,barY,liveW,barH,8);
+  roundRect(ctx,barX,barY,liveW,barH,5);
   ctx.fill();
-  ctx.font='bold 24px Outfit, sans-serif';
-  ctx.fillStyle='#6366f1';
-  ctx.textAlign='right';
-  ctx.fillText((t.exp||'Expectancy: ~')+P.le+' yrs',S-120,barY+barH+32);
 
-  // Bottom URL watermark
-  ctx.font='bold 28px Outfit, sans-serif';
-  const urlGrad=ctx.createLinearGradient(0,0,S,0);
-  urlGrad.addColorStop(0,'#6366f1');
-  urlGrad.addColorStop(1,'#06b6d4');
+  // Expectancy text
+  ctx.save();
+  ctx.font='bold 26px Outfit,sans-serif';
+  const expGrad=ctx.createLinearGradient(0,0,W,0);
+  expGrad.addColorStop(0,'#a5b4fc');
+  expGrad.addColorStop(1,'#67e8f9');
+  ctx.fillStyle=expGrad;
+  ctx.textAlign='right';
+  ctx.fillText((t.exp||'Expectancy: ~')+P.le+' yrs',W-120,barY+barH+34);
+  ctx.restore();
+
+  // ── BOTTOM BRAND ────────────────────────────────
+  // Divider
+  ctx.fillStyle=divGrad;
+  ctx.fillRect(160,H-110,W-320,1);
+
+  ctx.save();
+  ctx.font='bold 34px Outfit,sans-serif';
+  const urlGrad=ctx.createLinearGradient(0,0,W,0);
+  urlGrad.addColorStop(0,'#818cf8');
+  urlGrad.addColorStop(1,'#22d3ee');
   ctx.fillStyle=urlGrad;
   ctx.textAlign='center';
-  ctx.fillText('vivix.app',S/2,S-44);
+  ctx.fillText('vivix.app',W/2,H-66);
+  ctx.restore();
 
-  // Download
+  ctx.save();
+  ctx.font='400 20px Outfit,sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.25)';
+  ctx.textAlign='center';
+  ctx.fillText('AI · Preventive Health · ' + (lg==='es'?'Análisis personalizado':'Personalized analysis'),W/2,H-38);
+  ctx.restore();
+
+  // ── DOWNLOAD ────────────────────────────────────
   const link=document.createElement('a');
   link.download='vivix-score-'+sc+'.png';
   link.href=canvas.toDataURL('image/png');
