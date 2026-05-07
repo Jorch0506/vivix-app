@@ -13,8 +13,12 @@ module.exports = async function handler(req, res) {
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
+    // Debug — remove after confirming it works
+    console.log('VIVIX URL:', supabaseUrl ? supabaseUrl.substring(0, 40) : 'MISSING');
+    console.log('VIVIX KEY prefix:', supabaseKey ? supabaseKey.substring(0, 30) : 'MISSING');
+
     if (!supabaseUrl || !supabaseKey) {
-      console.error('VIVIX: Supabase env vars missing');
+      console.error('VIVIX: env vars missing');
       return res.status(200).json({ ok: false, error: 'not configured' });
     }
 
@@ -32,8 +36,10 @@ module.exports = async function handler(req, res) {
       lang: lang || null
     });
 
-    // Extract hostname from URL (handles trailing slashes)
-    const hostname = supabaseUrl.replace('https://', '').replace('http://', '').replace(/\/$/, '');
+    const hostname = supabaseUrl
+      .replace('https://', '')
+      .replace('http://', '')
+      .replace(/\/$/, '');
 
     const result = await new Promise(function(resolve, reject) {
       const opts = {
@@ -57,25 +63,21 @@ module.exports = async function handler(req, res) {
         });
       });
 
-      r.on('error', function(e) {
-        reject(e);
-      });
-
+      r.on('error', function(e) { reject(e); });
       r.write(payload);
       r.end();
     });
 
-    // Log result so we can see it in Vercel logs
-    console.log('VIVIX save-score status:', result.status, '| body:', result.body || '(empty)');
+    console.log('VIVIX Supabase response:', result.status, result.body || '(empty=success)');
 
     if (result.status === 201) {
       return res.status(200).json({ ok: true });
     } else {
-      return res.status(200).json({ ok: false, status: result.status, error: result.body });
+      return res.status(200).json({ ok: false, status: result.status, body: result.body });
     }
 
   } catch(err) {
-    console.error('VIVIX save-score error:', err.message);
+    console.error('VIVIX save-score exception:', err.message);
     return res.status(200).json({ ok: false, error: err.message });
   }
 };
