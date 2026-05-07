@@ -170,6 +170,20 @@ input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;
 .cta-note{font-size:10px;color:#9ca3af;font-weight:600;}
 .reset-btn{display:block;background:none;border:1.5px solid #e5e7eb;border-radius:12px;padding:11px 24px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#9ca3af;cursor:pointer;margin:0 auto;transition:all .2s;}
 .reset-btn:hover{border-color:#6366f1;color:#6366f1;}
+/* ── SHARE CARD ─────────────────────────────── */
+.share-btn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,#6366f1,#06b6d4);
+  border:none;border-radius:14px;padding:15px;
+  font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;
+  color:white;cursor:pointer;margin-bottom:10px;
+  letter-spacing:.3px;transition:all .2s;
+  box-shadow:0 4px 14px rgba(99,102,241,.3);
+}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(99,102,241,.4);}
+.share-note{font-size:11px;color:#9ca3af;text-align:center;margin-bottom:14px;}
+#shareCanvas{display:none;}
+
 .footer{text-align:center;padding-top:28px;border-top:1px solid #e5e7eb;margin-top:28px;font-size:10px;color:#9ca3af;font-weight:600;line-height:2.4;letter-spacing:.5px;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
@@ -391,6 +405,12 @@ input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;
     <p class="cta-note" id="t-cnote">Free forever · Your data always yours · No spam</p>
   </div>
 
+  <button class="share-btn" onclick="generateShareCard()" id="t-share">
+    📸 <span id="t-sharetxt">Compartir mi Vital Score</span>
+  </button>
+  <p class="share-note" id="t-sharenote">Imagen lista para WhatsApp · Stories · Redes sociales</p>
+  <canvas id="shareCanvas"></canvas>
+
   <button class="reset-btn" onclick="rst()" id="t-rst">← New analysis</button>
 </div>
 
@@ -404,7 +424,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;
 <script>
 const T={
 en:{badge:'AI Engine — Claude Sonnet',h1:'Know Your<br><em>Vital Score</em>',sub:'9 data points. Personalized scientific analysis by AI. Your real life expectancy, your risks, your action plan.',s1:'Profiles',s2:'Languages',s3:'Sources',step:'// 9 questions · 60 seconds',ft:'Your biometric profile',fs:'Processed locally. No identifiable data stored without your consent.',age:'Age',sex:'Biological sex',wt:'Weight (kg)',ht:'Height (cm)',ct:'Country',act:'Physical activity',act0:'Sedentary',act1:'1–2 days/wk',act2:'3–4 days/wk',act3:'5+ days/wk',smk:'Smoking',smk0:'Never',smk1:'Ex-smoker',smk2:'Current smoker',wa:'Water (liters/day)',sl:'Sleep (hours/night)',sel:'— Select —',m:'Male',f:'Female',btn:'✦ Analyze with AI',prv:'🔒 No cookies · No tracking · Anonymous data · GDPR compliant',lt:'Analyzing your profile...',ls:'AI is processing your information',rl:'GLOBAL VITAL SCORE',bmi:'BMI',hyd:'Hydration',slp:'Sleep',ll:'Your estimated lifeline',an:'Personalized AI Analysis',ask:'Ask your vital AI',chips:['What do I change first?','Impact of more sleep','Water & cognition','My main risk','30-day plan'],qph:'Ask about your profile...',cti:'Track Your Score Weekly',ctx:'Your Vital Score changes with your habits. Monitor it weekly.',cjoin:'Join Free',cnote:'Free forever · Your data always yours · No spam',rst:'← New analysis',disc:'Indicative only. Does not replace professional medical diagnosis.',now:'You now',exp:'Expectancy: ~',
-lpt:'Your Preventive Lab Panel',lpp:'PERSONALIZED',lps:'Based on your biometric profile, these are the lab tests that could give you the most preventive value right now.',lcta:'Interpret my results in VIVIX',ldisc:'Once you have your results, upload them and VIVIX will interpret each value in the context of your complete profile.',labs:'Interpret lab results',labssub:'Upload your PDF · Analysis in seconds · No signup',ok:'✓ You\'re on the list!',
+lpt:'Your Preventive Lab Panel',lpp:'PERSONALIZED',lps:'Based on your biometric profile, these are the lab tests that could give you the most preventive value right now.',lcta:'Interpret my results in VIVIX',ldisc:'Once you have your results, upload them and VIVIX will interpret each value in the context of your complete profile.',labs:'Interpret lab results',labssub:'Upload your PDF · Analysis in seconds · No signup',ok:'✓ You\'re on the list!',share:'📸 Share my Vital Score',sharenote:'Image ready for WhatsApp · Stories · Social media',
 bL:{low:'Underweight',ok:'Optimal',ov:'Overweight',o1:'Obesity I',o2:'Obesity II+'},
 wL:{d:'Dehydrated',lo:'Low',ok:'Acceptable',op:'Optimal',ex:'Slight excess'},
 sL:{sv:'Severe deprivation',in:'Insufficient',bo:'Borderline',op:'Optimal',ex:'Slight excess',hy:'Hypersomnia'},
@@ -412,7 +432,7 @@ ai:(p)=>`You are a preventive medicine specialist. Analyze this biometric profil
 qa:(p,q)=>`Preventive medicine specialist. Profile: ${p.age}yo, ${p.sx==='F'?'F':'M'}, BMI ${p.bmi} (${p.bL}), water ${p.wa}L (${p.wL}), sleep ${p.sl}h (${p.sL}), activity ${p.actLabel}, smoking ${p.smkLabel}, Score ${p.sc}/100, expectancy ~${p.le}y. Answer in English, max 140 words, direct, evidence-based, second person (you), no markdown: ${q}`},
 
 es:{badge:'Motor IA — Claude Sonnet',h1:'Conoce Tu<br><em>Vital Score</em>',sub:'9 datos. Análisis científico personalizado por IA. Tu expectativa de vida real, tus riesgos, tu plan de acción.',s1:'Perfiles',s2:'Idiomas',s3:'Fuentes',step:'// 9 preguntas · 60 segundos',ft:'Tu perfil biométrico',fs:'Procesado localmente. Sin datos identificables sin tu consentimiento.',age:'Edad',sex:'Sexo biológico',wt:'Peso (kg)',ht:'Altura (cm)',ct:'País',act:'Actividad física',act0:'Sedentario',act1:'1–2 días/sem',act2:'3–4 días/sem',act3:'5+ días/sem',smk:'Tabaquismo',smk0:'Nunca',smk1:'Ex-fumador',smk2:'Fumador activo',wa:'Agua (litros/día)',sl:'Sueño (horas/noche)',sel:'— Selecciona —',m:'Masculino',f:'Femenino',btn:'✦ Analizar con IA',prv:'🔒 Sin cookies · Sin tracking · Datos anónimos',lt:'Analizando tu perfil...',ls:'La IA está procesando tu información',rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hidratación',slp:'Sueño',ll:'Tu línea de vida estimada',an:'Análisis IA Personalizado',ask:'Pregúntale a tu IA vital',chips:['¿Qué cambio primero?','Impacto de dormir más','Agua y cognición','Mi riesgo principal','Plan 30 días'],qph:'Pregunta sobre tu perfil...',cti:'Monitorea Tu Score Semanal',ctx:'Tu Vital Score cambia con tus hábitos. Monitoréalo cada semana.',cjoin:'Acceso Gratuito',cnote:'Gratis · Tus datos siempre tuyos · Sin spam',rst:'← Nuevo análisis',disc:'Orientativo. No sustituye diagnóstico médico profesional.',now:'Tú ahora',exp:'Expectativa: ~',
-lpt:'Tu Panel Preventivo de Laboratorio',lpp:'PERSONALIZADO',lps:'Basado en tu perfil biométrico, estos son los estudios de laboratorio que mayor valor preventivo te darían ahora mismo.',lcta:'Interpretar mis resultados en VIVIX',ldisc:'Cuando tengas tus resultados, súbelos aquí y VIVIX interpretará cada valor en el contexto de tu perfil completo.',labs:'Interpretar resultados de laboratorio',labssub:'Sube tu PDF · Análisis en segundos · Sin registro',ok:'✓ ¡En la lista!',
+lpt:'Tu Panel Preventivo de Laboratorio',lpp:'PERSONALIZADO',lps:'Basado en tu perfil biométrico, estos son los estudios de laboratorio que mayor valor preventivo te darían ahora mismo.',lcta:'Interpretar mis resultados en VIVIX',ldisc:'Cuando tengas tus resultados, súbelos aquí y VIVIX interpretará cada valor en el contexto de tu perfil completo.',labs:'Interpretar resultados de laboratorio',labssub:'Sube tu PDF · Análisis en segundos · Sin registro',ok:'✓ ¡En la lista!',share:'📸 Compartir mi Vital Score',sharenote:'Imagen lista para WhatsApp · Stories · Redes sociales',
 bL:{low:'Bajo peso',ok:'Óptimo',ov:'Sobrepeso',o1:'Obesidad I',o2:'Obesidad II+'},
 wL:{d:'Deshidratado',lo:'Bajo',ok:'Aceptable',op:'Óptimo',ex:'Exceso leve'},
 sL:{sv:'Privación grave',in:'Insuficiente',bo:'Borderline',op:'Óptimo',ex:'Exceso leve',hy:'Hipersomnia'},
@@ -420,7 +440,7 @@ ai:(p)=>`Eres médico especialista en medicina preventiva. Analiza este perfil y
 qa:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi} (${p.bL}), agua ${p.wa}L (${p.wL}), sueño ${p.sl}h (${p.sL}), actividad ${p.actLabel}, tabaquismo ${p.smkLabel}, Score ${p.sc}/100, expectativa ~${p.le}a. Responde en español, máx 140 palabras, directo, basado en evidencia, segunda persona, sin markdown: ${q}`},
 
 pt:{badge:'Motor IA — Claude Sonnet',h1:'Conheça Seu<br><em>Vital Score</em>',sub:'9 dados. Análise científica personalizada por IA.',s1:'Perfis',s2:'Idiomas',s3:'Fontes',step:'// 9 perguntas · 60 segundos',ft:'Seu perfil biométrico',fs:'Processado localmente.',age:'Idade',sex:'Sexo biológico',wt:'Peso (kg)',ht:'Altura (cm)',ct:'País',act:'Atividade física',act0:'Sedentário',act1:'1–2 dias/sem',act2:'3–4 dias/sem',act3:'5+ dias/sem',smk:'Tabagismo',smk0:'Nunca',smk1:'Ex-fumante',smk2:'Fumante ativo',wa:'Água (litros/dia)',sl:'Sono (horas/noite)',sel:'— Selecione —',m:'Masculino',f:'Feminino',btn:'✦ Analisar com IA',prv:'🔒 Sem cookies · Dados anônimos',lt:'Analisando seu perfil...',ls:'A IA está processando',rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hidratação',slp:'Sono',ll:'Sua linha de vida estimada',an:'Análise IA Personalizada',ask:'Pergunte à sua IA vital',chips:['O que mudo primeiro?','Impacto de dormir mais','Água e cognição','Meu risco principal','Plano 30 dias'],qph:'Pergunte sobre seu perfil...',cti:'Monitore Seu Score Semanal',ctx:'Seu Vital Score muda com seus hábitos.',cjoin:'Acesso Gratuito',cnote:'Gratuito · Seus dados sempre seus',rst:'← Nova análise',disc:'Indicativo. Não substitui diagnóstico médico.',now:'Você agora',exp:'Expectativa: ~',
-lpt:'Seu Painel Preventivo de Laboratório',lpp:'PERSONALIZADO',lps:'Com base no seu perfil biométrico, estes são os exames que mais valor preventivo trariam agora.',lcta:'Interpretar meus resultados no VIVIX',ldisc:'Quando tiver seus resultados, envie-os e o VIVIX interpretará cada valor no contexto do seu perfil.',labs:'Interpretar resultados de laboratório',labssub:'Envie seu PDF · Análise em segundos · Sem cadastro',ok:'✓ Na lista!',
+lpt:'Seu Painel Preventivo de Laboratório',lpp:'PERSONALIZADO',lps:'Com base no seu perfil biométrico, estes são os exames que mais valor preventivo trariam agora.',lcta:'Interpretar meus resultados no VIVIX',ldisc:'Quando tiver seus resultados, envie-os e o VIVIX interpretará cada valor no contexto do seu perfil.',labs:'Interpretar resultados de laboratório',labssub:'Envie seu PDF · Análise em segundos · Sem cadastro',ok:'✓ Na lista!',share:'📸 Compartilhar meu Vital Score',sharenote:'Imagem pronta para WhatsApp · Stories · Redes sociais',
 bL:{low:'Abaixo do peso',ok:'Ótimo',ov:'Sobrepeso',o1:'Obesidade I',o2:'Obesidade II+'},
 wL:{d:'Desidratado',lo:'Baixo',ok:'Aceitável',op:'Ótimo',ex:'Excesso leve'},
 sL:{sv:'Privação grave',in:'Insuficiente',bo:'Limítrofe',op:'Ótimo',ex:'Excesso leve',hy:'Hipersonia'},
@@ -428,7 +448,7 @@ ai:(p)=>`Você é médico especialista. Analise em português. Sem markdown. Má
 qa:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi}, água ${p.wa}L, sono ${p.sl}h, Score ${p.sc}/100. Responda em português, máx 140 palavras, sem markdown: ${q}`},
 
 fr:{badge:'Moteur IA — Claude Sonnet',h1:'Connaissez Votre<br><em>Vital Score</em>',sub:'9 données. Analyse scientifique personnalisée par IA.',s1:'Profils',s2:'Langues',s3:'Sources',step:'// 9 questions · 60 secondes',ft:'Votre profil biométrique',fs:'Traité localement.',age:'Âge',sex:'Sexe biologique',wt:'Poids (kg)',ht:'Taille (cm)',ct:'Pays',act:'Activité physique',act0:'Sédentaire',act1:'1–2 jours/sem',act2:'3–4 jours/sem',act3:'5+ jours/sem',smk:'Tabagisme',smk0:'Jamais',smk1:'Ex-fumeur',smk2:'Fumeur actuel',wa:"Eau (litres/jour)",sl:'Sommeil (heures/nuit)',sel:'— Sélectionner —',m:'Masculin',f:'Féminin',btn:"✦ Analyser avec l'IA",prv:'🔒 Sans cookies · Données anonymes',lt:'Analyse en cours...',ls:"L'IA traite vos informations",rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hydratation',slp:'Sommeil',ll:'Votre ligne de vie estimée',an:'Analyse IA Personnalisée',ask:'Demandez à votre IA vitale',chips:['Que changer en premier?','Impact de plus de sommeil','Eau et cognition','Mon risque principal','Plan 30 jours'],qph:'Posez une question...',cti:'Suivez Votre Score Chaque Semaine',ctx:'Votre Vital Score évolue avec vos habitudes.',cjoin:'Accès Gratuit',cnote:'Gratuit · Vos données toujours à vous',rst:'← Nouvelle analyse',disc:'Indicatif. Ne remplace pas un diagnostic médical.',now:'Vous maintenant',exp:'Espérance: ~',
-lpt:'Votre Bilan Préventif de Laboratoire',lpp:'PERSONNALISÉ',lps:'Sur la base de votre profil biométrique, voici les examens qui vous apporteraient le plus de valeur préventive.',lcta:'Interpréter mes résultats dans VIVIX',ldisc:"Une fois vos résultats disponibles, importez-les et VIVIX interprétera chaque valeur dans le contexte de votre profil.",labs:'Interpréter les résultats de laboratoire',labssub:'Téléchargez votre PDF · Analyse en secondes · Sans inscription',ok:'✓ Sur la liste!',
+lpt:'Votre Bilan Préventif de Laboratoire',lpp:'PERSONNALISÉ',lps:'Sur la base de votre profil biométrique, voici les examens qui vous apporteraient le plus de valeur préventive.',lcta:'Interpréter mes résultats dans VIVIX',ldisc:"Une fois vos résultats disponibles, importez-les et VIVIX interprétera chaque valeur dans le contexte de votre profil.",labs:'Interpréter les résultats de laboratoire',labssub:'Téléchargez votre PDF · Analyse en secondes · Sans inscription',ok:'✓ Sur la liste!',share:'📸 Partager mon Vital Score',sharenote:'Image prête pour WhatsApp · Stories · Réseaux sociaux',
 bL:{low:'Insuffisance pondérale',ok:'Optimal',ov:'Surpoids',o1:'Obésité I',o2:'Obésité II+'},
 wL:{d:'Déshydraté',lo:'Bas',ok:'Acceptable',op:'Optimal',ex:'Léger excès'},
 sL:{sv:'Privation grave',in:'Insuffisant',bo:'Limite',op:'Optimal',ex:'Léger excès',hy:'Hypersomnie'},
@@ -436,7 +456,7 @@ ai:(p)=>`Vous êtes médecin spécialiste. Analysez en français. Sans markdown.
 qa:(p,q)=>`Médecin préventif. Profil: ${p.age}ans, IMC ${p.bmi}, eau ${p.wa}L, sommeil ${p.sl}h, Score ${p.sc}/100. Répondez en français, max 140 mots, sans markdown: ${q}`},
 
 hi:{badge:'AI इंजन — Claude Sonnet',h1:'अपना<br><em>Vital Score</em> जानें',sub:'9 डेटा बिंदु। AI द्वारा व्यक्तिगत वैज्ञानिक विश्लेषण।',s1:'प्रोफाइल',s2:'भाषाएं',s3:'स्रोत',step:'// 9 प्रश्न · 60 सेकंड',ft:'आपका बायोमेट्रिक प्रोफाइल',fs:'स्थानीय रूप से संसाधित।',age:'आयु',sex:'जैविक लिंग',wt:'वजन (kg)',ht:'ऊंचाई (cm)',ct:'देश',act:'शारीरिक गतिविधि',act0:'निष्क्रिय',act1:'1–2 दिन/सप्ताह',act2:'3–4 दिन/सप्ताह',act3:'5+ दिन/सप्ताह',smk:'धूम्रपान',smk0:'कभी नहीं',smk1:'पूर्व धूम्रपायी',smk2:'वर्तमान धूम्रपायी',wa:'पानी (लीटर/दिन)',sl:'नींद (घंटे/रात)',sel:'— चुनें —',m:'पुरुष',f:'महिला',btn:'✦ AI से विश्लेषण करें',prv:'🔒 कोई कुकीज़ नहीं · गुमनाम डेटा',lt:'विश्लेषण हो रहा है...',ls:'AI आपकी जानकारी संसाधित कर रहा है',rl:'ग्लोबल वाइटल स्कोर',bmi:'BMI',hyd:'जलयोजन',slp:'नींद',ll:'आपकी अनुमानित जीवन रेखा',an:'व्यक्तिगत AI विश्लेषण',ask:'अपने AI से पूछें',chips:['पहले क्या बदलूं?','अधिक नींद का प्रभाव','पानी और संज्ञान','मुख्य जोखिम','30 दिन योजना'],qph:'अपना प्रश्न पूछें...',cti:'साप्ताहिक स्कोर ट्रैक करें',ctx:'आपका Vital Score आपकी आदतों से बदलता है।',cjoin:'मुफ्त पहुंच',cnote:'मुफ्त · आपका डेटा हमेशा आपका',rst:'← नया विश्लेषण',disc:'संकेतात्मक। पेशेवर चिकित्सा का विकल्प नहीं।',now:'आप अभी',exp:'प्रत्याशा: ~',
-lpt:'आपका निवारक प्रयोगशाला पैनल',lpp:'व्यक्तिगत',lps:'आपके बायोमेट्रिक प्रोफाइल के आधार पर, ये वे परीक्षण हैं जो अभी सबसे अधिक निवारक मूल्य देंगे।',lcta:'VIVIX में मेरे परिणाम व्याख्या करें',ldisc:'जब आपके परिणाम आ जाएं, उन्हें यहां अपलोड करें।',labs:'प्रयोगशाला परिणाम समझें',labssub:'PDF अपलोड करें · सेकंड में विश्लेषण',ok:'✓ सूची में!',
+lpt:'आपका निवारक प्रयोगशाला पैनल',lpp:'व्यक्तिगत',lps:'आपके बायोमेट्रिक प्रोफाइल के आधार पर, ये वे परीक्षण हैं जो अभी सबसे अधिक निवारक मूल्य देंगे।',lcta:'VIVIX में मेरे परिणाम व्याख्या करें',ldisc:'जब आपके परिणाम आ जाएं, उन्हें यहां अपलोड करें।',labs:'प्रयोगशाला परिणाम समझें',labssub:'PDF अपलोड करें · सेकंड में विश्लेषण',ok:'✓ सूची में!',share:'📸 Vital Score शेयर करें',sharenote:'WhatsApp · Stories के लिए तैयार',
 bL:{low:'कम वजन',ok:'इष्टतम',ov:'अधिक वजन',o1:'मोटापा I',o2:'मोटापा II+'},
 wL:{d:'निर्जलित',lo:'कम',ok:'स्वीकार्य',op:'इष्टतम',ex:'हल्का अधिक'},
 sL:{sv:'गंभीर',in:'अपर्याप्त',bo:'सीमा',op:'इष्टतम',ex:'हल्का अधिक',hy:'अतिनिद्रा'},
@@ -444,7 +464,7 @@ ai:(p)=>`You are a preventive medicine specialist. Respond in Hindi (Devanagari 
 qa:(p,q)=>`Preventive doctor. Profile: ${p.age}y, BMI ${p.bmi}, water ${p.wa}L, sleep ${p.sl}h, Score ${p.sc}/100. Answer in Hindi, max 140 words, no markdown: ${q}`},
 
 zh:{badge:'AI引擎 — Claude Sonnet',h1:'了解您的<br><em>活力评分</em>',sub:'9个数据点。AI个性化科学分析。',s1:'档案数',s2:'语言',s3:'来源',step:'// 9个问题 · 60秒',ft:'您的生物特征档案',fs:'本地处理。未经您同意不存储可识别数据。',age:'年龄',sex:'生理性别',wt:'体重 (kg)',ht:'身高 (cm)',ct:'国家',act:'体育活动',act0:'久坐',act1:'1–2天/周',act2:'3–4天/周',act3:'5+天/周',smk:'吸烟情况',smk0:'从不',smk1:'已戒烟',smk2:'当前吸烟',wa:'每日饮水量（升）',sl:'每晚睡眠小时数',sel:'— 请选择 —',m:'男性',f:'女性',btn:'✦ AI分析',prv:'🔒 无cookie · 匿名数据',lt:'正在分析您的档案...',ls:'AI正在处理您的信息',rl:'全球生命活力评分',bmi:'BMI',hyd:'水分状态',slp:'睡眠',ll:'您的预计生命线',an:'个性化AI分析',ask:'向您的AI询问',chips:['我首先改变什么？','更多睡眠的影响','水分与认知','我的主要风险','30天计划'],qph:'询问您的档案相关问题...',cti:'每周追踪您的评分',ctx:'您的活力评分随习惯而变化。',cjoin:'免费加入',cnote:'免费 · 数据始终属于您',rst:'← 重新分析',disc:'仅供参考。不替代专业医疗诊断。',now:'您现在',exp:'预期: ~',
-lpt:'您的预防性实验室检测套餐',lpp:'个性化',lps:'根据您的生物特征档案，这些是目前最具预防价值的实验室检测项目。',lcta:'在VIVIX解读我的检测结果',ldisc:'收到检测结果后，上传至VIVIX，我们将结合您的完整档案解读每项数值。',labs:'解读检验报告',labssub:'上传PDF · 秒速分析 · 无需注册',ok:'✓ 已加入!',
+lpt:'您的预防性实验室检测套餐',lpp:'个性化',lps:'根据您的生物特征档案，这些是目前最具预防价值的实验室检测项目。',lcta:'在VIVIX解读我的检测结果',ldisc:'收到检测结果后，上传至VIVIX，我们将结合您的完整档案解读每项数值。',labs:'解读检验报告',labssub:'上传PDF · 秒速分析 · 无需注册',ok:'✓ 已加入!',share:'📸 分享我的活力评分',sharenote:'适用于微信 · 朋友圈 · 社交媒体',
 bL:{low:'体重不足',ok:'正常',ov:'超重',o1:'肥胖I级',o2:'肥胖II级+'},
 wL:{d:'脱水',lo:'不足',ok:'尚可',op:'最佳',ex:'轻微过量'},
 sL:{sv:'严重睡眠剥夺',in:'不足',bo:'临界',op:'最佳',ex:'轻微过量',hy:'嗜睡'},
@@ -492,6 +512,8 @@ function setLang(l){
   s('t-ll',t.ll);s('t-an',t.an);s('t-ask',t.ask);
   s('t-cti',t.cti);s('t-ctx',t.ctx);s('t-cjoin',t.cjoin);s('t-cnote',t.cnote);
   s('t-rst',t.rst);s('t-disc',t.disc);
+  s('t-sharetxt',t.share||'📸 Share my Vital Score');
+  s('t-sharenote',t.sharenote||'Image ready for WhatsApp · Stories · Social media');
   s('t-lpt',t.lpt);s('t-lpp',t.lpp);s('t-lps',t.lps);s('t-lcta',t.lcta);s('t-ldisc',t.ldisc);
   s('t-labs',t.labs);s('t-labssub',t.labssub);
   const el=document.getElementById('qi');if(el)el.placeholder=t.qph;
@@ -801,6 +823,178 @@ async function saveScore(){
     });
   }catch(e){}
 }
+
+// ── SHARE CARD GENERATOR ─────────────────────
+function generateShareCard(){
+  const canvas=document.getElementById('shareCanvas');
+  const ctx=canvas.getContext('2d');
+  const S=1080;
+  canvas.width=S;canvas.height=S;
+
+  // Score color
+  const sc=P.sc||0;
+  const scoreColor=sc>=75?'#10b981':sc>=50?'#f59e0b':'#ef4444';
+
+  // Background
+  ctx.fillStyle='#f8f9ff';
+  ctx.fillRect(0,0,S,S);
+
+  // Top gradient bar
+  const bar=ctx.createLinearGradient(0,0,S,0);
+  bar.addColorStop(0,'#6366f1');
+  bar.addColorStop(0.5,'#06b6d4');
+  bar.addColorStop(1,'#10b981');
+  ctx.fillStyle=bar;
+  ctx.fillRect(0,0,S,12);
+
+  // White card
+  ctx.fillStyle='white';
+  roundRect(ctx,60,80,S-120,S-160,32);
+  ctx.fill();
+
+  // Card top gradient bar
+  const cardBar=ctx.createLinearGradient(0,0,S,0);
+  cardBar.addColorStop(0,'#6366f1');
+  cardBar.addColorStop(0.5,'#06b6d4');
+  cardBar.addColorStop(1,'#10b981');
+  ctx.fillStyle=cardBar;
+  roundRect(ctx,60,80,S-120,10,{tl:32,tr:32,bl:0,br:0});
+  ctx.fill();
+
+  // VIVIX logo
+  ctx.font='italic bold 52px Georgia, serif';
+  const grad=ctx.createLinearGradient(0,0,200,0);
+  grad.addColorStop(0,'#6366f1');
+  grad.addColorStop(1,'#06b6d4');
+  ctx.fillStyle=grad;
+  ctx.textAlign='center';
+  ctx.fillText('VIVIX',S/2,185);
+
+  // Score ring
+  const cx=S/2,cy=420,r=180;
+  // Track
+  ctx.beginPath();
+  ctx.arc(cx,cy,r,-Math.PI/2,Math.PI*1.5);
+  ctx.strokeStyle='#f3f4f6';
+  ctx.lineWidth=22;
+  ctx.stroke();
+  // Fill
+  const ringGrad=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
+  ringGrad.addColorStop(0,'#6366f1');
+  ringGrad.addColorStop(1,'#06b6d4');
+  ctx.beginPath();
+  ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+(sc/100)*Math.PI*2);
+  ctx.strokeStyle=ringGrad;
+  ctx.lineWidth=22;
+  ctx.lineCap='round';
+  ctx.stroke();
+
+  // Score number
+  ctx.font='italic bold 180px Georgia, serif';
+  ctx.fillStyle='#1a1d2e';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText(sc,cx,cy-18);
+
+  // /100
+  ctx.font='bold 42px Outfit, sans-serif';
+  ctx.fillStyle='#9ca3af';
+  ctx.fillText('/100',cx,cy+80);
+
+  // VITAL SCORE label
+  ctx.font='bold 26px Outfit, sans-serif';
+  ctx.fillStyle='#9ca3af';
+  ctx.letterSpacing='4px';
+  ctx.fillText('VITAL SCORE GLOBAL',cx,cy+145);
+
+  // Profile line
+  const t=T[lg];
+  const sexLabel=P.sx==='F'?(t.f||'Female'):(t.m||'Male');
+  ctx.font='500 30px Outfit, sans-serif';
+  ctx.fillStyle='#6b7280';
+  ctx.fillText(P.age+'y · '+sexLabel+' · BMI '+P.bmi+' · '+P.co,cx,cy+200);
+
+  // 3 metric pills
+  const metrics=[
+    {ico:'⚖️',lbl:t.bmi||'BMI',val:P.bmi,st:P.bL},
+    {ico:'💧',lbl:t.hyd||'Hydration',val:P.wa+'L',st:P.wL},
+    {ico:'😴',lbl:t.slp||'Sleep',val:P.sl+'h',st:P.sL}
+  ];
+  const pillW=240,pillH=90,pillGap=30;
+  const pillsTotal=metrics.length*pillW+(metrics.length-1)*pillGap;
+  const pillX0=(S-pillsTotal)/2;
+  const pillY=cy+255;
+
+  metrics.forEach((m,i)=>{
+    const px=pillX0+i*(pillW+pillGap);
+    ctx.fillStyle='#f8f9ff';
+    roundRect(ctx,px,pillY,pillW,pillH,16);
+    ctx.fill();
+    ctx.strokeStyle='#e5e7eb';
+    ctx.lineWidth=2;
+    roundRect(ctx,px,pillY,pillW,pillH,16);
+    ctx.stroke();
+
+    ctx.font='32px sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(m.ico,px+pillW/2,pillY+34);
+    ctx.font='bold 22px Outfit, sans-serif';
+    ctx.fillStyle='#1a1d2e';
+    ctx.fillText(m.val,px+pillW/2,pillY+60);
+    ctx.font='500 18px Outfit, sans-serif';
+    ctx.fillStyle='#9ca3af';
+    ctx.fillText(m.lbl,px+pillW/2,pillY+80);
+  });
+
+  // Life expectancy bar
+  const barY=pillY+pillH+40;
+  const barX=120,barW=S-240,barH=16;
+  ctx.fillStyle='#f3f4f6';
+  roundRect(ctx,barX,barY,barW,barH,8);
+  ctx.fill();
+  const liveW=Math.min(barW,(P.age/100)*barW);
+  const liveGrad=ctx.createLinearGradient(barX,0,barX+barW,0);
+  liveGrad.addColorStop(0,'#6366f1');
+  liveGrad.addColorStop(1,'#06b6d4');
+  ctx.fillStyle=liveGrad;
+  roundRect(ctx,barX,barY,liveW,barH,8);
+  ctx.fill();
+  ctx.font='bold 24px Outfit, sans-serif';
+  ctx.fillStyle='#6366f1';
+  ctx.textAlign='right';
+  ctx.fillText((t.exp||'Expectancy: ~')+P.le+' yrs',S-120,barY+barH+32);
+
+  // Bottom URL watermark
+  ctx.font='bold 28px Outfit, sans-serif';
+  const urlGrad=ctx.createLinearGradient(0,0,S,0);
+  urlGrad.addColorStop(0,'#6366f1');
+  urlGrad.addColorStop(1,'#06b6d4');
+  ctx.fillStyle=urlGrad;
+  ctx.textAlign='center';
+  ctx.fillText('vivix.app',S/2,S-44);
+
+  // Download
+  const link=document.createElement('a');
+  link.download='vivix-score-'+sc+'.png';
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  if(typeof r==='number') r={tl:r,tr:r,bl:r,br:r};
+  ctx.beginPath();
+  ctx.moveTo(x+r.tl,y);
+  ctx.lineTo(x+w-r.tr,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r.tr);
+  ctx.lineTo(x+w,y+h-r.br);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r.br,y+h);
+  ctx.lineTo(x+r.bl,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r.bl);
+  ctx.lineTo(x,y+r.tl);
+  ctx.quadraticCurveTo(x,y,x+r.tl,y);
+  ctx.closePath();
+}
+
 
 window.addEventListener('DOMContentLoaded',()=>{
   const bl=navigator.language||'en';
