@@ -111,12 +111,25 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 .val-opt{color:#10b981;}.val-acc{color:#3b82f6;}.val-att{color:#f59e0b;}.val-cri{color:#ef4444;}
 .param-ref{font-size:13px;color:#6b7280;}
 .param-note{font-size:12px;color:#6b7280;line-height:1.6;border-top:1px solid #f8fafc;padding-top:8px;}
+
+/* ── PDF EXPORT BUTTON ──────────────────── */
+.pdf-btn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:white;border:1.5px solid #6366f1;
+  border-radius:14px;padding:14px;
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;
+  color:#6366f1;cursor:pointer;margin-bottom:10px;
+  letter-spacing:.2px;transition:all .2s;
+}
+.pdf-btn:hover{background:#eef2ff;transform:translateY(-1px);}
+.pdf-note{font-size:11px;color:#9ca3af;text-align:center;margin-bottom:14px;}
 .reset-btn{display:block;background:none;border:1.5px solid #e5e7eb;border-radius:12px;padding:11px 24px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#9ca3af;cursor:pointer;margin:0 auto;transition:all .2s;}
 .reset-btn:hover{border-color:#6366f1;color:#6366f1;}
 .footer{text-align:center;padding-top:28px;border-top:1px solid #e5e7eb;margin-top:28px;font-size:10px;color:#9ca3af;font-weight:600;line-height:2.4;letter-spacing:.5px;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="top-bar"></div>
@@ -209,7 +222,12 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
   </div>
 
   <div class="params" id="paramsEl"></div>
-  <button class="reset-btn" id="t-reset" onclick="resetAll()">Analizar otro documento</button>
+    <button class="pdf-btn" onclick="generatePDF()" id="t-pdfbtn">
+    📄 <span id="t-pdftxt">Descargar resumen en PDF</span>
+  </button>
+  <p class="pdf-note" id="t-pdfnote">Para compartir con tu médico · Sin datos personales identificables</p>
+
+<button class="reset-btn" id="t-reset" onclick="resetAll()">Analizar otro documento</button>
 </div>
 
 <div class="footer">
@@ -221,12 +239,12 @@ body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height
 
 <script>
 const T={
-es:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interpreta tus<br><em>Resultados</em>',sub:'Sube tu PDF de laboratorio y obtén un análisis claro, en lenguaje humano, respaldado por evidencia científica.',title:'Sube tu archivo',sub2:'PDF de laboratorio clínico. Procesado en tiempo real, no almacenado.',drag:'Arrastra tu PDF aquí',tap:'o toca para seleccionar',change:'Cambiar archivo',btn:'Interpretar resultados →',priv:'🔒 Tu archivo se procesa en tiempo real y no se almacena · Esto no es diagnóstico médico',lt:'Analizando tu laboratorio...',ls:'Claude Sonnet está revisando tu documento',s1:'Leyendo documento',s2:'Identificando parámetros',s3:'Comparando con rangos de referencia',s4:'Generando interpretación',sumLabel:'Resumen ejecutivo',planTitle:'🗓 Plan de Acción Personalizado',reset:'Analizar otro documento',disc:'Este análisis es informativo y no reemplaza la consulta médica profesional.',ready:'Listo para analizar',valLabel:'Tu valor',normalLabel:'Normal'},
-en:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interpret your<br><em>Lab Results</em>',sub:'Upload your lab PDF and get a clear analysis, in plain language, backed by scientific evidence.',title:'Upload your file',sub2:'Clinical lab PDF. Processed in real time, not stored.',drag:'Drag your PDF here',tap:'or tap to select',change:'Change file',btn:'Interpret results →',priv:'🔒 Your file is processed in real time and not stored · This is not medical diagnosis',lt:'Analyzing your lab...',ls:'Claude Sonnet is reviewing your document',s1:'Reading document',s2:'Identifying parameters',s3:'Comparing with reference ranges',s4:'Generating interpretation',sumLabel:'Executive summary',planTitle:'🗓 Personalized Action Plan',reset:'Analyze another document',disc:'This analysis is informational and does not replace professional medical consultation.',ready:'Ready to analyze',valLabel:'Your value',normalLabel:'Normal'},
-pt:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interprete seus<br><em>Resultados</em>',sub:'Envie seu PDF de laboratório e obtenha uma análise clara, em linguagem humana.',title:'Envie seu arquivo',sub2:'PDF de laboratório clínico. Processado em tempo real, não armazenado.',drag:'Arraste seu PDF aqui',tap:'ou toque para selecionar',change:'Trocar arquivo',btn:'Interpretar resultados →',priv:'🔒 Seu arquivo é processado em tempo real e não é armazenado',lt:'Analisando seu laboratório...',ls:'Claude Sonnet está revisando seu documento',s1:'Lendo documento',s2:'Identificando parâmetros',s3:'Comparando com valores de referência',s4:'Gerando interpretação',sumLabel:'Resumo executivo',planTitle:'🗓 Plano de Ação Personalizado',reset:'Analisar outro documento',disc:'Esta análise é informativa e não substitui a consulta médica profissional.',ready:'Pronto para analisar',valLabel:'Seu valor',normalLabel:'Normal'},
-fr:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interprétez vos<br><em>Résultats</em>',sub:"Téléchargez votre PDF de laboratoire et obtenez une analyse claire, en langage humain.",title:'Téléchargez votre fichier',sub2:'PDF de laboratoire clinique. Traité en temps réel, non stocké.',drag:'Glissez votre PDF ici',tap:'ou appuyez pour sélectionner',change:'Changer de fichier',btn:'Interpréter les résultats →',priv:"🔒 Votre fichier est traité en temps réel et non stocké",lt:'Analyse en cours...',ls:'Claude Sonnet examine votre document',s1:'Lecture du document',s2:'Identification des paramètres',s3:'Comparaison avec les valeurs de référence',s4:"Génération de l'interprétation",sumLabel:'Résumé exécutif',planTitle:"🗓 Plan d'Action Personnalisé",reset:'Analyser un autre document',disc:'Cette analyse est informative et ne remplace pas la consultation médicale.',ready:'Prêt à analyser',valLabel:'Votre valeur',normalLabel:'Normal'},
-hi:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'अपने<br><em>परिणाम</em> समझें',sub:'अपनी लैब PDF अपलोड करें और स्पष्ट विश्लेषण प्राप्त करें।',title:'अपनी फ़ाइल अपलोड करें',sub2:'क्लिनिकल लैब PDF। रीयल टाइम में प्रोसेस।',drag:'अपनी PDF यहाँ खींचें',tap:'या चुनने के लिए टैप करें',change:'फ़ाइल बदलें',btn:'परिणाम समझें →',priv:'🔒 आपकी फ़ाइल रीयल टाइम में प्रोसेस होती है',lt:'लैब विश्लेषण हो रहा है...',ls:'Claude Sonnet आपका दस्तावेज़ देख रहा है',s1:'दस्तावेज़ पढ़ना',s2:'पैरामीटर पहचानना',s3:'संदर्भ सीमाओं से तुलना',s4:'व्याख्या तैयार करना',sumLabel:'सारांश',planTitle:'🗓 व्यक्तिगत कार्य योजना',reset:'दूसरा दस्तावेज़ विश्लेषण करें',disc:'यह विश्लेषण सूचनात्मक है।',ready:'विश्लेषण के लिए तैयार',valLabel:'आपका मान',normalLabel:'सामान्य'},
-zh:{back:'← 活力评分',badge:'Lab Interpreter · Claude Sonnet',h1:'解读您的<br><em>检验报告</em>',sub:'上传您的检验PDF，获得清晰的分析，用通俗语言。',title:'上传您的文件',sub2:'临床实验室PDF。实时处理，不存储。',drag:'将PDF拖到这里',tap:'或点击选择',change:'更换文件',btn:'解读结果 →',priv:'🔒 您的文件实时处理，不存储',lt:'正在分析您的检验报告...',ls:'Claude Sonnet正在审查您的文件',s1:'读取文件',s2:'识别参数',s3:'与参考范围比较',s4:'生成解读',sumLabel:'执行摘要',planTitle:'🗓 个性化行动计划',reset:'分析另一份文件',disc:'此分析仅供参考。',ready:'准备好分析',valLabel:'您的值',normalLabel:'正常'}
+es:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interpreta tus<br><em>Resultados</em>',sub:'Sube tu PDF de laboratorio y obtén un análisis claro, en lenguaje humano, respaldado por evidencia científica.',title:'Sube tu archivo',sub2:'PDF de laboratorio clínico. Procesado en tiempo real, no almacenado.',drag:'Arrastra tu PDF aquí',tap:'o toca para seleccionar',change:'Cambiar archivo',btn:'Interpretar resultados →',priv:'🔒 Tu archivo se procesa en tiempo real y no se almacena · Esto no es diagnóstico médico',lt:'Analizando tu laboratorio...',ls:'Claude Sonnet está revisando tu documento',s1:'Leyendo documento',s2:'Identificando parámetros',s3:'Comparando con rangos de referencia',s4:'Generando interpretación',sumLabel:'Resumen ejecutivo',planTitle:'🗓 Plan de Acción Personalizado',reset:'Analizar otro documento',pdfbtn:'📄 Descargar resumen en PDF',pdfnote:'Para compartir con tu médico · Sin datos personales identificables',disc:'Este análisis es informativo y no reemplaza la consulta médica profesional.',ready:'Listo para analizar',valLabel:'Tu valor',normalLabel:'Normal'},
+en:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interpret your<br><em>Lab Results</em>',sub:'Upload your lab PDF and get a clear analysis, in plain language, backed by scientific evidence.',title:'Upload your file',sub2:'Clinical lab PDF. Processed in real time, not stored.',drag:'Drag your PDF here',tap:'or tap to select',change:'Change file',btn:'Interpret results →',priv:'🔒 Your file is processed in real time and not stored · This is not medical diagnosis',lt:'Analyzing your lab...',ls:'Claude Sonnet is reviewing your document',s1:'Reading document',s2:'Identifying parameters',s3:'Comparing with reference ranges',s4:'Generating interpretation',sumLabel:'Executive summary',planTitle:'🗓 Personalized Action Plan',reset:'Analyze another document',pdfbtn:'📄 Download summary as PDF',pdfnote:'Share with your doctor · No personal data stored',disc:'This analysis is informational and does not replace professional medical consultation.',ready:'Ready to analyze',valLabel:'Your value',normalLabel:'Normal'},
+pt:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interprete seus<br><em>Resultados</em>',sub:'Envie seu PDF de laboratório e obtenha uma análise clara, em linguagem humana.',title:'Envie seu arquivo',sub2:'PDF de laboratório clínico. Processado em tempo real, não armazenado.',drag:'Arraste seu PDF aqui',tap:'ou toque para selecionar',change:'Trocar arquivo',btn:'Interpretar resultados →',priv:'🔒 Seu arquivo é processado em tempo real e não é armazenado',lt:'Analisando seu laboratório...',ls:'Claude Sonnet está revisando seu documento',s1:'Lendo documento',s2:'Identificando parâmetros',s3:'Comparando com valores de referência',s4:'Gerando interpretação',sumLabel:'Resumo executivo',planTitle:'🗓 Plano de Ação Personalizado',reset:'Analisar outro documento',pdfbtn:'📄 Baixar resumo em PDF',pdfnote:'Para compartilhar com seu médico',disc:'Esta análise é informativa e não substitui a consulta médica profissional.',ready:'Pronto para analisar',valLabel:'Seu valor',normalLabel:'Normal'},
+fr:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'Interprétez vos<br><em>Résultats</em>',sub:"Téléchargez votre PDF de laboratoire et obtenez une analyse claire, en langage humain.",title:'Téléchargez votre fichier',sub2:'PDF de laboratoire clinique. Traité en temps réel, non stocké.',drag:'Glissez votre PDF ici',tap:'ou appuyez pour sélectionner',change:'Changer de fichier',btn:'Interpréter les résultats →',priv:"🔒 Votre fichier est traité en temps réel et non stocké",lt:'Analyse en cours...',ls:'Claude Sonnet examine votre document',s1:'Lecture du document',s2:'Identification des paramètres',s3:'Comparaison avec les valeurs de référence',s4:"Génération de l'interprétation",sumLabel:'Résumé exécutif',planTitle:"🗓 Plan d'Action Personnalisé",reset:'Analyser un autre document',pdfbtn:'📄 Télécharger en PDF',pdfnote:'À partager avec votre médecin',disc:'Cette analyse est informative et ne remplace pas la consultation médicale.',ready:'Prêt à analyser',valLabel:'Votre valeur',normalLabel:'Normal'},
+hi:{back:'← Vital Score',badge:'Lab Interpreter · Claude Sonnet',h1:'अपने<br><em>परिणाम</em> समझें',sub:'अपनी लैब PDF अपलोड करें और स्पष्ट विश्लेषण प्राप्त करें।',title:'अपनी फ़ाइल अपलोड करें',sub2:'क्लिनिकल लैब PDF। रीयल टाइम में प्रोसेस।',drag:'अपनी PDF यहाँ खींचें',tap:'या चुनने के लिए टैप करें',change:'फ़ाइल बदलें',btn:'परिणाम समझें →',priv:'🔒 आपकी फ़ाइल रीयल टाइम में प्रोसेस होती है',lt:'लैब विश्लेषण हो रहा है...',ls:'Claude Sonnet आपका दस्तावेज़ देख रहा है',s1:'दस्तावेज़ पढ़ना',s2:'पैरामीटर पहचानना',s3:'संदर्भ सीमाओं से तुलना',s4:'व्याख्या तैयार करना',sumLabel:'सारांश',planTitle:'🗓 व्यक्तिगत कार्य योजना',reset:'दूसरा दस्तावेज़ विश्लेषण करें',pdfbtn:'📄 PDF डाउनलोड करें',pdfnote:'अपने डॉक्टर के साथ साझा करें',disc:'यह विश्लेषण सूचनात्मक है।',ready:'विश्लेषण के लिए तैयार',valLabel:'आपका मान',normalLabel:'सामान्य'},
+zh:{back:'← 活力评分',badge:'Lab Interpreter · Claude Sonnet',h1:'解读您的<br><em>检验报告</em>',sub:'上传您的检验PDF，获得清晰的分析，用通俗语言。',title:'上传您的文件',sub2:'临床实验室PDF。实时处理，不存储。',drag:'将PDF拖到这里',tap:'或点击选择',change:'更换文件',btn:'解读结果 →',priv:'🔒 您的文件实时处理，不存储',lt:'正在分析您的检验报告...',ls:'Claude Sonnet正在审查您的文件',s1:'读取文件',s2:'识别参数',s3:'与参考范围比较',s4:'生成解读',sumLabel:'执行摘要',planTitle:'🗓 个性化行动计划',reset:'分析另一份文件',pdfbtn:'📄 下载PDF摘要',pdfnote:'与您的医生分享',disc:'此分析仅供参考。',ready:'准备好分析',valLabel:'您的值',normalLabel:'正常'}
 };
 
 const SM={
@@ -257,6 +275,8 @@ function setLang(l){
   s('t-change',t.change);s('t-priv',t.priv);
   s('t-lt',t.lt);s('t-ls',t.ls);s('t-s1',t.s1);s('t-s2',t.s2);s('t-s3',t.s3);s('t-s4',t.s4);
   s('t-sumLabel',t.sumLabel);s('t-planTitle',t.planTitle);s('t-reset',t.reset);s('t-disc',t.disc);
+  s('t-pdftxt',t.pdfbtn||'📄 Download PDF');
+  s('t-pdfnote',t.pdfnote||'Share with your doctor');
   const btn=document.getElementById('analyzeBtn');if(btn)btn.textContent=t.btn;
   const sz=document.getElementById('fileSize');
   if(sz&&currentFile)sz.textContent=(currentFile.size/1024).toFixed(0)+' KB · '+t.ready;
@@ -448,6 +468,245 @@ function resetAll(){
   hideError();
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
+// ── PDF GENERATOR ────────────────────────────────
+function generatePDF(){
+  if(!currentResult) return;
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const t=T[currentLang];
+  const W=210, margin=18, contentW=W-margin*2;
+  let y=margin;
+
+  // Color palette
+  const indigo=[99,102,241];
+  const teal=[6,182,212];
+  const green=[16,185,129];
+  const amber=[245,158,11];
+  const red=[239,68,68];
+  const dark=[26,29,46];
+  const gray=[107,114,128];
+  const lightGray=[243,244,246];
+
+  function addPageIfNeeded(needed){
+    if(y+needed>285){doc.addPage();y=margin;}
+  }
+
+  // ── HEADER ─────────────────────────────────────
+  // Gradient bar simulation
+  doc.setFillColor(...indigo);
+  doc.rect(0,0,70,4,'F');
+  doc.setFillColor(...teal);
+  doc.rect(70,0,70,4,'F');
+  doc.setFillColor(...green);
+  doc.rect(140,0,70,4,'F');
+
+  // VIVIX logo
+  doc.setFont('helvetica','bolditalic');
+  doc.setFontSize(26);
+  doc.setTextColor(...indigo);
+  doc.text('VIVIX',margin,18);
+
+  // Title right
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  doc.setTextColor(...gray);
+  doc.text('Lab Interpreter · AI Report',W-margin,14,{align:'right'});
+  doc.text(new Date().toLocaleDateString(currentLang==='zh'?'zh-CN':currentLang==='hi'?'hi-IN':'es-MX',{year:'numeric',month:'long',day:'numeric'}),W-margin,19,{align:'right'});
+
+  y=28;
+  // Divider
+  doc.setDrawColor(...lightGray);doc.setLineWidth(0.4);
+  doc.line(margin,y,W-margin,y);y+=8;
+
+  // ── EXECUTIVE SUMMARY ──────────────────────────
+  doc.setFillColor(...indigo);
+  doc.roundedRect(margin,y,contentW,7,2,2,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(9);
+  doc.setTextColor(255,255,255);
+  doc.text((t.sumLabel||'RESUMEN EJECUTIVO').toUpperCase(),margin+4,y+4.8);
+  y+=11;
+
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  doc.setTextColor(...dark);
+  const summaryLines=doc.splitTextToSize(currentResult.resumen||'',contentW);
+  summaryLines.forEach(line=>{addPageIfNeeded(5);doc.text(line,margin,y);y+=4.8;});
+  y+=4;
+
+  // ── VITAL INSIGHT ──────────────────────────────
+  addPageIfNeeded(20);
+  doc.setFillColor(238,242,255);
+  doc.roundedRect(margin,y,contentW,5,'F');
+  doc.setDrawColor(...indigo);doc.setLineWidth(0.5);
+  doc.line(margin,y,margin,y+5);
+
+  // Calc insight box height
+  const insightLines=doc.splitTextToSize('⚡ '+(currentResult.vital_insight||''),contentW-8);
+  const insightH=Math.max(14,insightLines.length*4.8+8);
+  doc.setFillColor(238,242,255);
+  doc.roundedRect(margin,y,contentW,insightH,2,2,'F');
+  doc.setDrawColor(...indigo);doc.setLineWidth(1);
+  doc.line(margin,y,margin,y+insightH);
+
+  doc.setFont('helvetica','bold');doc.setFontSize(8);
+  doc.setTextColor(...indigo);
+  doc.text('⚡ VITAL INSIGHT',margin+4,y+5);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  doc.setTextColor(30,64,175);
+  insightLines.forEach((line,i)=>{
+    if(i===0) doc.text(line.replace('⚡ ',''),margin+4,y+5);
+    else doc.text(line,margin+4,y+5+i*4.8);
+  });
+  y+=insightH+6;
+
+  // ── ACTION PLAN ────────────────────────────────
+  if(currentResult.plan_accion&&currentResult.plan_accion.length>0){
+    addPageIfNeeded(14);
+    doc.setFillColor(...green);
+    doc.roundedRect(margin,y,contentW,7,2,2,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(9);
+    doc.setTextColor(255,255,255);
+    doc.text((t.planTitle||'🗓 PLAN DE ACCIÓN').replace('🗓 ','').toUpperCase(),margin+4,y+4.8);
+    y+=11;
+
+    currentResult.plan_accion.forEach((step,i)=>{
+      const stepLines=doc.splitTextToSize((step.descripcion||step.description||''),contentW-22);
+      const stepH=Math.max(16,stepLines.length*4.5+10);
+      addPageIfNeeded(stepH+3);
+
+      doc.setFillColor(248,255,254);
+      doc.roundedRect(margin,y,contentW,stepH,2,2,'F');
+      doc.setDrawColor(...green);doc.setLineWidth(0.4);
+      doc.roundedRect(margin,y,contentW,stepH,2,2,'S');
+
+      // Number circle
+      doc.setFillColor(...green);
+      doc.circle(margin+5,y+stepH/2,3.5,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(8);
+      doc.setTextColor(255,255,255);
+      doc.text(String(i+1),margin+5,y+stepH/2+0.8,{align:'center'});
+
+      // Title
+      doc.setFont('helvetica','bold');doc.setFontSize(9);
+      doc.setTextColor(6,95,70);
+      doc.text(step.titulo||step.title||'',margin+12,y+5.5);
+
+      // Description
+      doc.setFont('helvetica','normal');doc.setFontSize(8);
+      doc.setTextColor(...dark);
+      stepLines.forEach((line,li)=>doc.text(line,margin+12,y+10+li*4.5));
+
+      // Timeframe
+      if(step.plazo||step.timeframe){
+        doc.setFont('helvetica','bold');doc.setFontSize(7);
+        doc.setTextColor(...green);
+        doc.text((step.plazo||step.timeframe).toUpperCase(),margin+12,y+stepH-3);
+      }
+      y+=stepH+3;
+    });
+    y+=3;
+  }
+
+  // ── MEDICAL ALERT ──────────────────────────────
+  if(currentResult.alerta_medica&&currentResult.alerta_medica!=='null'){
+    addPageIfNeeded(20);
+    const alertLines=doc.splitTextToSize(currentResult.alerta_medica,contentW-12);
+    const alertH=alertLines.length*4.8+14;
+    doc.setFillColor(254,242,242);
+    doc.roundedRect(margin,y,contentW,alertH,2,2,'F');
+    doc.setDrawColor(...red);doc.setLineWidth(0.5);
+    doc.roundedRect(margin,y,contentW,alertH,2,2,'S');
+    doc.setFont('helvetica','bold');doc.setFontSize(9);
+    doc.setTextColor(...red);
+    doc.text('⚠️ '+((currentLang==='es'||currentLang==='pt')?'Atención médica recomendada':'Medical attention recommended'),margin+4,y+6);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);
+    doc.setTextColor(185,28,28);
+    alertLines.forEach((line,i)=>doc.text(line,margin+4,y+12+i*4.8));
+    y+=alertH+6;
+  }
+
+  // ── PARAMETERS BY CATEGORY ─────────────────────
+  if(currentResult.categorias&&currentResult.categorias.length>0){
+    currentResult.categorias.forEach(cat=>{
+      addPageIfNeeded(16);
+      // Category header
+      doc.setFillColor(...dark);
+      doc.roundedRect(margin,y,contentW,7,2,2,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(9);
+      doc.setTextColor(255,255,255);
+      doc.text(cat.nombre.toUpperCase(),margin+4,y+4.8);
+      y+=10;
+
+      cat.parametros&&cat.parametros.forEach(p=>{
+        const statusMap={
+          'Óptimo':green,'Optimo':green,'Optimal':green,
+          'Aceptable':teal,'Acceptable':teal,
+          'Atención':amber,'Atencion':amber,'Attention':amber,
+          'Crítico':red,'Critico':red,'Critical':red
+        };
+        const statusColor=statusMap[p.estado]||gray;
+        const noteLines=p.nota?doc.splitTextToSize(p.nota,contentW-8):[];
+        const rowH=noteLines.length>0?Math.max(16,noteLines.length*4+14):14;
+        addPageIfNeeded(rowH+2);
+
+        doc.setFillColor(250,251,255);
+        doc.roundedRect(margin,y,contentW,rowH,1.5,1.5,'F');
+        doc.setDrawColor(229,231,235);doc.setLineWidth(0.3);
+        doc.roundedRect(margin,y,contentW,rowH,1.5,1.5,'S');
+        // Status bar
+        doc.setFillColor(...statusColor);
+        doc.roundedRect(margin,y,2.5,rowH,1,1,'F');
+
+        // Param name
+        doc.setFont('helvetica','bold');doc.setFontSize(8.5);
+        doc.setTextColor(...dark);
+        doc.text(p.nombre,margin+6,y+5.5);
+
+        // Value
+        doc.setFont('helvetica','bold');doc.setFontSize(9);
+        doc.setTextColor(...statusColor);
+        doc.text(p.valor||'',margin+6,y+10.5);
+
+        // Reference
+        doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+        doc.setTextColor(...gray);
+        doc.text('Ref: '+(p.referencia||''),margin+40,y+10.5);
+
+        // Status badge
+        doc.setFillColor(...statusColor);
+        const badgeW=22;
+        doc.roundedRect(W-margin-badgeW,y+2,badgeW,6,3,3,'F');
+        doc.setFont('helvetica','bold');doc.setFontSize(7);
+        doc.setTextColor(255,255,255);
+        doc.text(p.estado||'',W-margin-badgeW/2,y+5.8,{align:'center'});
+
+        // Note
+        if(noteLines.length>0){
+          doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+          doc.setTextColor(...gray);
+          noteLines.forEach((line,li)=>doc.text(line,margin+6,y+13+li*4));
+        }
+        y+=rowH+2;
+      });
+      y+=4;
+    });
+  }
+
+  // ── FOOTER ─────────────────────────────────────
+  const pageCount=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pageCount;i++){
+    doc.setPage(i);
+    doc.setDrawColor(...lightGray);doc.setLineWidth(0.4);
+    doc.line(margin,290,W-margin,290);
+    doc.setFont('helvetica','normal');doc.setFontSize(7);
+    doc.setTextColor(...gray);
+    doc.text('VIVIX · vivix.app · AI: Claude Sonnet · WHO · NIH · Harvard',margin,295);
+    doc.text((t.disc||'Informativo. No reemplaza diagnóstico médico.')+' | Pág. '+i+'/'+pageCount,W-margin,295,{align:'right'});
+  }
+
+  doc.save('vivix-labs-report.pdf');
+}
+
 
 window.addEventListener('DOMContentLoaded',()=>{
   const bl=navigator.language||'es';
