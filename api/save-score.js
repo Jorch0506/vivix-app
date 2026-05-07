@@ -13,13 +13,8 @@ module.exports = async function handler(req, res) {
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
-    // Debug — remove after confirming it works
-    console.log('VIVIX URL:', supabaseUrl ? supabaseUrl.substring(0, 40) : 'MISSING');
-    console.log('VIVIX KEY prefix:', supabaseKey ? supabaseKey.substring(0, 30) : 'MISSING');
-
     if (!supabaseUrl || !supabaseKey) {
-      console.error('VIVIX: env vars missing');
-      return res.status(200).json({ ok: false, error: 'not configured' });
+      return res.status(200).json({ ok: false });
     }
 
     const payload = JSON.stringify({
@@ -54,31 +49,20 @@ module.exports = async function handler(req, res) {
           'Content-Length': Buffer.byteLength(payload)
         }
       };
-
       const r = https.request(opts, function(resp) {
         let d = '';
         resp.on('data', function(c) { d += c; });
-        resp.on('end', function() {
-          resolve({ status: resp.statusCode, body: d });
-        });
+        resp.on('end', function() { resolve({ status: resp.statusCode, body: d }); });
       });
-
       r.on('error', function(e) { reject(e); });
       r.write(payload);
       r.end();
     });
 
-    console.log('VIVIX Supabase response:', result.status, result.body || '(empty=success)');
-
-    if (result.status === 201) {
-      return res.status(200).json({ ok: true });
-    } else {
-      return res.status(200).json({ ok: false, status: result.status, body: result.body });
-    }
+    return res.status(200).json({ ok: result.status === 201 });
 
   } catch(err) {
-    console.error('VIVIX save-score exception:', err.message);
-    return res.status(200).json({ ok: false, error: err.message });
+    return res.status(200).json({ ok: false });
   }
 };
 
