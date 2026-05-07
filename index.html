@@ -693,6 +693,7 @@ function go(){
     renderLabPanel(studies);
 
     runAI();
+    saveScore();
     window.scrollTo({top:0,behavior:'smooth'});
   },2800);
 }
@@ -784,6 +785,21 @@ function rst(){
   actVal=null;smkVal=null;
   lk=false;P={};
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function saveScore(){
+  try{
+    await fetch('/api/save-score',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        age:P.age,sex:P.sx,country:P.co,
+        bmi:P.bmi,water:P.wa,sleep:P.sl,
+        activity:P.actVal,smoking:P.smkVal,
+        score:P.sc,life_expectancy:P.le,lang:lg
+      })
+    });
+  }catch(e){}
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
