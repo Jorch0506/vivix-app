@@ -983,7 +983,7 @@ function generateShareCard(){
   roundRect(ctx,bX,bY,bW,bH,4);ctx.fill();
   const lW=Math.min(bW,(P.age/100)*bW);
   const barLg=ctx.createLinearGradient(bX,0,bX+bW,0);
-  lg2.addColorStop(0,'#6366f1');lg2.addColorStop(1,'#06b6d4');
+  barLg.addColorStop(0,'#6366f1');barLg.addColorStop(1,'#06b6d4');
   ctx.fillStyle=barLg;roundRect(ctx,bX,bY,lW,bH,4);ctx.fill();
 
   ctx.save();
