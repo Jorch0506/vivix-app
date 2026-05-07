@@ -14,11 +14,12 @@ module.exports = async function handler(req, res) {
     const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      return res.status(200).json({ ok: false, error: 'Supabase not configured' });
+      console.error('VIVIX: Supabase env vars missing');
+      return res.status(200).json({ ok: false, error: 'not configured' });
     }
 
     const payload = JSON.stringify({
-      age: age || null,
+      age: age ? parseInt(age) : null,
       sex: sex || null,
       country: country || null,
       bmi: bmi ? parseFloat(bmi) : null,
@@ -31,11 +32,12 @@ module.exports = async function handler(req, res) {
       lang: lang || null
     });
 
-    const urlObj = new URL(supabaseUrl);
+    // Extract hostname from URL (handles trailing slashes)
+    const hostname = supabaseUrl.replace('https://', '').replace('http://', '').replace(/\/$/, '');
 
-    const data = await new Promise(function(resolve, reject) {
+    const result = await new Promise(function(resolve, reject) {
       const opts = {
-        hostname: urlObj.hostname,
+        hostname: hostname,
         path: '/rest/v1/vital_scores',
         method: 'POST',
         headers: {
@@ -46,24 +48,36 @@ module.exports = async function handler(req, res) {
           'Content-Length': Buffer.byteLength(payload)
         }
       };
+
       const r = https.request(opts, function(resp) {
         let d = '';
         resp.on('data', function(c) { d += c; });
-        resp.on('end', function() { resolve({ status: resp.statusCode, body: d }); });
+        resp.on('end', function() {
+          resolve({ status: resp.statusCode, body: d });
+        });
       });
-      r.on('error', reject);
+
+      r.on('error', function(e) {
+        reject(e);
+      });
+
       r.write(payload);
       r.end();
     });
 
-    if (data.status === 201 || data.status === 200) {
+    // Log result so we can see it in Vercel logs
+    console.log('VIVIX save-score status:', result.status, '| body:', result.body || '(empty)');
+
+    if (result.status === 201) {
       return res.status(200).json({ ok: true });
     } else {
-      return res.status(200).json({ ok: false, error: data.body });
+      return res.status(200).json({ ok: false, status: result.status, error: result.body });
     }
 
   } catch(err) {
-    // Silent fail — never break the user experience
+    console.error('VIVIX save-score error:', err.message);
     return res.status(200).json({ ok: false, error: err.message });
   }
 };
+
+module.exports.config = { api: { bodyParser: { sizeLimit: '10mb' } } };
