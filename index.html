@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -10,256 +9,88 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-
-body{
-background:#f8f9ff;
-color:#1a1d2e;
-font-family:‘Outfit’,sans-serif;
-min-height:100vh;
-}
-
-/* TOP GRADIENT BAR */
-.top-bar{
-height:4px;
-background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);
-}
-
+body{background:#f8f9ff;color:#1a1d2e;font-family:'Outfit',sans-serif;min-height:100vh;}
+.top-bar{height:4px;background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);}
 .page{max-width:640px;margin:0 auto;padding:0 20px 80px}
-
-/* NAV */
-.nav{
-display:flex;align-items:center;justify-content:space-between;
-padding:20px 0 32px;
-}
-
-.logo{
-font-family:‘Lora’,serif;font-style:italic;font-size:24px;font-weight:700;
-background:linear-gradient(135deg,#6366f1,#06b6d4);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-
-.langs{
-display:flex;gap:2px;background:#e8eaf6;border-radius:100px;padding:3px;
-}
-
-.lb{
-background:none;border:none;padding:5px 11px;
-font-family:‘Outfit’,sans-serif;font-size:11px;font-weight:700;
-color:#6b7280;cursor:pointer;border-radius:100px;transition:all .2s;
-}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0 32px;}
+.logo{font-family:'Lora',serif;font-style:italic;font-size:24px;font-weight:700;background:linear-gradient(135deg,#6366f1,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.langs{display:flex;gap:2px;background:#e8eaf6;border-radius:100px;padding:3px;}
+.lb{background:none;border:none;padding:5px 11px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;color:#6b7280;cursor:pointer;border-radius:100px;transition:all .2s;}
 .lb.on{background:white;color:#6366f1;box-shadow:0 1px 4px rgba(0,0,0,.1);}
-
-/* HERO */
 .hero{text-align:center;padding:0 0 40px}
-
-.badge{
-display:inline-flex;align-items:center;gap:7px;
-background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(6,182,212,.08));
-border:1px solid rgba(99,102,241,.2);
-border-radius:100px;padding:7px 18px;
-font-size:12px;font-weight:600;color:#6366f1;margin-bottom:24px;
-}
-
-.badge-dot{
-width:7px;height:7px;border-radius:50%;
-background:linear-gradient(135deg,#6366f1,#06b6d4);
-animation:pulse 2s infinite;
-}
-
-.hero h1{
-font-family:‘Lora’,serif;
-font-size:clamp(44px,10vw,72px);
-line-height:.95;font-weight:700;
-color:#1a1d2e;margin-bottom:16px;
-}
-
-.hero h1 em{
-font-style:italic;
-background:linear-gradient(135deg,#6366f1,#06b6d4);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-
-.hero p{
-font-size:16px;color:#6b7280;line-height:1.7;
-max-width:440px;margin:0 auto 28px;font-weight:400;
-}
-
-.sources{
-display:flex;flex-wrap:wrap;justify-content:center;
-gap:6px 10px;font-size:10px;font-weight:700;
-color:#9ca3af;letter-spacing:1px;text-transform:uppercase;
-}
-
-/* STATS */
+.badge{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(6,182,212,.08));border:1px solid rgba(99,102,241,.2);border-radius:100px;padding:7px 18px;font-size:12px;font-weight:600;color:#6366f1;margin-bottom:24px;}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#06b6d4);animation:pulse 2s infinite;}
+.hero h1{font-family:'Lora',serif;font-size:clamp(44px,10vw,72px);line-height:.95;font-weight:700;color:#1a1d2e;margin-bottom:16px;}
+.hero h1 em{font-style:italic;background:linear-gradient(135deg,#6366f1,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{font-size:16px;color:#6b7280;line-height:1.7;max-width:440px;margin:0 auto 28px;font-weight:400;}
+.sources{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;font-size:10px;font-weight:700;color:#9ca3af;letter-spacing:1px;text-transform:uppercase;}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
-
-.stat{
-background:white;border:1px solid #e5e7eb;border-radius:20px;
-padding:20px 14px;text-align:center;
-box-shadow:0 1px 3px rgba(0,0,0,.04);
-transition:transform .2s,box-shadow .2s;
-}
+.stat{background:white;border:1px solid #e5e7eb;border-radius:20px;padding:20px 14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:transform .2s,box-shadow .2s;}
 .stat:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
-
-.stat-n{
-font-family:‘Lora’,serif;font-style:italic;font-size:30px;font-weight:700;
-background:linear-gradient(135deg,#6366f1,#06b6d4);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-line-height:1;margin-bottom:5px;
-}
+.stat-n{font-family:'Lora',serif;font-style:italic;font-size:30px;font-weight:700;background:linear-gradient(135deg,#6366f1,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:5px;}
 .stat-l{font-size:10px;font-weight:700;color:#9ca3af;letter-spacing:1px;text-transform:uppercase;}
-
-/* FORM CARD */
-.card{
-background:white;border:1px solid #e5e7eb;border-radius:24px;
-padding:28px 24px;margin-bottom:16px;
-box-shadow:0 2px 8px rgba(0,0,0,.06);
-position:relative;overflow:hidden;
-}
-
-.card-accent{
-position:absolute;top:0;left:0;right:0;height:3px;
-background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);
-}
-
+.card{background:white;border:1px solid #e5e7eb;border-radius:24px;padding:28px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;overflow:hidden;}
+.card-accent{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);}
 .step-tag{font-size:10px;font-weight:700;color:#6366f1;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
 .card-title{font-size:20px;font-weight:800;color:#1a1d2e;margin-bottom:4px;}
 .card-sub{font-size:12px;color:#9ca3af;line-height:1.5;margin-bottom:22px;}
-
-/* FIELDS */
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:440px){.fg{grid-template-columns:1fr}}
 .f{display:flex;flex-direction:column;gap:7px}
 .f.full{grid-column:1/-1}
-
 .f label{font-size:10px;font-weight:700;color:#6b7280;letter-spacing:1.5px;text-transform:uppercase;}
 .req{color:#6366f1;margin-left:2px;}
-
-.f input,.f select{
-background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:12px;
-padding:12px 14px;font-family:‘Outfit’,sans-serif;
-font-size:15px;font-weight:500;color:#1a1d2e;
-outline:none;appearance:none;-webkit-appearance:none;width:100%;
-transition:border-color .2s,box-shadow .2s,background .2s;
-}
-.f input:focus,.f select:focus{
-border-color:#6366f1;background:white;
-box-shadow:0 0 0 3px rgba(99,102,241,.1);
-}
+.f input,.f select{background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:12px;padding:12px 14px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;color:#1a1d2e;outline:none;appearance:none;-webkit-appearance:none;width:100%;transition:border-color .2s,box-shadow .2s,background .2s;}
+.f input:focus,.f select:focus{border-color:#6366f1;background:white;box-shadow:0 0 0 3px rgba(99,102,241,.1);}
 .f input::placeholder{color:#d1d5db;}
 .f select option{background:white;color:#1a1d2e;}
 
-/* SLIDERS */
+/* TOGGLE BUTTONS for activity & smoking */
+.toggle-group{display:flex;gap:6px;flex-wrap:wrap;}
+.tgl{background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:10px;padding:9px 14px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;color:#6b7280;cursor:pointer;transition:all .2s;flex:1;min-width:0;text-align:center;}
+.tgl:hover{border-color:#c7d2fe;color:#6366f1;}
+.tgl.on{background:#eef2ff;border-color:#6366f1;color:#6366f1;font-weight:800;}
+
 .slabel{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .slabel label{font-size:10px;font-weight:700;color:#6b7280;letter-spacing:1.5px;text-transform:uppercase;}
-.sval{
-font-size:18px;font-weight:800;
-background:linear-gradient(135deg,#6366f1,#06b6d4);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-
-input[type=range]{
-width:100%;height:5px;appearance:none;-webkit-appearance:none;
-background:#e5e7eb;border-radius:100px;outline:none;cursor:pointer;
-}
-input[type=range]::-webkit-slider-thumb{
-appearance:none;-webkit-appearance:none;
-width:22px;height:22px;border-radius:50%;
-background:linear-gradient(135deg,#6366f1,#06b6d4);
-cursor:pointer;box-shadow:0 2px 8px rgba(99,102,241,.35);
-border:3px solid white;
-}
-
-/* BUTTON */
-.btn{
-width:100%;
-background:linear-gradient(135deg,#6366f1,#06b6d4);
-border:none;border-radius:14px;padding:17px;
-font-family:‘Outfit’,sans-serif;font-size:16px;font-weight:800;
-color:white;cursor:pointer;margin-top:22px;
-letter-spacing:.3px;transition:all .2s;
-box-shadow:0 4px 14px rgba(99,102,241,.3);
-}
+.sval{font-size:18px;font-weight:800;background:linear-gradient(135deg,#6366f1,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+input[type=range]{width:100%;height:5px;appearance:none;-webkit-appearance:none;background:#e5e7eb;border-radius:100px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#06b6d4);cursor:pointer;box-shadow:0 2px 8px rgba(99,102,241,.35);border:3px solid white;}
+.btn{width:100%;background:linear-gradient(135deg,#6366f1,#06b6d4);border:none;border-radius:14px;padding:17px;font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:white;cursor:pointer;margin-top:22px;letter-spacing:.3px;transition:all .2s;box-shadow:0 4px 14px rgba(99,102,241,.3);}
 .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(99,102,241,.4);}
 .btn:active{transform:scale(.98);}
-
 .priv{font-size:11px;color:#9ca3af;text-align:center;margin-top:12px;line-height:1.8;}
-
-/* LOADING */
 #loadSec{display:none;text-align:center;padding:60px 0;}
 .load-emoji{font-size:52px;margin-bottom:20px;animation:float 2s ease-in-out infinite;}
-.load-t{font-family:‘Lora’,serif;font-style:italic;font-size:26px;color:#1a1d2e;margin-bottom:6px;}
+.load-t{font-family:'Lora',serif;font-style:italic;font-size:26px;color:#1a1d2e;margin-bottom:6px;}
 .load-s{font-size:13px;color:#9ca3af;margin-bottom:28px;}
 .lsteps{display:flex;flex-direction:column;gap:10px;max-width:280px;margin:0 auto;}
-.lstep{
-display:flex;align-items:center;gap:10px;
-font-size:13px;color:#d1d5db;font-weight:600;transition:color .4s;
-}
-.lstep.on{color:#6b7280;}
-.lstep.ok{color:#10b981;}
-.lstep-ico{
-width:28px;height:28px;background:#f3f4f6;
-border:1.5px solid #e5e7eb;border-radius:50%;
-display:flex;align-items:center;justify-content:center;
-font-size:13px;flex-shrink:0;transition:all .4s;
-}
+.lstep{display:flex;align-items:center;gap:10px;font-size:13px;color:#d1d5db;font-weight:600;transition:color .4s;}
+.lstep.on{color:#6b7280;}.lstep.ok{color:#10b981;}
+.lstep-ico{width:28px;height:28px;background:#f3f4f6;border:1.5px solid #e5e7eb;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all .4s;}
 .lstep.ok .lstep-ico{background:#ecfdf5;border-color:#10b981;}
-
-/* RESULTS */
 #resSec{display:none;}
-
-/* SCORE CARD */
-.score-card{
-background:white;border:1px solid #e5e7eb;border-radius:24px;
-padding:32px 24px;text-align:center;margin-bottom:14px;
-box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;overflow:hidden;
-}
-.score-card::before{
-content:’’;position:absolute;top:0;left:0;right:0;height:3px;
-background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);
-}
-
+.score-card{background:white;border:1px solid #e5e7eb;border-radius:24px;padding:32px 24px;text-align:center;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;overflow:hidden;}
+.score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);}
 .score-prof{font-size:12px;color:#9ca3af;font-weight:600;margin-bottom:24px;}
-
 .ring-wrap{width:150px;height:150px;margin:0 auto 16px;position:relative;}
 .ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
 .ring-track{fill:none;stroke:#f3f4f6;stroke-width:10;}
-.ring-fill{
-fill:none;stroke:url(#rg);stroke-width:10;stroke-linecap:round;
-stroke-dasharray:408;stroke-dashoffset:408;
-transition:stroke-dashoffset 1.5s cubic-bezier(.16,1,.3,1);
-}
+.ring-fill{fill:none;stroke:url(#rg);stroke-width:10;stroke-linecap:round;stroke-dasharray:408;stroke-dashoffset:408;transition:stroke-dashoffset 1.5s cubic-bezier(.16,1,.3,1);}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.ring-num{
-font-family:‘Lora’,serif;font-style:italic;font-size:48px;font-weight:700;line-height:1;
-background:linear-gradient(135deg,#6366f1,#06b6d4);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
+.ring-num{font-family:'Lora',serif;font-style:italic;font-size:48px;font-weight:700;line-height:1;background:linear-gradient(135deg,#6366f1,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .ring-den{font-size:13px;color:#9ca3af;font-weight:700;}
 .score-lbl{font-size:10px;font-weight:700;color:#9ca3af;letter-spacing:2px;text-transform:uppercase;}
-
-/* VITALS */
 .vitals{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
 @media(max-width:440px){.vitals{grid-template-columns:1fr;}}
-.vital{
-background:white;border:1px solid #e5e7eb;border-radius:18px;
-padding:16px 12px;text-align:center;
-box-shadow:0 1px 3px rgba(0,0,0,.04);
-transition:transform .2s;
-}
+.vital{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:transform .2s;}
 .vital:hover{transform:translateY(-2px);}
 .vital-ico{font-size:22px;margin-bottom:7px;}
 .vital-lbl{font-size:9px;font-weight:700;color:#9ca3af;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
 .vital-val{font-size:22px;font-weight:800;line-height:1;margin-bottom:3px;}
 .vital-st{font-size:11px;font-weight:600;}
-.cg{color:#10b981;} .cw{color:#f59e0b;} .cb{color:#ef4444;}
-
-/* LIFEBAR */
-.life-card{
-background:white;border:1px solid #e5e7eb;border-radius:18px;
-padding:20px;margin-bottom:14px;
-box-shadow:0 1px 3px rgba(0,0,0,.04);
-}
+.cg{color:#10b981;}.cw{color:#f59e0b;}.cb{color:#ef4444;}
+.life-card{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
 .life-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
 .life-title{font-size:13px;font-weight:700;color:#1a1d2e;}
 .life-years{font-size:13px;font-weight:800;color:#6366f1;}
@@ -267,161 +98,89 @@ box-shadow:0 1px 3px rgba(0,0,0,.04);
 .life-pot{position:absolute;top:0;bottom:0;left:0;background:rgba(99,102,241,.12);border-radius:100px;transition:width 1.5s cubic-bezier(.16,1,.3,1);}
 .life-lived{position:absolute;top:0;bottom:0;left:0;background:linear-gradient(90deg,#6366f1,#06b6d4);border-radius:100px;transition:width 1.5s cubic-bezier(.16,1,.3,1);}
 .life-lbls{display:flex;justify-content:space-between;font-size:10px;color:#9ca3af;font-weight:600;}
-
-/* AI CARD */
-.ai-card{
-background:white;border:1px solid #e5e7eb;border-radius:18px;
-padding:22px;margin-bottom:14px;
-box-shadow:0 1px 3px rgba(0,0,0,.04);
-position:relative;overflow:hidden;
-}
-.ai-card::before{
-content:’’;position:absolute;top:0;left:0;right:0;height:3px;
-background:linear-gradient(90deg,#8b5cf6,#6366f1,#06b6d4);
-}
+.ai-card{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:22px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);position:relative;overflow:hidden;}
+.ai-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b5cf6,#6366f1,#06b6d4);}
 .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
 .ai-title{font-size:15px;font-weight:800;color:#1a1d2e;}
-.ai-pill{
-background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(99,102,241,.1));
-border:1px solid rgba(139,92,246,.2);
-border-radius:100px;padding:3px 10px;
-font-size:9px;font-weight:700;color:#8b5cf6;letter-spacing:1px;
-}
+.ai-pill{background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(99,102,241,.1));border:1px solid rgba(139,92,246,.2);border-radius:100px;padding:3px 10px;font-size:9px;font-weight:700;color:#8b5cf6;letter-spacing:1px;}
 .ai-txt{font-size:14px;color:#374151;line-height:1.85;white-space:pre-wrap;font-weight:400;}
-.ai-cur{
-display:inline-block;width:2px;height:14px;
-background:#6366f1;animation:blink 1s step-end infinite;
-vertical-align:middle;margin-left:1px;
-}
-.ai-src{
-display:none;align-items:center;gap:6px;
-margin-top:12px;padding-top:10px;border-top:1px solid #f3f4f6;
-font-size:10px;color:#9ca3af;font-weight:600;
-}
+.ai-cur{display:inline-block;width:2px;height:14px;background:#6366f1;animation:blink 1s step-end infinite;vertical-align:middle;margin-left:1px;}
+.ai-src{display:none;align-items:center;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #f3f4f6;font-size:10px;color:#9ca3af;font-weight:600;}
 
-/* FOLLOWUP */
-.fu-card{
-background:white;border:1px solid #e5e7eb;border-radius:18px;
-padding:22px;margin-bottom:14px;
-box-shadow:0 1px 3px rgba(0,0,0,.04);
-}
-.fu-title{
-font-size:15px;font-weight:800;color:#1a1d2e;
-margin-bottom:14px;display:flex;align-items:center;gap:7px;
-}
-.fu-title::before{content:‘✦’;color:#6366f1;font-size:11px;}
+/* ═══════════════════════════════════════
+   PANEL PREVENTIVO DE LABORATORIO — NEW
+   ═══════════════════════════════════════ */
+.labs-panel{background:white;border:1px solid #e5e7eb;border-radius:24px;padding:26px 24px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;overflow:hidden;}
+.labs-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#10b981,#06b6d4,#6366f1);}
+.labs-panel-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.labs-panel-icon{font-size:22px;}
+.labs-panel-title{font-size:16px;font-weight:800;color:#1a1d2e;}
+.labs-panel-pill{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(6,182,212,.1));border:1px solid rgba(16,185,129,.25);border-radius:100px;padding:3px 10px;font-size:9px;font-weight:700;color:#10b981;letter-spacing:1px;text-transform:uppercase;}
+.labs-panel-sub{font-size:12px;color:#9ca3af;line-height:1.6;margin-bottom:20px;}
+.labs-studies{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.lab-study{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;border-radius:14px;border:1.5px solid #e5e7eb;background:#fafbff;transition:all .2s;}
+.lab-study:hover{border-color:#c7d2fe;background:#f5f7ff;}
+.lab-study.priority-high{border-color:#fde68a;background:#fffbeb;}
+.lab-study.priority-high:hover{border-color:#f59e0b;background:#fef3c7;}
+.lab-study.priority-critical{border-color:#fecaca;background:#fff5f5;}
+.lab-study.priority-critical:hover{border-color:#ef4444;background:#fef2f2;}
+.lab-study-ico{font-size:20px;flex-shrink:0;margin-top:1px;}
+.lab-study-body{flex:1;}
+.lab-study-name{font-size:13px;font-weight:800;color:#1a1d2e;margin-bottom:2px;}
+.lab-study-reason{font-size:12px;color:#6b7280;line-height:1.5;}
+.lab-study-badge{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;}
+.badge-routine{background:#eff6ff;color:#3b82f6;}
+.badge-priority{background:#fffbeb;color:#d97706;}
+.badge-urgent{background:#fef2f2;color:#ef4444;}
+.labs-cta-row{display:flex;gap:10px;align-items:center;}
+.labs-cta-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:linear-gradient(135deg,#10b981,#06b6d4);border:none;border-radius:14px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:white;cursor:pointer;text-decoration:none;transition:all .2s;box-shadow:0 4px 12px rgba(16,185,129,.3);}
+.labs-cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(16,185,129,.4);}
+.labs-cta-note{font-size:11px;color:#9ca3af;line-height:1.5;}
 
+.fu-card{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:22px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.fu-title{font-size:15px;font-weight:800;color:#1a1d2e;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.fu-title::before{content:'✦';color:#6366f1;font-size:11px;}
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
-.chip{
-background:#f8f9ff;border:1.5px solid #e8eaf6;border-radius:100px;
-padding:7px 14px;font-size:11px;font-weight:700;color:#6366f1;
-cursor:pointer;font-family:‘Outfit’,sans-serif;transition:all .2s;
-}
+.chip{background:#f8f9ff;border:1.5px solid #e8eaf6;border-radius:100px;padding:7px 14px;font-size:11px;font-weight:700;color:#6366f1;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
 .chip:hover:not(.off){background:#eef2ff;border-color:#c7d2fe;}
 .chip.off{opacity:.3;pointer-events:none;}
-
 .qrow{display:flex;gap:8px;}
-.qi{
-flex:1;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:12px;
-padding:11px 14px;font-family:‘Outfit’,sans-serif;font-size:13px;font-weight:500;
-color:#1a1d2e;outline:none;transition:all .2s;
-}
+.qi{flex:1;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:12px;padding:11px 14px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:#1a1d2e;outline:none;transition:all .2s;}
 .qi:focus{border-color:#6366f1;background:white;box-shadow:0 0 0 3px rgba(99,102,241,.1);}
 .qi:disabled{opacity:.45;}
 .qi::placeholder{color:#d1d5db;}
-
-.qbtn{
-background:linear-gradient(135deg,#6366f1,#06b6d4);border:none;
-border-radius:12px;padding:11px 18px;font-family:‘Outfit’,sans-serif;
-font-size:12px;font-weight:800;color:white;cursor:pointer;
-white-space:nowrap;transition:all .2s;
-box-shadow:0 2px 8px rgba(99,102,241,.25);
-}
+.qbtn{background:linear-gradient(135deg,#6366f1,#06b6d4);border:none;border-radius:12px;padding:11px 18px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;color:white;cursor:pointer;white-space:nowrap;transition:all .2s;box-shadow:0 2px 8px rgba(99,102,241,.25);}
 .qbtn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,.35);}
 .qbtn:disabled{opacity:.4;cursor:not-allowed;}
-
 .answers{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
-.ac{
-background:#fffbeb;border:1.5px solid #fde68a;
-border-left:3px solid #f59e0b;border-radius:14px;padding:14px;
-}
+.ac{background:#fffbeb;border:1.5px solid #fde68a;border-left:3px solid #f59e0b;border-radius:14px;padding:14px;}
 .aq{font-size:10px;color:#92400e;font-weight:700;margin-bottom:7px;font-style:italic;}
 .aa{font-size:13px;color:#374151;line-height:1.85;white-space:pre-wrap;}
-
-/* EMAIL CTA */
-.cta{
-background:linear-gradient(135deg,#f8f9ff,#eff6ff);
-border:1px solid #c7d2fe;border-radius:24px;
-padding:32px 24px;text-align:center;margin-bottom:14px;
-position:relative;overflow:hidden;
-}
-.cta::before{
-content:’’;position:absolute;top:0;left:0;right:0;height:3px;
-background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);
-}
+.cta{background:linear-gradient(135deg,#f8f9ff,#eff6ff);border:1px solid #c7d2fe;border-radius:24px;padding:32px 24px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden;}
+.cta::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6366f1,#06b6d4,#10b981);}
 .cta-ico{font-size:36px;margin-bottom:14px;}
-.cta-title{font-family:‘Lora’,serif;font-style:italic;font-size:24px;color:#1a1d2e;margin-bottom:8px;}
+.cta-title{font-family:'Lora',serif;font-style:italic;font-size:24px;color:#1a1d2e;margin-bottom:8px;}
 .cta-txt{font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:22px;max-width:340px;margin-left:auto;margin-right:auto;}
-
 .email-row{display:flex;gap:8px;max-width:380px;margin:0 auto 10px;}
-.email-in{
-flex:1;background:white;border:1.5px solid #c7d2fe;border-radius:12px;
-padding:13px 16px;font-family:‘Outfit’,sans-serif;font-size:13px;font-weight:500;
-color:#1a1d2e;outline:none;transition:all .2s;
-}
+.email-in{flex:1;background:white;border:1.5px solid #c7d2fe;border-radius:12px;padding:13px 16px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:#1a1d2e;outline:none;transition:all .2s;}
 .email-in:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1);}
 .email-in::placeholder{color:#c7d2fe;}
-
-.email-btn{
-background:linear-gradient(135deg,#6366f1,#06b6d4);border:none;
-border-radius:12px;padding:13px 18px;font-family:‘Outfit’,sans-serif;
-font-size:12px;font-weight:800;color:white;cursor:pointer;
-white-space:nowrap;transition:all .2s;
-box-shadow:0 4px 12px rgba(99,102,241,.3);
-}
+.email-btn{background:linear-gradient(135deg,#6366f1,#06b6d4);border:none;border-radius:12px;padding:13px 18px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;color:white;cursor:pointer;white-space:nowrap;transition:all .2s;box-shadow:0 4px 12px rgba(99,102,241,.3);}
 .email-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(99,102,241,.4);}
 .cta-note{font-size:10px;color:#9ca3af;font-weight:600;}
-
-/* LABS CTA BUTTON */
-.labs-btn{
-display:block;text-align:center;margin-bottom:10px;
-padding:15px;
-background:white;
-border:1.5px solid #6366f1;
-color:#6366f1;border-radius:14px;
-font-family:‘Outfit’,sans-serif;font-weight:800;font-size:14px;
-text-decoration:none;letter-spacing:.2px;
-transition:all .2s;
-}
-.labs-btn:hover{background:#eef2ff;transform:translateY(-1px);}
-
-.reset-btn{
-display:block;background:none;border:1.5px solid #e5e7eb;border-radius:12px;
-padding:11px 24px;font-family:‘Outfit’,sans-serif;font-size:13px;font-weight:700;
-color:#9ca3af;cursor:pointer;margin:0 auto;transition:all .2s;
-}
+.reset-btn{display:block;background:none;border:1.5px solid #e5e7eb;border-radius:12px;padding:11px 24px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#9ca3af;cursor:pointer;margin:0 auto;transition:all .2s;}
 .reset-btn:hover{border-color:#6366f1;color:#6366f1;}
-
-.footer{
-text-align:center;padding-top:28px;border-top:1px solid #e5e7eb;
-margin-top:28px;font-size:10px;color:#9ca3af;font-weight:600;
-line-height:2.4;letter-spacing:.5px;
-}
-
+.footer{text-align:center;padding-top:28px;border-top:1px solid #e5e7eb;margin-top:28px;font-size:10px;color:#9ca3af;font-weight:600;line-height:2.4;letter-spacing:.5px;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 </style>
-
 </head>
 <body>
-
 <div class="top-bar"></div>
-
 <div class="page">
 
 <!-- NAV -->
-
 <nav class="nav">
   <div class="logo">VIVIX</div>
   <div class="langs">
@@ -435,28 +194,22 @@ line-height:2.4;letter-spacing:.5px;
 </nav>
 
 <!-- HERO -->
-
 <div class="hero">
   <div class="badge"><div class="badge-dot"></div><span id="t-badge">AI Engine — Claude Sonnet</span></div>
   <h1 id="t-h1">Know Your<br><em>Vital Score</em></h1>
   <p id="t-sub">7 data points. Personalized scientific analysis by AI. Your real life expectancy, your risks, your action plan.</p>
-  <div class="sources">
-    <span>WHO</span><span>·</span><span>Harvard</span><span>·</span>
-    <span>NIH</span><span>·</span><span>The Lancet</span><span>·</span><span>eBioMedicine</span>
-  </div>
+  <div class="sources"><span>WHO</span><span>·</span><span>Harvard</span><span>·</span><span>NIH</span><span>·</span><span>The Lancet</span><span>·</span><span>eBioMedicine</span></div>
 </div>
 
-<!-- LABS ENTRY POINT — visible desde el inicio -->
-
+<!-- LABS ENTRY POINT -->
 <div style="text-align:center;margin-bottom:28px;">
   <a href="/labs" style="display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:white;border:1.5px solid #6366f1;color:#6366f1;border-radius:14px;font-family:'Outfit',sans-serif;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 2px 8px rgba(99,102,241,.12);transition:all .2s;" onmouseover="this.style.background='#eef2ff'" onmouseout="this.style.background='white'">
-    🧪 <span id="t-labs">Interpretar resultados de laboratorio</span> <span style="opacity:.5">→</span>
+    🧪 <span id="t-labs">Interpret lab results</span> <span style="opacity:.5">→</span>
   </a>
-  <div id="t-labssub" style="font-size:11px;color:#9ca3af;margin-top:8px;font-family:'Outfit',sans-serif;">Sube tu PDF · Análisis en segundos · Sin registro</div>
+  <div id="t-labssub" style="font-size:11px;color:#9ca3af;margin-top:8px;font-family:'Outfit',sans-serif;">Upload your PDF · Analysis in seconds · No signup</div>
 </div>
 
 <!-- STATS -->
-
 <div class="stats">
   <div class="stat"><div class="stat-n" id="userCount">0</div><div class="stat-l" id="t-s1">Profiles</div></div>
   <div class="stat"><div class="stat-n">6</div><div class="stat-l" id="t-s2">Languages</div></div>
@@ -464,48 +217,68 @@ line-height:2.4;letter-spacing:.5px;
 </div>
 
 <!-- FORM -->
-
 <div id="formSec">
-<div class="card">
-  <div class="card-accent"></div>
-  <div class="step-tag" id="t-step">// 7 questions · 45 seconds</div>
-  <div class="card-title" id="t-ft">Your biometric profile</div>
-  <div class="card-sub" id="t-fs">Processed locally. No identifiable data stored without your consent.</div>
-  <div class="fg">
-    <div class="f"><label id="t-age">Age<span class="req"> *</span></label><input type="number" id="age" placeholder="38" min="18" max="100"></div>
-    <div class="f"><label id="t-sex">Sex<span class="req"> *</span></label>
-      <select id="sex"><option value="" id="t-sel">— Select —</option><option value="M" id="t-m">Male</option><option value="F" id="t-f">Female</option></select>
+  <div class="card">
+    <div class="card-accent"></div>
+    <div class="step-tag" id="t-step">// 9 questions · 60 seconds</div>
+    <div class="card-title" id="t-ft">Your biometric profile</div>
+    <div class="card-sub" id="t-fs">Processed locally. No identifiable data stored without your consent.</div>
+    <div class="fg">
+      <div class="f"><label id="t-age">Age<span class="req"> *</span></label><input type="number" id="age" placeholder="38" min="18" max="100"></div>
+      <div class="f"><label id="t-sex">Sex<span class="req"> *</span></label>
+        <select id="sex"><option value="" id="t-sel">— Select —</option><option value="M" id="t-m">Male</option><option value="F" id="t-f">Female</option></select>
+      </div>
+      <div class="f"><label id="t-wt">Weight (kg)<span class="req"> *</span></label><input type="number" id="weight" placeholder="75" min="30" max="250"></div>
+      <div class="f"><label id="t-ht">Height (cm)<span class="req"> *</span></label><input type="number" id="height" placeholder="175" min="100" max="220"></div>
+      <div class="f full"><label id="t-ct">Country<span class="req"> *</span></label>
+        <select id="country">
+          <option value="">— Select —</option>
+          <option value="MX">🇲🇽 Mexico</option><option value="US">🇺🇸 United States</option>
+          <option value="CO">🇨🇴 Colombia</option><option value="AR">🇦🇷 Argentina</option>
+          <option value="BR">🇧🇷 Brazil</option><option value="CL">🇨🇱 Chile</option>
+          <option value="PE">🇵🇪 Peru</option><option value="ES">🇪🇸 Spain</option>
+          <option value="FR">🇫🇷 France</option><option value="IN">🇮🇳 India</option>
+          <option value="CN">🇨🇳 China</option><option value="GB">🇬🇧 UK</option>
+          <option value="DE">🇩🇪 Germany</option><option value="OTHER">🌍 Other</option>
+        </select>
+      </div>
+
+      <!-- ACTIVITY — NEW -->
+      <div class="f full">
+        <label id="t-act">Physical activity<span class="req"> *</span></label>
+        <div class="toggle-group" id="actGroup">
+          <button class="tgl" data-val="0" onclick="selectToggle('actGroup',this)">🛋️ <span id="t-act0">Sedentary</span></button>
+          <button class="tgl" data-val="1" onclick="selectToggle('actGroup',this)">🚶 <span id="t-act1">1–2 days</span></button>
+          <button class="tgl" data-val="3" onclick="selectToggle('actGroup',this)">🏃 <span id="t-act2">3–4 days</span></button>
+          <button class="tgl" data-val="5" onclick="selectToggle('actGroup',this)">💪 <span id="t-act3">5+ days</span></button>
+        </div>
+      </div>
+
+      <!-- SMOKING — NEW -->
+      <div class="f full">
+        <label id="t-smk">Smoking<span class="req"> *</span></label>
+        <div class="toggle-group" id="smkGroup">
+          <button class="tgl" data-val="never" onclick="selectToggle('smkGroup',this)">🌿 <span id="t-smk0">Never</span></button>
+          <button class="tgl" data-val="ex" onclick="selectToggle('smkGroup',this)">⏳ <span id="t-smk1">Ex-smoker</span></button>
+          <button class="tgl" data-val="yes" onclick="selectToggle('smkGroup',this)">🚬 <span id="t-smk2">Current</span></button>
+        </div>
+      </div>
+
+      <div class="f full">
+        <div class="slabel"><label id="t-wa">Water (liters/day)<span class="req"> *</span></label><div class="sval" id="wV">1.5 L</div></div>
+        <input type="range" id="wS" min="0.5" max="5" step="0.1" value="1.5">
+      </div>
+      <div class="f full">
+        <div class="slabel"><label id="t-sl">Sleep (hours/night)<span class="req"> *</span></label><div class="sval" id="sV">7.0 h</div></div>
+        <input type="range" id="sS" min="2" max="12" step="0.5" value="7">
+      </div>
     </div>
-    <div class="f"><label id="t-wt">Weight (kg)<span class="req"> *</span></label><input type="number" id="weight" placeholder="75" min="30" max="250"></div>
-    <div class="f"><label id="t-ht">Height (cm)<span class="req"> *</span></label><input type="number" id="height" placeholder="175" min="100" max="220"></div>
-    <div class="f full"><label id="t-ct">Country<span class="req"> *</span></label>
-      <select id="country">
-        <option value="">— Select —</option>
-        <option value="MX">🇲🇽 Mexico</option><option value="US">🇺🇸 United States</option>
-        <option value="CO">🇨🇴 Colombia</option><option value="AR">🇦🇷 Argentina</option>
-        <option value="BR">🇧🇷 Brazil</option><option value="CL">🇨🇱 Chile</option>
-        <option value="PE">🇵🇪 Peru</option><option value="ES">🇪🇸 Spain</option>
-        <option value="FR">🇫🇷 France</option><option value="IN">🇮🇳 India</option>
-        <option value="CN">🇨🇳 China</option><option value="GB">🇬🇧 UK</option>
-        <option value="DE">🇩🇪 Germany</option><option value="OTHER">🌍 Other</option>
-      </select>
-    </div>
-    <div class="f full">
-      <div class="slabel"><label id="t-wa">Water (liters/day)<span class="req"> *</span></label><div class="sval" id="wV">1.5 L</div></div>
-      <input type="range" id="wS" min="0.5" max="5" step="0.1" value="1.5">
-    </div>
-    <div class="f full">
-      <div class="slabel"><label id="t-sl">Sleep (hours/night)<span class="req"> *</span></label><div class="sval" id="sV">7.0 h</div></div>
-      <input type="range" id="sS" min="2" max="12" step="0.5" value="7">
-    </div>
+    <button class="btn" onclick="go()" id="t-btn">✦ Analyze with AI</button>
+    <p class="priv" id="t-prv">🔒 No cookies · No tracking · Anonymous data · GDPR compliant</p>
   </div>
-  <button class="btn" onclick="go()" id="t-btn">✦ Analyze with AI</button>
-  <p class="priv" id="t-prv">🔒 No cookies · No tracking · Anonymous data · GDPR compliant</p>
-</div>
 </div>
 
 <!-- LOADING -->
-
 <div id="loadSec">
   <div class="load-emoji">🧬</div>
   <div class="load-t" id="t-lt">Analyzing your profile...</div>
@@ -519,7 +292,6 @@ line-height:2.4;letter-spacing:.5px;
 </div>
 
 <!-- RESULTS -->
-
 <div id="resSec">
   <svg width="0" height="0">
     <defs>
@@ -530,6 +302,7 @@ line-height:2.4;letter-spacing:.5px;
     </defs>
   </svg>
 
+  <!-- SCORE -->
   <div class="score-card">
     <div class="score-prof" id="rp">—</div>
     <div class="ring-wrap">
@@ -545,12 +318,14 @@ line-height:2.4;letter-spacing:.5px;
     <div class="score-lbl" id="t-rl">GLOBAL VITAL SCORE</div>
   </div>
 
+  <!-- VITALS -->
   <div class="vitals">
     <div class="vital"><div class="vital-ico">⚖️</div><div class="vital-lbl" id="t-bmi">BMI</div><div class="vital-val" id="vBmi">—</div><div class="vital-st" id="vBmiL">—</div></div>
     <div class="vital"><div class="vital-ico">💧</div><div class="vital-lbl" id="t-hyd">Hydration</div><div class="vital-val" id="vWat">—</div><div class="vital-st" id="vWatL">—</div></div>
     <div class="vital"><div class="vital-ico">😴</div><div class="vital-lbl" id="t-slp">Sleep</div><div class="vital-val" id="vSlp">—</div><div class="vital-st" id="vSlpL">—</div></div>
   </div>
 
+  <!-- LIFEBAR -->
   <div class="life-card">
     <div class="life-top">
       <div class="life-title" id="t-ll">Your estimated lifeline</div>
@@ -563,6 +338,7 @@ line-height:2.4;letter-spacing:.5px;
     <div class="life-lbls"><span>0</span><span id="lbAge">—</span><span>100</span></div>
   </div>
 
+  <!-- AI ANALYSIS -->
   <div class="ai-card">
     <div class="ai-head">
       <div class="ai-title" id="t-an">Personalized AI Analysis</div>
@@ -573,6 +349,26 @@ line-height:2.4;letter-spacing:.5px;
     <div class="ai-src" id="aiSrc">🔬 WHO 2024 · NIH · Harvard Chan School · The Lancet · eBioMedicine 2023</div>
   </div>
 
+  <!-- ═══════════════════════════════════════
+       PANEL PREVENTIVO DE LABORATORIO — NEW
+       ═══════════════════════════════════════ -->
+  <div class="labs-panel" id="labsPanel" style="display:none;">
+    <div class="labs-panel-head">
+      <div class="labs-panel-icon">🧪</div>
+      <div class="labs-panel-title" id="t-lpt">Your Preventive Lab Panel</div>
+      <div class="labs-panel-pill" id="t-lpp">PERSONALIZED</div>
+    </div>
+    <div class="labs-panel-sub" id="t-lps">Based on your biometric profile, these are the lab tests that could give you the most preventive value right now.</div>
+    <div class="labs-studies" id="labsStudies"></div>
+    <div class="labs-cta-row">
+      <a href="/labs" class="labs-cta-btn" id="labsCtaLink">
+        <span>📋</span><span id="t-lcta">Interpret my results in VIVIX</span>
+      </a>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:#9ca3af;line-height:1.5;" id="t-ldisc">Once you have your results, upload them and VIVIX will interpret each value in the context of your complete profile.</div>
+  </div>
+
+  <!-- FOLLOW-UP -->
   <div class="fu-card" id="fuSec" style="display:none">
     <div class="fu-title" id="t-ask">Ask your vital AI</div>
     <div class="chips" id="chipsEl"></div>
@@ -583,6 +379,7 @@ line-height:2.4;letter-spacing:.5px;
     <div class="answers" id="answers"></div>
   </div>
 
+  <!-- EMAIL CTA -->
   <div class="cta">
     <div class="cta-ico">📊</div>
     <div class="cta-title" id="t-cti">Track Your Score Weekly</div>
@@ -594,12 +391,7 @@ line-height:2.4;letter-spacing:.5px;
     <p class="cta-note" id="t-cnote">Free forever · Your data always yours · No spam</p>
   </div>
 
-  <!-- LABS BUTTON — única línea nueva -->
-
-<a href="/labs" class="labs-btn">🧪 Interpretar mis resultados de laboratorio →</a>
-
-<button class="reset-btn" onclick="rst()" id="t-rst">← New analysis</button>
-
+  <button class="reset-btn" onclick="rst()" id="t-rst">← New analysis</button>
 </div>
 
 <div class="footer">
@@ -607,22 +399,73 @@ line-height:2.4;letter-spacing:.5px;
   AI: Claude Sonnet · WHO · NIH · Harvard · The Lancet<br>
   <span id="t-disc">Indicative only. Does not replace professional medical diagnosis.</span>
 </div>
-
 </div>
 
 <script>
 const T={
-en:{badge:'AI Engine — Claude Sonnet',h1:'Know Your<br><em>Vital Score</em>',sub:'7 data points. Personalized scientific analysis by AI. Your real life expectancy, your risks, your action plan.',s1:'Profiles',s2:'Languages',s3:'Sources',step:'// 7 questions · 45 seconds',ft:'Your biometric profile',fs:'Processed locally. No identifiable data stored without your consent.',age:'Age',sex:'Biological sex',wt:'Weight (kg)',ht:'Height (cm)',ct:'Country',wa:'Water (liters/day)',sl:'Sleep (hours/night)',sel:'— Select —',m:'Male',f:'Female',btn:'✦ Analyze with AI',prv:'🔒 No cookies · No tracking · Anonymous data · GDPR compliant',lt:'Analyzing your profile...',ls:'AI is processing your information',rl:'GLOBAL VITAL SCORE',bmi:'BMI',hyd:'Hydration',slp:'Sleep',ll:'Your estimated lifeline',an:'Personalized AI Analysis',ask:'Ask your vital AI',chips:['What do I change first?','Impact of more sleep','Water & cognition','My main risk','30-day plan'],qph:'Ask about your profile...',cti:'Track Your Score Weekly',ctx:'Your Vital Score changes with your habits. Monitor it weekly.',cjoin:'Join Free',cnote:'Free forever · Your data always yours · No spam',rst:'← New analysis',disc:'Indicative only. Does not replace professional medical diagnosis.',now:'You now',exp:'Expectancy: ~',bL:{low:'Underweight',ok:'Optimal',ov:'Overweight',o1:'Obesity I',o2:'Obesity II+'},wL:{d:'Dehydrated',lo:'Low',ok:'Acceptable',op:'Optimal',ex:'Slight excess'},sL:{sv:'Severe deprivation',in:'Insufficient',bo:'Borderline',op:'Optimal',ex:'Slight excess',hy:'Hypersomnia'},ai:(p)=>`You are a preventive medicine specialist. Analyze this biometric profile and give a personalized, evidence-based report. English only. Max 280 words. No markdown, no asterisks, no bullet points. Second person (you). Be direct, empathetic and scientific.\n\nProfile: ${p.age}yo, ${p.sx==='F'?'Female':'Male'}, ${p.co}, BMI ${p.bmi} (${p.bL}), water ${p.wa}L of ${p.wo}L optimal (${p.wL}), sleep ${p.sl}h (${p.sL}). Vital Score: ${p.sc}/100. Life expectancy: ~${p.le} years (${p.yl} remaining).\n\nStructure: 1) Powerful personalized opener 2) What their score means practically 3) Biggest risk factor with biological impact 4) Main strength if any 5) Top 3 changes ordered by impact with timeframes 6) Honest motivating close.`,qa:(p,q)=>`Preventive medicine specialist. Profile: ${p.age}yo, ${p.sx==='F'?'F':'M'}, BMI ${p.bmi} (${p.bL}), water ${p.wa}L (${p.wL}), sleep ${p.sl}h (${p.sL}), Score ${p.sc}/100, expectancy ~${p.le}y. Answer in English, max 140 words, direct, evidence-based, second person (you), no markdown: ${q}`,ok:'✓ You\'re on the list!'},
-es:{badge:'Motor IA — Claude Sonnet',h1:'Conoce Tu<br><em>Vital Score</em>',sub:'7 datos. Análisis científico personalizado por IA. Tu expectativa de vida real, tus riesgos, tu plan de acción.',s1:'Perfiles',s2:'Idiomas',s3:'Fuentes',step:'// 7 preguntas · 45 segundos',ft:'Tu perfil biométrico',fs:'Procesado localmente. Sin datos identificables sin tu consentimiento.',age:'Edad',sex:'Sexo biológico',wt:'Peso (kg)',ht:'Altura (cm)',ct:'País',wa:'Agua (litros/día)',sl:'Sueño (horas/noche)',sel:'— Selecciona —',m:'Masculino',f:'Femenino',btn:'✦ Analizar con IA',prv:'🔒 Sin cookies · Sin tracking · Datos anónimos',lt:'Analizando tu perfil...',ls:'La IA está procesando tu información',rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hidratación',slp:'Sueño',ll:'Tu línea de vida estimada',an:'Análisis IA Personalizado',ask:'Pregúntale a tu IA vital',chips:['¿Qué cambio primero?','Impacto de dormir más','Agua y cognición','Mi riesgo principal','Plan 30 días'],qph:'Pregunta sobre tu perfil...',cti:'Monitorea Tu Score Semanal',ctx:'Tu Vital Score cambia con tus hábitos. Monitoréalo cada semana.',cjoin:'Acceso Gratuito',cnote:'Gratis · Tus datos siempre tuyos · Sin spam',rst:'← Nuevo análisis',disc:'Orientativo. No sustituye diagnóstico médico profesional.',now:'Tú ahora',exp:'Expectativa: ~',bL:{low:'Bajo peso',ok:'Óptimo',ov:'Sobrepeso',o1:'Obesidad I',o2:'Obesidad II+'},wL:{d:'Deshidratado',lo:'Bajo',ok:'Aceptable',op:'Óptimo',ex:'Exceso leve'},sL:{sv:'Privación grave',in:'Insuficiente',bo:'Borderline',op:'Óptimo',ex:'Exceso leve',hy:'Hipersomnia'},ai:(p)=>`Eres médico especialista en medicina preventiva. Analiza este perfil y genera un informe personalizado en español. Sin markdown, sin asteriscos, sin listas. Máximo 280 palabras. Segunda persona (tú). Directo, empático, científico.\n\nPerfil: ${p.age}a, ${p.sx==='F'?'Femenino':'Masculino'}, ${p.co}, IMC ${p.bmi} (${p.bL}), agua ${p.wa}L de ${p.wo}L óptimo (${p.wL}), sueño ${p.sl}h (${p.sL}). Vital Score: ${p.sc}/100. Expectativa: ~${p.le} años (${p.yl} restantes).\n\nEstructura: 1) Apertura impactante personalizada 2) Qué significa el score prácticamente 3) Mayor factor de riesgo con impacto biológico 4) Mayor fortaleza si existe 5) Top 3 cambios por impacto con plazos 6) Cierre motivador y honesto.`,qa:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi} (${p.bL}), agua ${p.wa}L (${p.wL}), sueño ${p.sl}h (${p.sL}), Score ${p.sc}/100, expectativa ~${p.le}a. Responde en español, máx 140 palabras, directo, basado en evidencia, segunda persona, sin markdown: ${q}`,ok:'✓ ¡En la lista!'},
-pt:{badge:'Motor IA — Claude Sonnet',h1:'Conheça Seu<br><em>Vital Score</em>',sub:'7 dados. Análise científica personalizada por IA.',s1:'Perfis',s2:'Idiomas',s3:'Fontes',step:'// 7 perguntas · 45 segundos',ft:'Seu perfil biométrico',fs:'Processado localmente.',age:'Idade',sex:'Sexo biológico',wt:'Peso (kg)',ht:'Altura (cm)',ct:'País',wa:'Água (litros/dia)',sl:'Sono (horas/noite)',sel:'— Selecione —',m:'Masculino',f:'Feminino',btn:'✦ Analisar com IA',prv:'🔒 Sem cookies · Dados anônimos',lt:'Analisando seu perfil...',ls:'A IA está processando',rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hidratação',slp:'Sono',ll:'Sua linha de vida estimada',an:'Análise IA Personalizada',ask:'Pergunte à sua IA vital',chips:['O que mudo primeiro?','Impacto de dormir mais','Água e cognição','Meu risco principal','Plano 30 dias'],qph:'Pergunte sobre seu perfil...',cti:'Monitore Seu Score Semanal',ctx:'Seu Vital Score muda com seus hábitos.',cjoin:'Acesso Gratuito',cnote:'Gratuito · Seus dados sempre seus',rst:'← Nova análise',disc:'Indicativo. Não substitui diagnóstico médico.',now:'Você agora',exp:'Expectativa: ~',bL:{low:'Abaixo do peso',ok:'Ótimo',ov:'Sobrepeso',o1:'Obesidade I',o2:'Obesidade II+'},wL:{d:'Desidratado',lo:'Baixo',ok:'Aceitável',op:'Ótimo',ex:'Excesso leve'},sL:{sv:'Privação grave',in:'Insuficiente',bo:'Limítrofe',op:'Ótimo',ex:'Excesso leve',hy:'Hipersonia'},ai:(p)=>`Você é médico especialista. Analise em português. Sem markdown. Máx 280 palavras. Segunda pessoa.\n\nPerfil: ${p.age}a, ${p.sx==='F'?'Feminino':'Masculino'}, ${p.co}, IMC ${p.bmi}, água ${p.wa}L, sono ${p.sl}h. Score: ${p.sc}/100. Expectativa: ~${p.le} anos.`,qa:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi}, água ${p.wa}L, sono ${p.sl}h, Score ${p.sc}/100. Responda em português, máx 140 palavras, sem markdown: ${q}`,ok:'✓ Na lista!'},
-fr:{badge:'Moteur IA — Claude Sonnet',h1:'Connaissez Votre<br><em>Vital Score</em>',sub:'7 données. Analyse scientifique personnalisée par IA.',s1:'Profils',s2:'Langues',s3:'Sources',step:'// 7 questions · 45 secondes',ft:'Votre profil biométrique',fs:'Traité localement.',age:'Âge',sex:'Sexe biologique',wt:'Poids (kg)',ht:'Taille (cm)',ct:'Pays',wa:"Eau (litres/jour)",sl:'Sommeil (heures/nuit)',sel:'— Sélectionner —',m:'Masculin',f:'Féminin',btn:"✦ Analyser avec l'IA",prv:'🔒 Sans cookies · Données anonymes',lt:'Analyse en cours...',ls:"L'IA traite vos informations",rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hydratation',slp:'Sommeil',ll:'Votre ligne de vie estimée',an:'Analyse IA Personnalisée',ask:'Demandez à votre IA vitale',chips:['Que changer en premier?','Impact de plus de sommeil','Eau et cognition','Mon risque principal','Plan 30 jours'],qph:'Posez une question...',cti:'Suivez Votre Score Chaque Semaine',ctx:'Votre Vital Score évolue avec vos habitudes.',cjoin:'Accès Gratuit',cnote:'Gratuit · Vos données toujours à vous',rst:'← Nouvelle analyse',disc:'Indicatif. Ne remplace pas un diagnostic médical.',now:'Vous maintenant',exp:'Espérance: ~',bL:{low:'Insuffisance pondérale',ok:'Optimal',ov:'Surpoids',o1:'Obésité I',o2:'Obésité II+'},wL:{d:'Déshydraté',lo:'Bas',ok:'Acceptable',op:'Optimal',ex:'Léger excès'},sL:{sv:'Privation grave',in:'Insuffisant',bo:'Limite',op:'Optimal',ex:'Léger excès',hy:'Hypersomnie'},ai:(p)=>`Vous êtes médecin spécialiste. Analysez en français. Sans markdown. Max 280 mots. Deuxième personne.\n\nProfil: ${p.age}ans, ${p.sx==='F'?'Féminin':'Masculin'}, ${p.co}, IMC ${p.bmi}, eau ${p.wa}L, sommeil ${p.sl}h. Score: ${p.sc}/100. Espérance: ~${p.le} ans.`,qa:(p,q)=>`Médecin préventif. Profil: ${p.age}ans, IMC ${p.bmi}, eau ${p.wa}L, sommeil ${p.sl}h, Score ${p.sc}/100. Répondez en français, max 140 mots, sans markdown: ${q}`,ok:'✓ Sur la liste!'},
-hi:{badge:'AI इंजन — Claude Sonnet',h1:'अपना<br><em>Vital Score</em> जानें',sub:'7 डेटा बिंदु। AI द्वारा व्यक्तिगत वैज्ञानिक विश्लेषण।',s1:'प्रोफाइल',s2:'भाषाएं',s3:'स्रोत',step:'// 7 प्रश्न · 45 सेकंड',ft:'आपका बायोमेट्रिक प्रोफाइल',fs:'स्थानीय रूप से संसाधित।',age:'आयु',sex:'जैविक लिंग',wt:'वजन (kg)',ht:'ऊंचाई (cm)',ct:'देश',wa:'पानी (लीटर/दिन)',sl:'नींद (घंटे/रात)',sel:'— चुनें —',m:'पुरुष',f:'महिला',btn:'✦ AI से विश्लेषण करें',prv:'🔒 कोई कुकीज़ नहीं · गुमनाम डेटा',lt:'विश्लेषण हो रहा है...',ls:'AI आपकी जानकारी संसाधित कर रहा है',rl:'ग्लोबल वाइटल स्कोर',bmi:'BMI',hyd:'जलयोजन',slp:'नींद',ll:'आपकी अनुमानित जीवन रेखा',an:'व्यक्तिगत AI विश्लेषण',ask:'अपने AI से पूछें',chips:['पहले क्या बदलूं?','अधिक नींद का प्रभाव','पानी और संज्ञान','मुख्य जोखिम','30 दिन योजना'],qph:'अपना प्रश्न पूछें...',cti:'साप्ताहिक स्कोर ट्रैक करें',ctx:'आपका Vital Score आपकी आदतों से बदलता है।',cjoin:'मुफ्त पहुंच',cnote:'मुफ्त · आपका डेटा हमेशा आपका',rst:'← नया विश्लेषण',disc:'संकेतात्मक। पेशेवर चिकित्सा का विकल्प नहीं।',now:'आप अभी',exp:'प्रत्याशा: ~',bL:{low:'कम वजन',ok:'इष्टतम',ov:'अधिक वजन',o1:'मोटापा I',o2:'मोटापा II+'},wL:{d:'निर्जलित',lo:'कम',ok:'स्वीकार्य',op:'इष्टतम',ex:'हल्का अधिक'},sL:{sv:'गंभीर',in:'अपर्याप्त',bo:'सीमा',op:'इष्टतम',ex:'हल्का अधिक',hy:'अतिनिद्रा'},ai:(p)=>`You are a preventive medicine specialist. Respond in Hindi (Devanagari script). No markdown. Max 280 words. Second person.\n\nProfile: ${p.age}y, ${p.sx==='F'?'Female':'Male'}, ${p.co}, BMI ${p.bmi}, water ${p.wa}L, sleep ${p.sl}h. Score: ${p.sc}/100. Expectancy: ~${p.le} years.`,qa:(p,q)=>`Preventive doctor. Profile: ${p.age}y, BMI ${p.bmi}, water ${p.wa}L, sleep ${p.sl}h, Score ${p.sc}/100. Answer in Hindi, max 140 words, no markdown: ${q}`,ok:'✓ सूची में!'},
-zh:{badge:'AI引擎 — Claude Sonnet',h1:'了解您的<br><em>活力评分</em>',sub:'7个数据点。AI个性化科学分析。',s1:'档案数',s2:'语言',s3:'来源',step:'// 7个问题 · 45秒',ft:'您的生物特征档案',fs:'本地处理。未经您同意不存储可识别数据。',age:'年龄',sex:'生理性别',wt:'体重 (kg)',ht:'身高 (cm)',ct:'国家',wa:'每日饮水量（升）',sl:'每晚睡眠小时数',sel:'— 请选择 —',m:'男性',f:'女性',btn:'✦ AI分析',prv:'🔒 无cookie · 匿名数据',lt:'正在分析您的档案...',ls:'AI正在处理您的信息',rl:'全球生命活力评分',bmi:'BMI',hyd:'水分状态',slp:'睡眠',ll:'您的预计生命线',an:'个性化AI分析',ask:'向您的AI询问',chips:['我首先改变什么？','更多睡眠的影响','水分与认知','我的主要风险','30天计划'],qph:'询问您的档案相关问题...',cti:'每周追踪您的评分',ctx:'您的活力评分随习惯而变化。',cjoin:'免费加入',cnote:'免费 · 数据始终属于您',rst:'← 重新分析',disc:'仅供参考。不替代专业医疗诊断。',now:'您现在',exp:'预期: ~',bL:{low:'体重不足',ok:'正常',ov:'超重',o1:'肥胖I级',o2:'肥胖II级+'},wL:{d:'脱水',lo:'不足',ok:'尚可',op:'最佳',ex:'轻微过量'},sL:{sv:'严重睡眠剥夺',in:'不足',bo:'临界',op:'最佳',ex:'轻微过量',hy:'嗜睡'},ai:(p)=>`你是预防医学专科医生。用中文分析此档案。无markdown。最多280字。第二人称（您）。\n\n档案：${p.age}岁，${p.sx==='F'?'女性':'男性'}，${p.co}，BMI ${p.bmi}，饮水${p.wa}L，睡眠${p.sl}h。评分：${p.sc}/100。预期：~${p.le}岁。`,qa:(p,q)=>`预防医学医生。档案：${p.age}岁，BMI ${p.bmi}，饮水${p.wa}L，睡眠${p.sl}h，评分${p.sc}/100。用中文回答，最多140字，无markdown：${q}`,ok:'✓ 已加入!'}
+en:{badge:'AI Engine — Claude Sonnet',h1:'Know Your<br><em>Vital Score</em>',sub:'9 data points. Personalized scientific analysis by AI. Your real life expectancy, your risks, your action plan.',s1:'Profiles',s2:'Languages',s3:'Sources',step:'// 9 questions · 60 seconds',ft:'Your biometric profile',fs:'Processed locally. No identifiable data stored without your consent.',age:'Age',sex:'Biological sex',wt:'Weight (kg)',ht:'Height (cm)',ct:'Country',act:'Physical activity',act0:'Sedentary',act1:'1–2 days/wk',act2:'3–4 days/wk',act3:'5+ days/wk',smk:'Smoking',smk0:'Never',smk1:'Ex-smoker',smk2:'Current smoker',wa:'Water (liters/day)',sl:'Sleep (hours/night)',sel:'— Select —',m:'Male',f:'Female',btn:'✦ Analyze with AI',prv:'🔒 No cookies · No tracking · Anonymous data · GDPR compliant',lt:'Analyzing your profile...',ls:'AI is processing your information',rl:'GLOBAL VITAL SCORE',bmi:'BMI',hyd:'Hydration',slp:'Sleep',ll:'Your estimated lifeline',an:'Personalized AI Analysis',ask:'Ask your vital AI',chips:['What do I change first?','Impact of more sleep','Water & cognition','My main risk','30-day plan'],qph:'Ask about your profile...',cti:'Track Your Score Weekly',ctx:'Your Vital Score changes with your habits. Monitor it weekly.',cjoin:'Join Free',cnote:'Free forever · Your data always yours · No spam',rst:'← New analysis',disc:'Indicative only. Does not replace professional medical diagnosis.',now:'You now',exp:'Expectancy: ~',
+lpt:'Your Preventive Lab Panel',lpp:'PERSONALIZED',lps:'Based on your biometric profile, these are the lab tests that could give you the most preventive value right now.',lcta:'Interpret my results in VIVIX',ldisc:'Once you have your results, upload them and VIVIX will interpret each value in the context of your complete profile.',labs:'Interpret lab results',labssub:'Upload your PDF · Analysis in seconds · No signup',ok:'✓ You\'re on the list!',
+bL:{low:'Underweight',ok:'Optimal',ov:'Overweight',o1:'Obesity I',o2:'Obesity II+'},
+wL:{d:'Dehydrated',lo:'Low',ok:'Acceptable',op:'Optimal',ex:'Slight excess'},
+sL:{sv:'Severe deprivation',in:'Insufficient',bo:'Borderline',op:'Optimal',ex:'Slight excess',hy:'Hypersomnia'},
+ai:(p)=>`You are a preventive medicine specialist. Analyze this biometric profile and give a personalized, evidence-based report. English only. Max 280 words. No markdown, no asterisks, no bullet points. Second person (you). Be direct, empathetic and scientific.\n\nProfile: ${p.age}yo, ${p.sx==='F'?'Female':'Male'}, ${p.co}, BMI ${p.bmi} (${p.bL}), water ${p.wa}L of ${p.wo}L optimal (${p.wL}), sleep ${p.sl}h (${p.sL}), physical activity ${p.actLabel}, smoking: ${p.smkLabel}. Vital Score: ${p.sc}/100. Life expectancy: ~${p.le} years (${p.yl} remaining).\n\nStructure: 1) Powerful personalized opener 2) What their score means practically 3) Biggest risk factor with biological impact 4) Main strength if any 5) Top 3 changes ordered by impact with timeframes 6) Honest motivating close.`,
+qa:(p,q)=>`Preventive medicine specialist. Profile: ${p.age}yo, ${p.sx==='F'?'F':'M'}, BMI ${p.bmi} (${p.bL}), water ${p.wa}L (${p.wL}), sleep ${p.sl}h (${p.sL}), activity ${p.actLabel}, smoking ${p.smkLabel}, Score ${p.sc}/100, expectancy ~${p.le}y. Answer in English, max 140 words, direct, evidence-based, second person (you), no markdown: ${q}`},
+
+es:{badge:'Motor IA — Claude Sonnet',h1:'Conoce Tu<br><em>Vital Score</em>',sub:'9 datos. Análisis científico personalizado por IA. Tu expectativa de vida real, tus riesgos, tu plan de acción.',s1:'Perfiles',s2:'Idiomas',s3:'Fuentes',step:'// 9 preguntas · 60 segundos',ft:'Tu perfil biométrico',fs:'Procesado localmente. Sin datos identificables sin tu consentimiento.',age:'Edad',sex:'Sexo biológico',wt:'Peso (kg)',ht:'Altura (cm)',ct:'País',act:'Actividad física',act0:'Sedentario',act1:'1–2 días/sem',act2:'3–4 días/sem',act3:'5+ días/sem',smk:'Tabaquismo',smk0:'Nunca',smk1:'Ex-fumador',smk2:'Fumador activo',wa:'Agua (litros/día)',sl:'Sueño (horas/noche)',sel:'— Selecciona —',m:'Masculino',f:'Femenino',btn:'✦ Analizar con IA',prv:'🔒 Sin cookies · Sin tracking · Datos anónimos',lt:'Analizando tu perfil...',ls:'La IA está procesando tu información',rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hidratación',slp:'Sueño',ll:'Tu línea de vida estimada',an:'Análisis IA Personalizado',ask:'Pregúntale a tu IA vital',chips:['¿Qué cambio primero?','Impacto de dormir más','Agua y cognición','Mi riesgo principal','Plan 30 días'],qph:'Pregunta sobre tu perfil...',cti:'Monitorea Tu Score Semanal',ctx:'Tu Vital Score cambia con tus hábitos. Monitoréalo cada semana.',cjoin:'Acceso Gratuito',cnote:'Gratis · Tus datos siempre tuyos · Sin spam',rst:'← Nuevo análisis',disc:'Orientativo. No sustituye diagnóstico médico profesional.',now:'Tú ahora',exp:'Expectativa: ~',
+lpt:'Tu Panel Preventivo de Laboratorio',lpp:'PERSONALIZADO',lps:'Basado en tu perfil biométrico, estos son los estudios de laboratorio que mayor valor preventivo te darían ahora mismo.',lcta:'Interpretar mis resultados en VIVIX',ldisc:'Cuando tengas tus resultados, súbelos aquí y VIVIX interpretará cada valor en el contexto de tu perfil completo.',labs:'Interpretar resultados de laboratorio',labssub:'Sube tu PDF · Análisis en segundos · Sin registro',ok:'✓ ¡En la lista!',
+bL:{low:'Bajo peso',ok:'Óptimo',ov:'Sobrepeso',o1:'Obesidad I',o2:'Obesidad II+'},
+wL:{d:'Deshidratado',lo:'Bajo',ok:'Aceptable',op:'Óptimo',ex:'Exceso leve'},
+sL:{sv:'Privación grave',in:'Insuficiente',bo:'Borderline',op:'Óptimo',ex:'Exceso leve',hy:'Hipersomnia'},
+ai:(p)=>`Eres médico especialista en medicina preventiva. Analiza este perfil y genera un informe personalizado en español. Sin markdown, sin asteriscos, sin listas. Máximo 280 palabras. Segunda persona (tú). Directo, empático, científico.\n\nPerfil: ${p.age}a, ${p.sx==='F'?'Femenino':'Masculino'}, ${p.co}, IMC ${p.bmi} (${p.bL}), agua ${p.wa}L de ${p.wo}L óptimo (${p.wL}), sueño ${p.sl}h (${p.sL}), actividad física ${p.actLabel}, tabaquismo: ${p.smkLabel}. Vital Score: ${p.sc}/100. Expectativa: ~${p.le} años (${p.yl} restantes).\n\nEstructura: 1) Apertura impactante personalizada 2) Qué significa el score prácticamente 3) Mayor factor de riesgo con impacto biológico 4) Mayor fortaleza si existe 5) Top 3 cambios por impacto con plazos 6) Cierre motivador y honesto.`,
+qa:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi} (${p.bL}), agua ${p.wa}L (${p.wL}), sueño ${p.sl}h (${p.sL}), actividad ${p.actLabel}, tabaquismo ${p.smkLabel}, Score ${p.sc}/100, expectativa ~${p.le}a. Responde en español, máx 140 palabras, directo, basado en evidencia, segunda persona, sin markdown: ${q}`},
+
+pt:{badge:'Motor IA — Claude Sonnet',h1:'Conheça Seu<br><em>Vital Score</em>',sub:'9 dados. Análise científica personalizada por IA.',s1:'Perfis',s2:'Idiomas',s3:'Fontes',step:'// 9 perguntas · 60 segundos',ft:'Seu perfil biométrico',fs:'Processado localmente.',age:'Idade',sex:'Sexo biológico',wt:'Peso (kg)',ht:'Altura (cm)',ct:'País',act:'Atividade física',act0:'Sedentário',act1:'1–2 dias/sem',act2:'3–4 dias/sem',act3:'5+ dias/sem',smk:'Tabagismo',smk0:'Nunca',smk1:'Ex-fumante',smk2:'Fumante ativo',wa:'Água (litros/dia)',sl:'Sono (horas/noite)',sel:'— Selecione —',m:'Masculino',f:'Feminino',btn:'✦ Analisar com IA',prv:'🔒 Sem cookies · Dados anônimos',lt:'Analisando seu perfil...',ls:'A IA está processando',rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hidratação',slp:'Sono',ll:'Sua linha de vida estimada',an:'Análise IA Personalizada',ask:'Pergunte à sua IA vital',chips:['O que mudo primeiro?','Impacto de dormir mais','Água e cognição','Meu risco principal','Plano 30 dias'],qph:'Pergunte sobre seu perfil...',cti:'Monitore Seu Score Semanal',ctx:'Seu Vital Score muda com seus hábitos.',cjoin:'Acesso Gratuito',cnote:'Gratuito · Seus dados sempre seus',rst:'← Nova análise',disc:'Indicativo. Não substitui diagnóstico médico.',now:'Você agora',exp:'Expectativa: ~',
+lpt:'Seu Painel Preventivo de Laboratório',lpp:'PERSONALIZADO',lps:'Com base no seu perfil biométrico, estes são os exames que mais valor preventivo trariam agora.',lcta:'Interpretar meus resultados no VIVIX',ldisc:'Quando tiver seus resultados, envie-os e o VIVIX interpretará cada valor no contexto do seu perfil.',labs:'Interpretar resultados de laboratório',labssub:'Envie seu PDF · Análise em segundos · Sem cadastro',ok:'✓ Na lista!',
+bL:{low:'Abaixo do peso',ok:'Ótimo',ov:'Sobrepeso',o1:'Obesidade I',o2:'Obesidade II+'},
+wL:{d:'Desidratado',lo:'Baixo',ok:'Aceitável',op:'Ótimo',ex:'Excesso leve'},
+sL:{sv:'Privação grave',in:'Insuficiente',bo:'Limítrofe',op:'Ótimo',ex:'Excesso leve',hy:'Hipersonia'},
+ai:(p)=>`Você é médico especialista. Analise em português. Sem markdown. Máx 280 palavras. Segunda pessoa.\n\nPerfil: ${p.age}a, ${p.sx==='F'?'Feminino':'Masculino'}, ${p.co}, IMC ${p.bmi}, água ${p.wa}L, sono ${p.sl}h, atividade ${p.actLabel}, tabagismo ${p.smkLabel}. Score: ${p.sc}/100. Expectativa: ~${p.le} anos.`,
+qa:(p,q)=>`Médico preventivo. Perfil: ${p.age}a, IMC ${p.bmi}, água ${p.wa}L, sono ${p.sl}h, Score ${p.sc}/100. Responda em português, máx 140 palavras, sem markdown: ${q}`},
+
+fr:{badge:'Moteur IA — Claude Sonnet',h1:'Connaissez Votre<br><em>Vital Score</em>',sub:'9 données. Analyse scientifique personnalisée par IA.',s1:'Profils',s2:'Langues',s3:'Sources',step:'// 9 questions · 60 secondes',ft:'Votre profil biométrique',fs:'Traité localement.',age:'Âge',sex:'Sexe biologique',wt:'Poids (kg)',ht:'Taille (cm)',ct:'Pays',act:'Activité physique',act0:'Sédentaire',act1:'1–2 jours/sem',act2:'3–4 jours/sem',act3:'5+ jours/sem',smk:'Tabagisme',smk0:'Jamais',smk1:'Ex-fumeur',smk2:'Fumeur actuel',wa:"Eau (litres/jour)",sl:'Sommeil (heures/nuit)',sel:'— Sélectionner —',m:'Masculin',f:'Féminin',btn:"✦ Analyser avec l'IA",prv:'🔒 Sans cookies · Données anonymes',lt:'Analyse en cours...',ls:"L'IA traite vos informations",rl:'VITAL SCORE GLOBAL',bmi:'IMC',hyd:'Hydratation',slp:'Sommeil',ll:'Votre ligne de vie estimée',an:'Analyse IA Personnalisée',ask:'Demandez à votre IA vitale',chips:['Que changer en premier?','Impact de plus de sommeil','Eau et cognition','Mon risque principal','Plan 30 jours'],qph:'Posez une question...',cti:'Suivez Votre Score Chaque Semaine',ctx:'Votre Vital Score évolue avec vos habitudes.',cjoin:'Accès Gratuit',cnote:'Gratuit · Vos données toujours à vous',rst:'← Nouvelle analyse',disc:'Indicatif. Ne remplace pas un diagnostic médical.',now:'Vous maintenant',exp:'Espérance: ~',
+lpt:'Votre Bilan Préventif de Laboratoire',lpp:'PERSONNALISÉ',lps:'Sur la base de votre profil biométrique, voici les examens qui vous apporteraient le plus de valeur préventive.',lcta:'Interpréter mes résultats dans VIVIX',ldisc:"Une fois vos résultats disponibles, importez-les et VIVIX interprétera chaque valeur dans le contexte de votre profil.",labs:'Interpréter les résultats de laboratoire',labssub:'Téléchargez votre PDF · Analyse en secondes · Sans inscription',ok:'✓ Sur la liste!',
+bL:{low:'Insuffisance pondérale',ok:'Optimal',ov:'Surpoids',o1:'Obésité I',o2:'Obésité II+'},
+wL:{d:'Déshydraté',lo:'Bas',ok:'Acceptable',op:'Optimal',ex:'Léger excès'},
+sL:{sv:'Privation grave',in:'Insuffisant',bo:'Limite',op:'Optimal',ex:'Léger excès',hy:'Hypersomnie'},
+ai:(p)=>`Vous êtes médecin spécialiste. Analysez en français. Sans markdown. Max 280 mots. Deuxième personne.\n\nProfil: ${p.age}ans, ${p.sx==='F'?'Féminin':'Masculin'}, ${p.co}, IMC ${p.bmi}, eau ${p.wa}L, sommeil ${p.sl}h, activité ${p.actLabel}, tabagisme ${p.smkLabel}. Score: ${p.sc}/100. Espérance: ~${p.le} ans.`,
+qa:(p,q)=>`Médecin préventif. Profil: ${p.age}ans, IMC ${p.bmi}, eau ${p.wa}L, sommeil ${p.sl}h, Score ${p.sc}/100. Répondez en français, max 140 mots, sans markdown: ${q}`},
+
+hi:{badge:'AI इंजन — Claude Sonnet',h1:'अपना<br><em>Vital Score</em> जानें',sub:'9 डेटा बिंदु। AI द्वारा व्यक्तिगत वैज्ञानिक विश्लेषण।',s1:'प्रोफाइल',s2:'भाषाएं',s3:'स्रोत',step:'// 9 प्रश्न · 60 सेकंड',ft:'आपका बायोमेट्रिक प्रोफाइल',fs:'स्थानीय रूप से संसाधित।',age:'आयु',sex:'जैविक लिंग',wt:'वजन (kg)',ht:'ऊंचाई (cm)',ct:'देश',act:'शारीरिक गतिविधि',act0:'निष्क्रिय',act1:'1–2 दिन/सप्ताह',act2:'3–4 दिन/सप्ताह',act3:'5+ दिन/सप्ताह',smk:'धूम्रपान',smk0:'कभी नहीं',smk1:'पूर्व धूम्रपायी',smk2:'वर्तमान धूम्रपायी',wa:'पानी (लीटर/दिन)',sl:'नींद (घंटे/रात)',sel:'— चुनें —',m:'पुरुष',f:'महिला',btn:'✦ AI से विश्लेषण करें',prv:'🔒 कोई कुकीज़ नहीं · गुमनाम डेटा',lt:'विश्लेषण हो रहा है...',ls:'AI आपकी जानकारी संसाधित कर रहा है',rl:'ग्लोबल वाइटल स्कोर',bmi:'BMI',hyd:'जलयोजन',slp:'नींद',ll:'आपकी अनुमानित जीवन रेखा',an:'व्यक्तिगत AI विश्लेषण',ask:'अपने AI से पूछें',chips:['पहले क्या बदलूं?','अधिक नींद का प्रभाव','पानी और संज्ञान','मुख्य जोखिम','30 दिन योजना'],qph:'अपना प्रश्न पूछें...',cti:'साप्ताहिक स्कोर ट्रैक करें',ctx:'आपका Vital Score आपकी आदतों से बदलता है।',cjoin:'मुफ्त पहुंच',cnote:'मुफ्त · आपका डेटा हमेशा आपका',rst:'← नया विश्लेषण',disc:'संकेतात्मक। पेशेवर चिकित्सा का विकल्प नहीं।',now:'आप अभी',exp:'प्रत्याशा: ~',
+lpt:'आपका निवारक प्रयोगशाला पैनल',lpp:'व्यक्तिगत',lps:'आपके बायोमेट्रिक प्रोफाइल के आधार पर, ये वे परीक्षण हैं जो अभी सबसे अधिक निवारक मूल्य देंगे।',lcta:'VIVIX में मेरे परिणाम व्याख्या करें',ldisc:'जब आपके परिणाम आ जाएं, उन्हें यहां अपलोड करें।',labs:'प्रयोगशाला परिणाम समझें',labssub:'PDF अपलोड करें · सेकंड में विश्लेषण',ok:'✓ सूची में!',
+bL:{low:'कम वजन',ok:'इष्टतम',ov:'अधिक वजन',o1:'मोटापा I',o2:'मोटापा II+'},
+wL:{d:'निर्जलित',lo:'कम',ok:'स्वीकार्य',op:'इष्टतम',ex:'हल्का अधिक'},
+sL:{sv:'गंभीर',in:'अपर्याप्त',bo:'सीमा',op:'इष्टतम',ex:'हल्का अधिक',hy:'अतिनिद्रा'},
+ai:(p)=>`You are a preventive medicine specialist. Respond in Hindi (Devanagari script). No markdown. Max 280 words. Second person.\n\nProfile: ${p.age}y, ${p.sx==='F'?'Female':'Male'}, ${p.co}, BMI ${p.bmi}, water ${p.wa}L, sleep ${p.sl}h, activity ${p.actLabel}, smoking ${p.smkLabel}. Score: ${p.sc}/100. Expectancy: ~${p.le} years.`,
+qa:(p,q)=>`Preventive doctor. Profile: ${p.age}y, BMI ${p.bmi}, water ${p.wa}L, sleep ${p.sl}h, Score ${p.sc}/100. Answer in Hindi, max 140 words, no markdown: ${q}`},
+
+zh:{badge:'AI引擎 — Claude Sonnet',h1:'了解您的<br><em>活力评分</em>',sub:'9个数据点。AI个性化科学分析。',s1:'档案数',s2:'语言',s3:'来源',step:'// 9个问题 · 60秒',ft:'您的生物特征档案',fs:'本地处理。未经您同意不存储可识别数据。',age:'年龄',sex:'生理性别',wt:'体重 (kg)',ht:'身高 (cm)',ct:'国家',act:'体育活动',act0:'久坐',act1:'1–2天/周',act2:'3–4天/周',act3:'5+天/周',smk:'吸烟情况',smk0:'从不',smk1:'已戒烟',smk2:'当前吸烟',wa:'每日饮水量（升）',sl:'每晚睡眠小时数',sel:'— 请选择 —',m:'男性',f:'女性',btn:'✦ AI分析',prv:'🔒 无cookie · 匿名数据',lt:'正在分析您的档案...',ls:'AI正在处理您的信息',rl:'全球生命活力评分',bmi:'BMI',hyd:'水分状态',slp:'睡眠',ll:'您的预计生命线',an:'个性化AI分析',ask:'向您的AI询问',chips:['我首先改变什么？','更多睡眠的影响','水分与认知','我的主要风险','30天计划'],qph:'询问您的档案相关问题...',cti:'每周追踪您的评分',ctx:'您的活力评分随习惯而变化。',cjoin:'免费加入',cnote:'免费 · 数据始终属于您',rst:'← 重新分析',disc:'仅供参考。不替代专业医疗诊断。',now:'您现在',exp:'预期: ~',
+lpt:'您的预防性实验室检测套餐',lpp:'个性化',lps:'根据您的生物特征档案，这些是目前最具预防价值的实验室检测项目。',lcta:'在VIVIX解读我的检测结果',ldisc:'收到检测结果后，上传至VIVIX，我们将结合您的完整档案解读每项数值。',labs:'解读检验报告',labssub:'上传PDF · 秒速分析 · 无需注册',ok:'✓ 已加入!',
+bL:{low:'体重不足',ok:'正常',ov:'超重',o1:'肥胖I级',o2:'肥胖II级+'},
+wL:{d:'脱水',lo:'不足',ok:'尚可',op:'最佳',ex:'轻微过量'},
+sL:{sv:'严重睡眠剥夺',in:'不足',bo:'临界',op:'最佳',ex:'轻微过量',hy:'嗜睡'},
+ai:(p)=>`你是预防医学专科医生。用中文分析此档案。无markdown。最多280字。第二人称（您）。\n\n档案：${p.age}岁，${p.sx==='F'?'女性':'男性'}，${p.co}，BMI ${p.bmi}，饮水${p.wa}L，睡眠${p.sl}h，运动${p.actLabel}，吸烟${p.smkLabel}。评分：${p.sc}/100。预期：~${p.le}岁。`,
+qa:(p,q)=>`预防医学医生。档案：${p.age}岁，BMI ${p.bmi}，饮水${p.wa}L，睡眠${p.sl}h，评分${p.sc}/100。用中文回答，最多140字，无markdown：${q}`}
 };
 
 let lg='en',P={},lk=false;
+let actVal=null,smkVal=null;
+
 const CO={MX:'Mexico',US:'USA',CO:'Colombia',AR:'Argentina',BR:'Brazil',CL:'Chile',PE:'Peru',ES:'Spain',FR:'France',IN:'India',CN:'China',GB:'UK',DE:'Germany',OTHER:'Other'};
 
+// ─── TOGGLE SELECTOR ───────────────────────
+function selectToggle(groupId,btn){
+  document.querySelectorAll('#'+groupId+' .tgl').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(groupId==='actGroup') actVal=btn.dataset.val;
+  if(groupId==='smkGroup') smkVal=btn.dataset.val;
+}
+
+// ─── LANG ──────────────────────────────────
 function setLang(l){
   lg=l;
   document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.textContent===l.toUpperCase()));
@@ -636,6 +479,10 @@ function setLang(l){
   s('t-wt',t.wt+' <span class="req">*</span>');
   s('t-ht',t.ht+' <span class="req">*</span>');
   s('t-ct',t.ct+' <span class="req">*</span>');
+  s('t-act',t.act+' <span class="req">*</span>');
+  s('t-act0',t.act0);s('t-act1',t.act1);s('t-act2',t.act2);s('t-act3',t.act3);
+  s('t-smk',t.smk+' <span class="req">*</span>');
+  s('t-smk0',t.smk0);s('t-smk1',t.smk1);s('t-smk2',t.smk2);
   s('t-wa',t.wa+' <span class="req">*</span>');
   s('t-sl',t.sl+' <span class="req">*</span>');
   s('t-sel',t.sel);s('t-m',t.m);s('t-f',t.f);
@@ -645,9 +492,8 @@ function setLang(l){
   s('t-ll',t.ll);s('t-an',t.an);s('t-ask',t.ask);
   s('t-cti',t.cti);s('t-ctx',t.ctx);s('t-cjoin',t.cjoin);s('t-cnote',t.cnote);
   s('t-rst',t.rst);s('t-disc',t.disc);
-  const labsT={en:{labs:'Interpret lab results',labssub:'Upload your PDF · Analysis in seconds · No signup'},es:{labs:'Interpretar resultados de laboratorio',labssub:'Sube tu PDF · Análisis en segundos · Sin registro'},pt:{labs:'Interpretar resultados de laboratório',labssub:'Envie seu PDF · Análise em segundos · Sem cadastro'},fr:{labs:'Interpréter les résultats de laboratoire',labssub:'Téléchargez votre PDF · Analyse en secondes · Sans inscription'},hi:{labs:'प्रयोगशाला परिणाम समझें',labssub:'PDF अपलोड करें · सेकंड में विश्लेषण'},zh:{labs:'解读检验报告',labssub:'上传PDF · 秒速分析 · 无需注册'}};
-  const lt=labsT[l]||labsT.en;
-  s('t-labs',lt.labs);s('t-labssub',lt.labssub);
+  s('t-lpt',t.lpt);s('t-lpp',t.lpp);s('t-lps',t.lps);s('t-lcta',t.lcta);s('t-ldisc',t.ldisc);
+  s('t-labs',t.labs);s('t-labssub',t.labssub);
   const el=document.getElementById('qi');if(el)el.placeholder=t.qph;
   const ch=document.getElementById('chipsEl');
   if(ch){ch.innerHTML='';t.chips.forEach(c=>{const el=document.createElement('div');el.className='chip';el.textContent=c;el.onclick=()=>askQ(el,c);ch.appendChild(el);})}
@@ -658,6 +504,135 @@ document.getElementById('sS').oninput=e=>document.getElementById('sV').textConte
 
 function ctr(el,to,d=2000){let st=null;const r=ts=>{if(!st)st=ts;const p=Math.min((ts-st)/d,1);el.textContent=Math.floor(p*to).toLocaleString();if(p<1)requestAnimationFrame(r);};requestAnimationFrame(r);}
 
+// ─── ACTIVITY & SMOKING LABELS ──────────────
+function getActLabel(val,t){
+  if(val==='0') return t.act0;
+  if(val==='1') return t.act1;
+  if(val==='3') return t.act2;
+  if(val==='5') return t.act3;
+  return '';
+}
+function getSmkLabel(val,t){
+  if(val==='never') return t.smk0;
+  if(val==='ex') return t.smk1;
+  if(val==='yes') return t.smk2;
+  return '';
+}
+
+// ─── SCORE CALCULATION ──────────────────────
+function calcScore(B,W,S,actVal,smkVal){
+  // Base: BMI 25%, Hydration 25%, Sleep 25%, Activity 15%, Smoking 10%
+  const actScore=actVal==='5'?100:actVal==='3'?80:actVal==='1'?55:25;
+  const smkScore=smkVal==='never'?100:smkVal==='ex'?65:10;
+  return Math.round(B.s*.25+W.s*.25+S.s*.25+actScore*.15+smkScore*.10);
+}
+
+function calcLifeExpectancy(sx,sl,wa,wo,bmi,actVal,smkVal){
+  let base=sx==='F'?76:72;
+  // Sleep
+  base+=(sl<6?-4:sl<7?-1.5:sl>9?-2:2);
+  // Hydration
+  const wr=wa/wo;
+  base+=(wr<0.5?-3:wr<0.75?-1:wr>=0.9&&wr<=1.3?2.5:0);
+  // BMI
+  base+=(bmi<18.5?-2:bmi<25?2:bmi<30?-1:bmi<35?-3:-6);
+  // Activity
+  base+=(actVal==='5'?3:actVal==='3'?1.5:actVal==='1'?0:-2);
+  // Smoking
+  base+=(smkVal==='yes'?-8:smkVal==='ex'?-2:0);
+  return Math.round(base);
+}
+
+// ─── LAB SUGGESTIONS ENGINE ─────────────────
+function buildLabStudies(P,t){
+  const studies=[];
+  const bmi=parseFloat(P.bmi);
+
+  // ALWAYS recommended (base panel for everyone 25+)
+  studies.push({ico:'🩸',name:lg==='es'?'Biometría hemática completa':lg==='pt'?'Hemograma completo':lg==='fr'?'Numération formule sanguine':lg==='zh'?'全血细胞计数':lg==='hi'?'पूर्ण रक्त गणना':'Complete blood count (CBC)',reason:lg==='es'?'Panel base: detecta anemia, infecciones y estado inmune general.':lg==='pt'?'Painel base: detecta anemia, infecções e estado imune geral.':lg==='fr'?'Bilan de base: détecte anémie, infections et état immunitaire.':lg==='zh'?'基础检查：检测贫血、感染和整体免疫状态。':lg==='hi'?'आधारभूत परीक्षण: एनीमिया, संक्रमण और प्रतिरक्षा स्थिति।':'Base panel: detects anemia, infections and general immune status.',priority:'routine'});
+
+  studies.push({ico:'🫀',name:lg==='es'?'Perfil lipídico completo':lg==='pt'?'Perfil lipídico':lg==='fr'?'Bilan lipidique':lg==='zh'?'血脂全套':lg==='hi'?'लिपिड प्रोफाइल':'Lipid panel (cholesterol + triglycerides)',reason:lg==='es'?'Colesterol total, LDL, HDL y triglicéridos. Riesgo cardiovascular directo.':lg==='pt'?'Colesterol total, LDL, HDL e triglicerídeos. Risco cardiovascular direto.':lg==='fr'?'Cholestérol total, LDL, HDL et triglycérides. Risque cardiovasculaire direct.':lg==='zh'?'总胆固醇、LDL、HDL和甘油三酯。直接评估心血管风险。':lg==='hi'?'कोलेस्ट्रॉल, LDL, HDL और ट्राइग्लिसराइड्स।':'Total cholesterol, LDL, HDL and triglycerides. Direct cardiovascular risk.',priority:'routine'});
+
+  studies.push({ico:'☀️',name:lg==='es'?'Vitamina D (25-OH)':lg==='pt'?'Vitamina D':lg==='fr'?'Vitamine D':lg==='zh'?'维生素D':lg==='hi'?'विटामिन D':'Vitamin D (25-OH)',reason:lg==='es'?'Deficiencia afecta inmunidad, huesos y estado de ánimo. >70% de adultos urbanos tienen niveles bajos.':lg==='pt'?'Deficiência afeta imunidade, ossos e humor. >70% dos adultos urbanos têm níveis baixos.':lg==='fr'?'Carence affecte immunité, os et humeur. >70% des adultes urbains sont déficients.':lg==='zh'?'缺乏影响免疫力、骨骼和情绪。超过70%的城市成年人水平偏低。':lg==='hi'?'कमी प्रतिरक्षा, हड्डियों और मूड को प्रभावित करती है।':'Deficiency impacts immunity, bones and mood. >70% of urban adults have low levels.',priority:'routine'});
+
+  // BMI-based
+  if(bmi>=25){
+    studies.push({ico:'🍬',name:lg==='es'?'Glucosa en ayuno + HbA1c':lg==='pt'?'Glicose em jejum + HbA1c':lg==='fr'?'Glycémie à jeun + HbA1c':lg==='zh'?'空腹血糖 + 糖化血红蛋白':lg==='hi'?'उपवास ग्लूकोज + HbA1c':'Fasting glucose + HbA1c',reason:lg==='es'?'Con tu IMC actual, el riesgo de prediabetes o resistencia a la insulina es significativo.':lg==='pt'?'Com seu IMC atual, o risco de pré-diabetes ou resistência à insulina é significativo.':lg==='fr'?'Avec votre IMC actuel, le risque de prédiabète ou résistance à l\'insuline est significatif.':lg==='zh'?'根据您目前的BMI，患前驱糖尿病或胰岛素抵抗的风险显著。':lg==='hi'?'आपके वर्तमान BMI के साथ, प्रीडायबिटीज का खतरा महत्वपूर्ण है।':'With your current BMI, prediabetes or insulin resistance risk is significant.',priority:'priority'});
+  }
+  if(bmi>=30){
+    studies.push({ico:'🫁',name:lg==='es'?'Insulina en ayuno + HOMA-IR':lg==='pt'?'Insulina em jejum + HOMA-IR':lg==='fr'?'Insuline à jeun + HOMA-IR':lg==='zh'?'空腹胰岛素 + HOMA-IR':lg==='hi'?'उपवास इंसुलिन + HOMA-IR':'Fasting insulin + HOMA-IR',reason:lg==='es'?'Indicador directo de resistencia a la insulina. Prioritario con obesidad.':lg==='pt'?'Indicador direto de resistência à insulina. Prioritário com obesidade.':lg==='fr'?'Indicateur direct de résistance à l\'insuline. Prioritaire en cas d\'obésité.':lg==='zh'?'胰岛素抵抗的直接指标。肥胖时为优先检测项目。':lg==='hi'?'इंसुलिन प्रतिरोध का सीधा संकेतक।':'Direct indicator of insulin resistance. Priority with obesity.',priority:'urgent'});
+  }
+
+  // Sleep-based
+  if(parseFloat(P.sl)<6){
+    studies.push({ico:'🧠',name:lg==='es'?'Cortisol matutino + TSH':lg==='pt'?'Cortisol matinal + TSH':lg==='fr'?'Cortisol matinal + TSH':lg==='zh'?'晨间皮质醇 + 促甲状腺激素':lg==='hi'?'सुबह का कोर्टिसोल + TSH':'Morning cortisol + TSH',reason:lg==='es'?'La privación crónica de sueño eleva el cortisol y puede suprimir la tiroides.':lg==='pt'?'A privação crônica de sono eleva o cortisol e pode suprimir a tireoide.':lg==='fr'?'La privation chronique de sommeil élève le cortisol et peut supprimer la thyroïde.':lg==='zh'?'慢性睡眠剥夺会升高皮质醇并可能抑制甲状腺功能。':lg==='hi'?'पुरानी नींद की कमी कोर्टिसोल बढ़ाती है।':'Chronic sleep deprivation elevates cortisol and may suppress thyroid function.',priority:'priority'});
+  }
+
+  // Hydration-based
+  if(P.wa<1.5){
+    studies.push({ico:'🫘',name:lg==='es'?'Función renal (BUN + creatinina + ácido úrico)':lg==='pt'?'Função renal (BUN + creatinina + ácido úrico)':lg==='fr'?'Fonction rénale (BUN + créatinine + acide urique)':lg==='zh'?'肾功能（BUN + 肌酐 + 尿酸）':lg==='hi'?'गुर्दे का कार्य (BUN + क्रिएटिनिन + यूरिक एसिड)':'Kidney function (BUN + creatinine + uric acid)',reason:lg==='es'?'Tu consumo de agua actual puede estar estresando tus riñones a largo plazo.':lg==='pt'?'Seu consumo atual de água pode estar estressando seus rins a longo prazo.':lg==='fr'?'Votre consommation d\'eau actuelle peut stresser vos reins à long terme.':lg==='zh'?'您目前的饮水量可能正在长期给肾脏造成压力。':lg==='hi'?'आपका वर्तमान पानी का सेवन गुर्दों पर दबाव डाल सकता है।':'Your current water intake may be stressing your kidneys long-term.',priority:'priority'});
+  }
+
+  // Smoking-based
+  if(P.smkVal==='yes'){
+    studies.push({ico:'🫁',name:lg==='es'?'Función hepática (ALT, AST, GGT) + PCR ultrasensible':lg==='pt'?'Função hepática + PCR ultrassensível':lg==='fr'?'Fonction hépatique + CRP ultrasensible':lg==='zh'?'肝功能 + 超敏C反应蛋白':lg==='hi'?'लिवर फंक्शन + अल्ट्रासेंसिटिव CRP':'Liver function (ALT, AST, GGT) + High-sensitivity CRP',reason:lg==='es'?'El tabaquismo activo genera inflamación sistémica y daño hepático progresivo.':lg==='pt'?'O tabagismo ativo gera inflamação sistêmica e dano hepático progressivo.':lg==='fr'?'Le tabagisme actif génère une inflammation systémique et des dommages hépatiques.':lg==='zh'?'吸烟会导致全身性炎症和进行性肝损伤。':lg==='hi'?'सक्रिय धूम्रपान से प्रणालीगत सूजन होती है।':'Active smoking generates systemic inflammation and progressive liver damage.',priority:'urgent'});
+  }
+  if(P.smkVal==='ex'){
+    studies.push({ico:'💨',name:lg==='es'?'PCR ultrasensible + función pulmonar (espirometría)':lg==='pt'?'PCR ultrassensível + função pulmonar':lg==='fr'?'CRP ultrasensible + fonction pulmonaire':lg==='zh'?'超敏CRP + 肺功能（肺活量测定）':lg==='hi'?'अल्ट्रासेंसिटिव CRP + फेफड़ों की कार्यक्षमता':'High-sensitivity CRP + pulmonary function (spirometry)',reason:lg==='es'?'Como ex-fumador, monitorear inflamación residual y capacidad pulmonar es clave.':lg==='pt'?'Como ex-fumante, monitorar inflamação residual e capacidade pulmonar é essencial.':lg==='fr'?'En tant qu\'ex-fumeur, surveiller l\'inflammation résiduelle et la capacité pulmonaire est essentiel.':lg==='zh'?'作为戒烟者，监测残余炎症和肺活量至关重要。':lg==='hi'?'पूर्व धूम्रपायी के रूप में, अवशिष्ट सूजन और फेफड़ों की क्षमता की निगरानी महत्वपूर्ण है।':'As ex-smoker, monitoring residual inflammation and lung capacity is key.',priority:'priority'});
+  }
+
+  // Age-based additions
+  const age=parseInt(P.age);
+  if(age>=35){
+    studies.push({ico:'⚡',name:lg==='es'?'Ferritina + hierro sérico + transferrina':lg==='pt'?'Ferritina + ferro sérico + transferrina':lg==='fr'?'Ferritine + fer sérique + transferrine':lg==='zh'?'铁蛋白 + 血清铁 + 转铁蛋白':lg==='hi'?'फेरिटिन + सीरम आयरन + ट्रांसफेरिन':'Ferritin + serum iron + transferrin',reason:lg==='es'?'La deficiencia de hierro afecta energía, cognición y sistema inmune. Frecuente e invisible.':lg==='pt'?'A deficiência de ferro afeta energia, cognição e sistema imune. Frequente e invisível.':lg==='fr'?'La carence en fer affecte l\'énergie, la cognition et l\'immunité. Fréquente et invisible.':lg==='zh'?'缺铁影响能量、认知和免疫系统。常见且不易察觉。':lg==='hi'?'आयरन की कमी ऊर्जा, संज्ञान और प्रतिरक्षा को प्रभावित करती है।':'Iron deficiency affects energy, cognition and immune system. Common and invisible.',priority:'routine'});
+  }
+  if(age>=40){
+    studies.push({ico:'❤️',name:lg==='es'?'PCR ultrasensible + homocisteína':lg==='pt'?'PCR ultrassensível + homocisteína':lg==='fr'?'CRP ultrasensible + homocystéine':lg==='zh'?'超敏CRP + 同型半胱氨酸':lg==='hi'?'अल्ट्रासेंसिटिव CRP + होमोसिस्टीन':'High-sensitivity CRP + homocysteine',reason:lg==='es'?'Marcadores de inflamación silenciosa y riesgo cardiovascular oculto, críticos a partir de los 40.':lg==='pt'?'Marcadores de inflamação silenciosa e risco cardiovascular oculto, críticos a partir dos 40.':lg==='fr'?'Marqueurs d\'inflammation silencieuse et risque cardiovasculaire caché, critiques après 40 ans.':lg==='zh'?'隐性炎症和隐匿性心血管风险标志物，40岁后至关重要。':lg==='hi'?'मौन सूजन और छिपे हुए हृदय संबंधी जोखिम के मार्कर।':'Silent inflammation and hidden cardiovascular risk markers, critical after 40.',priority:age>=45?'urgent':'priority'});
+  }
+
+  // Limit to top 5 most relevant
+  return studies.slice(0,6);
+}
+
+// ─── RENDER LAB PANEL ───────────────────────
+function renderLabPanel(studies){
+  const panel=document.getElementById('labsPanel');
+  const container=document.getElementById('labsStudies');
+  container.innerHTML='';
+
+  const priorityMap={routine:'badge-routine',priority:'badge-priority',urgent:'badge-urgent'};
+  const priorityClass={routine:'',priority:'priority-high',urgent:'priority-critical'};
+  const priorityLabel={
+    routine:{es:'Preventivo',en:'Preventive',pt:'Preventivo',fr:'Préventif',hi:'निवारक',zh:'预防性'},
+    priority:{es:'Prioritario',en:'Priority',pt:'Prioritário',fr:'Prioritaire',hi:'प्राथमिकता',zh:'优先'},
+    urgent:{es:'Urgente',en:'Urgent',pt:'Urgente',fr:'Urgent',hi:'तत्काल',zh:'紧急'}
+  };
+
+  studies.forEach(s=>{
+    const div=document.createElement('div');
+    div.className='lab-study '+priorityClass[s.priority];
+    div.innerHTML=`
+      <div class="lab-study-ico">${s.ico}</div>
+      <div class="lab-study-body">
+        <div class="lab-study-name">${s.name}</div>
+        <div class="lab-study-reason">${s.reason}</div>
+        <span class="lab-study-badge ${priorityMap[s.priority]}">${priorityLabel[s.priority][lg]||priorityLabel[s.priority].en}</span>
+      </div>`;
+    container.appendChild(div);
+  });
+
+  // Pass profile to labs page via localStorage for contextualized interpretation
+  try{
+    localStorage.setItem('vivix_profile',JSON.stringify({
+      age:P.age,sx:P.sx,bmi:P.bmi,co:P.co,wa:P.wa,sl:P.sl,
+      actVal:P.actVal,smkVal:P.smkVal,sc:P.sc,le:P.le,lang:lg
+    }));
+  }catch(e){}
+
+  panel.style.display='block';
+}
+
+// ─── MAIN FLOW ──────────────────────────────
 function go(){
   const t=T[lg];
   const age=+document.getElementById('age').value;
@@ -667,30 +642,56 @@ function go(){
   const co=document.getElementById('country').value;
   const wa=+document.getElementById('wS').value;
   const sl=+document.getElementById('sS').value;
-  if(!age||!sx||!wt||!ht||!co){alert('Please complete all fields.');return;}
+
+  if(!age||!sx||!wt||!ht||!co){alert(lg==='es'?'Completa todos los campos.':'Please complete all fields.');return;}
+  if(actVal===null){alert(lg==='es'?'Selecciona tu nivel de actividad física.':'Please select your physical activity level.');return;}
+  if(smkVal===null){alert(lg==='es'?'Selecciona tu situación de tabaquismo.':'Please select your smoking status.');return;}
+
   const hm=ht/100,bmi=wt/(hm*hm);
   const wo=sx==='F'?2.7:3.7,wr=wa/wo;
+
   const B=bmi<18.5?{s:55,l:t.bL.low,c:'cb'}:bmi<25?{s:100,l:t.bL.ok,c:'cg'}:bmi<30?{s:70,l:t.bL.ov,c:'cw'}:bmi<35?{s:45,l:t.bL.o1,c:'cb'}:{s:25,l:t.bL.o2,c:'cb'};
   const W=wr<0.5?{s:30,l:t.wL.d,c:'cb'}:wr<0.75?{s:55,l:t.wL.lo,c:'cw'}:wr<0.9?{s:75,l:t.wL.ok,c:'cw'}:wr<=1.3?{s:100,l:t.wL.op,c:'cg'}:{s:80,l:t.wL.ex,c:'cw'};
   const S=sl<5?{s:20,l:t.sL.sv,c:'cb'}:sl<6?{s:45,l:t.sL.in,c:'cb'}:sl<7?{s:70,l:t.sL.bo,c:'cw'}:sl<=9?{s:100,l:t.sL.op,c:'cg'}:sl<=10?{s:75,l:t.sL.ex,c:'cw'}:{s:50,l:t.sL.hy,c:'cw'};
-  const sc=Math.round(B.s*.30+W.s*.35+S.s*.35);
-  const le=Math.round((sx==='F'?76:72)+(sl<6?-4:sl<7?-1.5:sl>9?-2:2)+(wr<0.5?-3:wr<0.75?-1:wr>=0.9&&wr<=1.3?2.5:0)+(bmi<18.5?-2:bmi<25?2:bmi<30?-1:bmi<35?-3:-6));
-  P={age,sx,wt,ht,co:CO[co]||co,wa,sl,bmi:bmi.toFixed(1),wo,bL:B.l,wL:W.l,sL:S.l,sc,le,yl:Math.max(0,le-age)};
+
+  const sc=calcScore(B,W,S,actVal,smkVal);
+  const le=calcLifeExpectancy(sx,sl,wa,wo,bmi,actVal,smkVal);
+  const actLabel=getActLabel(actVal,t);
+  const smkLabel=getSmkLabel(smkVal,t);
+
+  P={age,sx,wt,ht,co:CO[co]||co,wa,sl,bmi:bmi.toFixed(1),wo,bL:B.l,wL:W.l,sL:S.l,sc,le,yl:Math.max(0,le-age),actVal,smkVal,actLabel,smkLabel};
+
   document.getElementById('formSec').style.display='none';
   document.getElementById('loadSec').style.display='block';
+
   ['s1','s2','s3','s4'].forEach((id,i)=>setTimeout(()=>{if(i>0)document.getElementById(['s1','s2','s3','s4'][i-1]).classList.add('ok');document.getElementById(id).classList.add('on');},i*600));
+
   setTimeout(()=>{
     document.getElementById('loadSec').style.display='none';
     document.getElementById('resSec').style.display='block';
-    document.getElementById('rp').textContent=`${age}y · ${sx==='F'?T[lg].f:T[lg].m} · BMI ${P.bmi} · ${CO[co]||co}`;
+
+    document.getElementById('rp').textContent=`${age}y · ${sx==='F'?t.f:t.m} · BMI ${P.bmi} · ${CO[co]||co}`;
     document.getElementById('rsn').textContent=sc;
+
     const circ=2*Math.PI*65;
     setTimeout(()=>{document.getElementById('ringF').style.strokeDashoffset=circ-(sc/100)*circ;},300);
+
     vt('vBmi',P.bmi,B.l,B.c);vt('vWat',wa.toFixed(1)+'L',W.l,W.c);vt('vSlp',sl.toFixed(1)+'h',S.l,S.c);
-    setTimeout(()=>{document.getElementById('lbv').style.width=Math.min(100,age)+'%';document.getElementById('lbp').style.width=Math.min(100,le)+'%';},400);
-    document.getElementById('lbAge').textContent=`${T[lg].now} (${age})`;
-    document.getElementById('lbExp').textContent=`${T[lg].exp}${le} yrs`;
+
+    setTimeout(()=>{
+      document.getElementById('lbv').style.width=Math.min(100,age)+'%';
+      document.getElementById('lbp').style.width=Math.min(100,le)+'%';
+    },400);
+
+    document.getElementById('lbAge').textContent=`${t.now} (${age})`;
+    document.getElementById('lbExp').textContent=`${t.exp}${le} yrs`;
+
     setLang(lg);
+
+    // Render lab panel
+    const studies=buildLabStudies(P,T[lg]);
+    renderLabPanel(studies);
+
     runAI();
     window.scrollTo({top:0,behavior:'smooth'});
   },2800);
@@ -702,19 +703,12 @@ function vt(id,val,lbl,cls){
 }
 
 async function callAI(msg,cb){
-  const r=await fetch('/api/chat',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({message:msg})
-  });
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});
   if(!r.ok) throw new Error('API error '+r.status);
   const data=await r.json();
   if(data.text){
     const words=data.text.split(' ');
-    for(const word of words){
-      cb(word+' ');
-      await new Promise(resolve=>setTimeout(resolve,25));
-    }
+    for(const word of words){cb(word+' ');await new Promise(resolve=>setTimeout(resolve,25));}
   }
 }
 
@@ -727,7 +721,7 @@ async function runAI(){
   try{
     await callAI(t.ai(P),tok=>{tx.textContent+=tok;});
   }catch(e){
-    tx.textContent=`Vital Score: ${P.sc}/100. ${P.yl} years remaining at current habits. ${P.sl<7?'Sleep is your highest priority.':''} ${P.wa<P.wo*.75?'Hydration needs improvement.':''} Small consistent changes compound over time.`;
+    tx.textContent=`Vital Score: ${P.sc}/100. ${P.yl} years remaining at current habits.`;
   }
   cur.style.display='none';src.style.display='flex';
   document.getElementById('fuSec').style.display='block';
@@ -766,26 +760,12 @@ async function joinList(){
   const em=document.getElementById('emailIn').value.trim();
   if(!em||!em.includes('@'))return;
   const btn=document.getElementById('t-cjoin');
-  btn.textContent='...';
-  btn.disabled=true;
+  btn.textContent='...';btn.disabled=true;
   try{
-    await fetch('https://formspree.io/f/xqenbplz',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({
-        email:em,
-        lang:lg,
-        vital_score:P.sc||'',
-        age:P.age||'',
-        country:P.co||'',
-        source:'vivix.app',
-        ts:new Date().toISOString()
-      })
-    });
+    await fetch('https://formspree.io/f/xqenbplz',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:em,lang:lg,vital_score:P.sc||'',age:P.age||'',country:P.co||'',source:'vivix.app',ts:new Date().toISOString()})});
   }catch(e){}
   document.getElementById('emailIn').value='';
-  btn.textContent=t.ok;
-  btn.disabled=false;
+  btn.textContent=t.ok;btn.disabled=false;
 }
 
 function rst(){
@@ -796,8 +776,12 @@ function rst(){
   document.getElementById('aiSrc').style.display='none';
   document.getElementById('answers').innerHTML='';
   document.getElementById('fuSec').style.display='none';
+  document.getElementById('labsPanel').style.display='none';
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('off'));
   document.getElementById('ringF').style.strokeDashoffset='408';
+  // Reset toggles
+  document.querySelectorAll('.tgl').forEach(b=>b.classList.remove('on'));
+  actVal=null;smkVal=null;
   lk=false;P={};
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -809,6 +793,5 @@ window.addEventListener('DOMContentLoaded',()=>{
   ctr(document.getElementById('userCount'),1247,2500);
 });
 </script>
-
 </body>
 </html>
