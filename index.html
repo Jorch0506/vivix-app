@@ -1012,9 +1012,9 @@ function generateShareCard(){
 
   // 3 METRICS
   const metrics=[
-    {ico:'⚖️',lbl:t.bmi||'BMI',val:P.bmi},
-    {ico:'💧',lbl:t.hyd||'Hydration',val:P.wa+'L'},
-    {ico:'😴',lbl:t.slp||'Sleep',val:P.sl+'h'}
+    {color:[99,102,241],lbl:t.bmi||'BMI',val:P.bmi},
+    {color:[6,182,212],lbl:t.hyd||'Hydration',val:P.wa+'L'},
+    {color:[16,185,129],lbl:t.slp||'Sleep',val:P.sl+'h'}
   ];
   const mW=254,mH=100,mGap=20,mY=624;
   const mX0=(W-3*mW-2*mGap)/2;
@@ -1026,8 +1026,11 @@ function generateShareCard(){
     ctx.strokeStyle='rgba(255,255,255,0.09)';ctx.lineWidth=1;
     roundRect(ctx,mx,mY,mW,mH,16);ctx.stroke();
     ctx.restore();
-    ctx.font='26px sans-serif';ctx.textAlign='center';
-    ctx.fillText(m.ico,mx+mW/2,mY+30);
+    // Colored dot instead of emoji (works on iOS)
+    ctx.beginPath();
+    ctx.arc(mx+mW/2,mY+22,7,0,Math.PI*2);
+    ctx.fillStyle='rgba('+m.color[0]+','+m.color[1]+','+m.color[2]+',0.85)';
+    ctx.fill();
     ctx.save();ctx.font='bold 28px Outfit,sans-serif';
     ctx.fillStyle='rgba(255,255,255,0.90)';ctx.textAlign='center';
     ctx.fillText(m.val,mx+mW/2,mY+60);ctx.restore();
